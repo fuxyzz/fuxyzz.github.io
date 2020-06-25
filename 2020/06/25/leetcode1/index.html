@@ -4,7 +4,23 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.2.1">
+//<meta name="generator" content="Hexo 4.2.1">
+<script>
+    (function(){
+        if('22222222'){
+            if (prompt('请输入文章密码') !== '22222222'){
+                alert('密码错误！');
+		if (history.length === 1) {
+		    window.opener = null;
+		    window.open('', '_self');
+		    window.close();
+                } else {
+                    history.back();
+                }
+            }
+        }
+    })();
+</script>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -20,15 +36,15 @@
     var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Muse","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;two-sum&#x2F; 题目描述：给定数组和目标数字，求在数组中拿到的两个数字相加为target的下标。 思路：用HashMap即可，注意判断下标相同（即同个元素）的情况。 1234567891011121314public int[] twoSum(int[] nums, int target) &amp;#123;    Map map &amp;#x3D">
+  <meta name="description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;two-sum&#x2F; 题目描述：给定数组和目标数字，求在数组中拿到的两个数字相加为target的下标。 思路：用HashMap即可，注意判断下标相同（即同个元素）的情况。 public int[] twoSum(int[] nums, int target) &amp;#123;    Map map &#x3D; new HashMap();">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leetcode1">
 <meta property="og:url" content="https://fuxyzz.github.io/2020/06/25/leetcode1/index.html">
 <meta property="og:site_name" content="fuxyzz&#39;s blog">
-<meta property="og:description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;two-sum&#x2F; 题目描述：给定数组和目标数字，求在数组中拿到的两个数字相加为target的下标。 思路：用HashMap即可，注意判断下标相同（即同个元素）的情况。 1234567891011121314public int[] twoSum(int[] nums, int target) &amp;#123;    Map map &amp;#x3D">
+<meta property="og:description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;two-sum&#x2F; 题目描述：给定数组和目标数字，求在数组中拿到的两个数字相加为target的下标。 思路：用HashMap即可，注意判断下标相同（即同个元素）的情况。 public int[] twoSum(int[] nums, int target) &amp;#123;    Map map &#x3D; new HashMap();">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-25T13:57:14.000Z">
-<meta property="article:modified_time" content="2020-06-25T14:00:48.827Z">
+<meta property="article:modified_time" content="2020-06-25T15:53:02.086Z">
 <meta property="article:author" content="fuxyzz">
 <meta property="article:tag" content="leetcode">
 <meta name="twitter:card" content="summary">
@@ -239,7 +255,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-06-25 21:57:14 / 修改时间：22:00:48" itemprop="dateCreated datePublished" datetime="2020-06-25T21:57:14+08:00">2020-06-25</time>
+              <time title="创建时间：2020-06-25 21:57:14 / 修改时间：23:53:02" itemprop="dateCreated datePublished" datetime="2020-06-25T21:57:14+08:00">2020-06-25</time>
             </span>
 
           
@@ -256,7 +272,7 @@
         <p><a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener">https://leetcode.com/problems/two-sum/</a></p>
 <p>题目描述：给定数组和目标数字，求在数组中拿到的两个数字相加为target的下标。</p>
 <p>思路：用HashMap即可，注意判断下标相同（即同个元素）的情况。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public int[] twoSum(int[] nums, int target) &#123;</span><br><span class="line">    Map map &#x3D; new HashMap();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; nums.length; i++) &#123;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; nums.length; i++) &#123;</span><br><span class="line">        if (map.get(target - nums[i]) !&#x3D; null &amp;&amp; (int) map.get(target - nums[i]) !&#x3D; i) &#123;</span><br><span class="line">            return new int[]&#123;i, (int) map.get(target - nums[i])&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return new int[]&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int[] twoSum(int[] nums, int target) &#123;</span><br><span class="line">    Map map &#x3D; new HashMap();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; nums.length; i++) &#123;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; nums.length; i++) &#123;</span><br><span class="line">        if (map.get(target - nums[i]) !&#x3D; null &amp;&amp; (int) map.get(target - nums[i]) !&#x3D; i) &#123;</span><br><span class="line">            return new int[]&#123;i, (int) map.get(target - nums[i])&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return new int[]&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
     </div>
 
