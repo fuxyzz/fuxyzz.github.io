@@ -20,17 +20,20 @@
     var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="fuxyzz&#39;s blog">
-<meta property="og:url" content="https://fuxyzz.github.io/tags/index.html">
+  <meta name="description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;best-time-to-buy-and-sell-stock-with-cooldown&#x2F; 思路：考虑3个状态位，0表示当天手上有股票，1表示当天刚卖掉，2表示当天手上没股票观望中，隔天可以进行交易。 public int maxProfit(int[] prices) &amp;#123;    if(prices.length &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode 309">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/07/20/leetcode-309/index.html">
 <meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;best-time-to-buy-and-sell-stock-with-cooldown&#x2F; 思路：考虑3个状态位，0表示当天手上有股票，1表示当天刚卖掉，2表示当天手上没股票观望中，隔天可以进行交易。 public int maxProfit(int[] prices) &amp;#123;    if(prices.length &#x3D;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-06-25T16:03:14.000Z">
-<meta property="article:modified_time" content="2020-06-26T13:08:38.203Z">
+<meta property="article:published_time" content="2020-07-20T08:02:12.000Z">
+<meta property="article:modified_time" content="2020-07-20T08:02:43.180Z">
 <meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="algorithm">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://fuxyzz.github.io/tags/">
+<link rel="canonical" href="https://fuxyzz.github.io/2020/07/20/leetcode-309/">
 
 
 <script id="page-configurations">
@@ -38,13 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>标签 | fuxyzz's blog
-</title>
+  <title>leetcode 309 | fuxyzz's blog</title>
   
 
 
@@ -223,51 +225,112 @@
 
       <div class="main-inner">
         
-  
-  
 
-        <div class="content page posts-expand">
+        <div class="content post posts-expand">
           
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-309/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode 309
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2020-07-20 16:02:12 / 修改时间：16:02:43" itemprop="dateCreated datePublished" datetime="2020-07-20T16:02:12+08:00">2020-07-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/</a></p>
+<p>思路：考虑3个状态位，0表示当天手上有股票，1表示当天刚卖掉，2表示当天手上没股票观望中，隔天可以进行交易。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    if(prices.length &#x3D;&#x3D; 0)&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 0 手上有   1 刚卖   2 观望中|手上没有|冷静中</span><br><span class="line">    int[][] dp &#x3D; new int[3][prices.length];</span><br><span class="line">    dp[0][0] &#x3D; -prices[0];</span><br><span class="line">    for(int i &#x3D; 1; i &lt; prices.length; ++i)&#123;</span><br><span class="line">        &#x2F;&#x2F;今天手上有，要么昨天就有，要么昨天观望今天买入</span><br><span class="line">        dp[0][i] &#x3D; Math.max( dp[0][i-1] , dp[2][i-1] - prices[i] );</span><br><span class="line">        &#x2F;&#x2F;今天刚卖一定是昨天有今天卖</span><br><span class="line">        dp[1][i] &#x3D; dp[0][i-1] + prices[i];</span><br><span class="line">        &#x2F;&#x2F;今天观望，要么昨天就在观望，要么昨天刚卖</span><br><span class="line">        dp[2][i] &#x3D; Math.max( dp[2][i-1] , dp[1][i-1] );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return Math.max(dp[1][prices.length - 1] , dp[2][prices.length - 1]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>或者我们可以直接考虑两个状态位，0持有，1未持有。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    if(prices.length &lt; 2)&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    int[][] dp &#x3D; new int[2][prices.length];</span><br><span class="line">    &#x2F;&#x2F;0持有，1手上没股票</span><br><span class="line">    dp[0][0] &#x3D; -prices[0];</span><br><span class="line">    dp[0][1] &#x3D; Math.max(-prices[0],-prices[1]);</span><br><span class="line">    dp[1][1] &#x3D; Math.max(0,prices[1]-prices[0]);</span><br><span class="line">    for(int i &#x3D; 2; i &lt; prices.length ;++i)&#123;</span><br><span class="line">        dp[0][i] &#x3D; Math.max(dp[1][i-2] - prices[i] , dp[0][i-1]);</span><br><span class="line">        dp[1][i] &#x3D; Math.max(dp[1][i-1] , dp[0][i-1] + prices[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return dp[1][prices.length-1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/20/leetcode-188/" rel="prev" title="leetcode 188">
+      <i class="fa fa-chevron-left"></i> leetcode 188
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/20/leetcode-714/" rel="next" title="leetcode 714">
+      leetcode 714 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              目前共计 2 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              <a href="/tags/algorithm/" style="font-size: 30px;" class="tag-cloud-10">algorithm</a> <a href="/tags/binary-search/" style="font-size: 12px;" class="tag-cloud-0">binary search</a>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
         </div>
