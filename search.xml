@@ -223,34 +223,20 @@
       </tags>
   </entry>
   <entry>
-    <title>Flink简单环境搭建</title>
-    <url>/2020/07/24/Flink%E7%AE%80%E5%8D%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<h1 id="一、linux环境下搭建Flink介绍"><a href="#一、linux环境下搭建Flink介绍" class="headerlink" title="一、linux环境下搭建Flink介绍"></a>一、linux环境下搭建Flink介绍</h1><p>Flink后续的版本开始支持python进行开发，应该是为了配合机器学习。由于之前学习的时候只有java版本，这边还是以java为例进行搭建。java的安装这里忽略，除java外Flink还需要maven或者gradle进行项目构建，这里选用maven。Flink可以直接下载已经编译好的版本（这种方式不需要安装maven），或者在github上clone下来自行编译。如果你想参与Flink源码开发的话，应该使用github的方式。</p>
-<h1 id="二、安装maven"><a href="#二、安装maven" class="headerlink" title="二、安装maven"></a>二、安装maven</h1><p><a href="http://mirrors.hust.edu.cn/apache/maven/maven-3/" target="_blank" rel="noopener">http://mirrors.hust.edu.cn/apache/maven/maven-3/</a> ，到这个地址挑选版本安装。以当前看到的最新版本3.6.3为例。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;</span><br><span class="line">&#x2F;&#x2F;下载</span><br><span class="line">wget http:&#x2F;&#x2F;mirrors.hust.edu.cn&#x2F;apache&#x2F;maven&#x2F;maven-3&#x2F;3.6.3&#x2F;binaries&#x2F;apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">&#x2F;&#x2F;解压</span><br><span class="line">tar xvf apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">&#x2F;&#x2F;重命名，也可以用软链的方式保留版本号，但是版本号可以用mvn -version看，我这边直接重命名了</span><br><span class="line">mv apache-maven-3.6.3 maven</span><br></pre></td></tr></table></figure>
-
-<p>设置全局mvn命令，编辑/etc/profile文件，最后加上</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export M2_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;maven</span><br><span class="line">PATH&#x3D;$PATH:$HOME&#x2F;bin:$M2_HOME&#x2F;bin</span><br></pre></td></tr></table></figure>
-<p>记得source一下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mvn -version</span><br></pre></td></tr></table></figure>
-<p>能看到版本号说明你成功了</p>
-<h1 id="三、安装Flink"><a href="#三、安装Flink" class="headerlink" title="三、安装Flink"></a>三、安装Flink</h1><h3 id="安装方式一"><a href="#安装方式一" class="headerlink" title="安装方式一"></a>安装方式一</h3><p><a href="https://mirror.bit.edu.cn/apache/flink/" target="_blank" rel="noopener">https://mirror.bit.edu.cn/apache/flink/</a> ，在这里挑选版本下载。我选择目前最新的1.11.0版本。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;</span><br><span class="line">&#x2F;&#x2F;下载</span><br><span class="line">wget https:&#x2F;&#x2F;mirror.bit.edu.cn&#x2F;apache&#x2F;flink&#x2F;flink-1.11.0&#x2F;flink-1.11.0-src.tgz</span><br><span class="line">&#x2F;&#x2F;解压</span><br><span class="line">tar xvf flink-1.11.0-src.tgz</span><br><span class="line">&#x2F;&#x2F;重命名</span><br><span class="line">mv flink-1.11.0 flink</span><br></pre></td></tr></table></figure>
-
-<h3 id="安装方式二"><a href="#安装方式二" class="headerlink" title="安装方式二"></a>安装方式二</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;clone一下</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;apache&#x2F;flink.git</span><br><span class="line">&#x2F;&#x2F;进入flink目录</span><br><span class="line">cd flink</span><br><span class="line">&#x2F;&#x2F;使用maven构建</span><br><span class="line">mvn clean install -DskipTests</span><br><span class="line">&#x2F;&#x2F;或者使用下面这个，可以跳过测试QA插件和javaDocs，更快一点</span><br><span class="line">mvn clean install -DskipTests -Dfast</span><br></pre></td></tr></table></figure>
-
-<h1 id="四、上手使用"><a href="#四、上手使用" class="headerlink" title="四、上手使用"></a>四、上手使用</h1><p>以方式一安装Flink为例，运行Flink。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;flink&#x2F;bin&#x2F;</span><br><span class="line">&#x2F;&#x2F;启动的脚本命令</span><br><span class="line">.&#x2F;start-cluster.sh</span><br><span class="line">&#x2F;&#x2F;停止的脚本命令</span><br><span class="line">.&#x2F;bin&#x2F;stop-cluster.sh</span><br></pre></td></tr></table></figure>
-<p>启动后，有WEB UI可以使用，默认端口是8081。如果非本机访问不了检查一下防火墙是否放行端口。从WEB UI可以直观的看到提交的任务，任务的运行情况，任务被分配的TaskSlot，Flink设置的并发度，Flink的设置，日志等。具体这里不演示。</p>
-<p>尝试提交任务运行</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;flink</span><br><span class="line">&#x2F;&#x2F;提交官方的demo</span><br><span class="line">bin&#x2F;flink run examples&#x2F;streaming&#x2F;WordCount.jar</span><br><span class="line">&#x2F;&#x2F;看输出的结果</span><br><span class="line">tail log&#x2F;flink-*-taskexecutor-*.out</span><br><span class="line">&#x2F;&#x2F;结果</span><br><span class="line">  (to,1)</span><br><span class="line">  (be,1)</span><br><span class="line">  (or,1)</span><br><span class="line">  (not,1)</span><br><span class="line">  (to,2)</span><br><span class="line">  (be,2)</span><br></pre></td></tr></table></figure>
-<p>至此，完成Flink的简单上手应用，后续就是编写Flink的应用，打成jar后进行提交即可。</p>
+    <title>leetcode-84</title>
+    <url>/2020/07/27/leetcode-84/</url>
+    <content><![CDATA[<h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">https://leetcode.com/problems/largest-rectangle-in-histogram/</a></p>
+<p>题目描述：给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p>
+<p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>维护一个单调递增栈，从左往右扫一次，对于扫到位置的element，如果element大于等于栈顶的值就压栈；否则，逐个弹出栈顶的值，直到element大于等于栈顶的值，弹栈过程中，更新矩形最大值。为了最后一次也能做计算，我们需要在最后多压一个 -1 入栈，因为-1小于所有数组的值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int largestRectangleArea(int[] heights) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    Stack&lt;Integer&gt; stack &#x3D; new Stack&lt;&gt;();</span><br><span class="line">    int[] heightss &#x3D; new int[heights.length + 1];</span><br><span class="line">    System.arraycopy(heights, 0, heightss, 0, heights.length);</span><br><span class="line">    heightss[heights.length] &#x3D; -1;</span><br><span class="line"></span><br><span class="line">    int top &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; heightss.length; ++i) &#123;</span><br><span class="line">        if (stack.empty() || heightss[stack.peek()] &lt;&#x3D; heightss[i]) &#123;</span><br><span class="line">            stack.push(i);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            while (!stack.empty() &amp;&amp; heightss[stack.peek()] &gt; heightss[i]) &#123;</span><br><span class="line">                top &#x3D; stack.pop();</span><br><span class="line">                ans &#x3D; Math.max(ans, (i - top) * heightss[top]);</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; 不能用 stack.push(i)来代替下面两行，会破坏(i - top) * heightss[top]的计算</span><br><span class="line">            stack.push(top);</span><br><span class="line">            heightss[top] &#x3D; heightss[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Flink</category>
+        <category>algorithm</category>
+        <category>leetcode</category>
       </categories>
       <tags>
-        <tag>Flink</tag>
+        <tag>algorithm</tag>
       </tags>
   </entry>
 </search>
