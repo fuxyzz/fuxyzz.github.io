@@ -319,4 +319,23 @@
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode-258</title>
+    <url>/2020/07/30/leetcode-258/</url>
+    <content><![CDATA[<h4 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h4><p><a href="https://leetcode.com/problems/add-digits/" target="_blank" rel="noopener">https://leetcode.com/problems/add-digits/</a></p>
+<p>给定一个数，求所有位上相加的和，循环上面的操作直到和为一个一位数，例如99 = 9 + 9 = 18 = 1 + 8 = 9。</p>
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>利用数学推导，一个10的倍数求最高位的数可以用 % 9来操作，例如70，70 % 9 = 7。</p>
+<p>如果给定的数需要循环相加的次数为1，那么71给出题目中的答案就是70 % 9 + 1，可以表示成70 % 9 + 1 % 9，使用结合律化成71 % 9。</p>
+<p>如果给定的数需要循环相加的数超过1次，我们可以继续推导，例如88 = 80 % 9 + 8 % 9 = 16 = 10 % 9 + 6 % 9 = 7，可以看出每次循环的相加操作都是%9，对于一个数num来说，num % 9 % 9 … = num % 9。于是本题变成了 % 9即可，但是要考虑9的倍数的情况，例如num = 9。利用分配律，num % 9 = (1 + num - 1) % 9 = 1 + (num - 1) % 9。</p>
+<p>多位数的情况也是一样的，假如一个数有n位，每一位上的数分别是an,an-1…a1，则答案就是(an * 10 ^ <sup>n</sup>) % 9 + （an-1 * 10 <sup>n-1</sup>） % 9 + … + a1 % 9。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int addDigits(int num) &#123;</span><br><span class="line">        return 1 + (num - 1) % 9;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
 </search>
