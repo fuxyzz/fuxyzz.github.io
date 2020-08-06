@@ -338,4 +338,43 @@
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode-16</title>
+    <url>/2020/08/06/leetcode-16/</url>
+    <content><![CDATA[<h4 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h4><p><a href="https://leetcode.com/problems/3sum-closest/" target="_blank" rel="noopener">https://leetcode.com/problems/3sum-closest/</a></p>
+<p>给定一个包括&nbsp;<em>n</em> 个整数的数组&nbsp;<code>nums</code><em>&nbsp;</em>和 一个目标值&nbsp;<code>target</code>。找出&nbsp;<code>nums</code><em>&nbsp;</em>中的三个整数，使得它们的和与&nbsp;<code>target</code>&nbsp;最接近。返回这三个数的和。假定每组输入只存在唯一答案。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例：</strong></p>
+
+<pre><strong>输入：</strong>nums = [-1,2,1,-4], target = 1
+<strong>输出：</strong>2
+<strong>解释：</strong>与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+</pre>
+
+<p>&nbsp;</p>
+
+<p><strong>提示：</strong></p>
+
+<ul>
+    <li><code>3 &lt;= nums.length &lt;= 10^3</code></li>
+    <li><code>-10^3&nbsp;&lt;= nums[i]&nbsp;&lt;= 10^3</code></li>
+    <li><code>-10^4&nbsp;&lt;= target&nbsp;&lt;= 10^4</code></li>
+</ul>
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>暴力的话，时间复杂度O（n<sup>3</sup>），与leetcode15类似，使用双指针。设答案为ans，枚举到的三数和为sum，比较abs(ans - target)与abs(sum - target)，更新答案。枚举的过程如下：</p>
+<p>设第一个数为i，第二个数为j，初始值为j +  1，第三个数为k，初始值为nums.length - 1，遍历i，j与k是指针，当sum &lt;= target时更新j，当sum &gt; target时更新k。能如此更新j和k是因为，对于单调递增的数组，如果sum &lt;= target，sum只能尝试变得更大去接近target，同理，sum &gt; target，sum只能尝试变得更小去接近target。</p>
+<p>优化点：j更新前，如果与后面的元素相等可以跳过，因为j + 1位置的值肯定是已经参与更新过最佳答案，同理k更新前，如果与前面的元素相等也可以跳过。</p>
+<p>时间复杂度O（n<sup>2</sup>），空间复杂度O（log（n）），主要是排序时造成的空间复杂度。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int threeSumClosest(int[] nums, int target) &#123;</span><br><span class="line">    int n &#x3D; nums.length;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int ans &#x3D; Integer.MAX_VALUE &#x2F; 2;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i) &#123;</span><br><span class="line">        &#x2F;&#x2F;重复的要剔除</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int j &#x3D; i + 1;</span><br><span class="line">        int k &#x3D; n - 1;</span><br><span class="line">        while (j &lt; k) &#123;</span><br><span class="line">            int sum &#x3D; nums[i] + nums[j] + nums[k];</span><br><span class="line">            if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                return sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;比较距离更新最大值</span><br><span class="line">            if (Math.abs(sum - target) &lt; Math.abs(ans - target)) &#123;</span><br><span class="line">                ans &#x3D; sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (sum &gt; target) &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[k] &#x3D;&#x3D; nums[k - 1]) &#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                k--;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[j] &#x3D;&#x3D; nums[j + 1]) &#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
 </search>
