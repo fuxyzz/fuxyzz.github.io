@@ -228,7 +228,7 @@
     <content><![CDATA[<h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">https://leetcode.com/problems/largest-rectangle-in-histogram/</a></p>
 <p>题目描述：给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p>
 <p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>维护一个单调递增栈，从左往右扫一次，对于扫到位置的element，如果element大于等于栈顶的值就压栈；否则，逐个弹出栈顶的值，直到element大于等于栈顶的值，弹栈过程中，更新矩形最大值。为了最后一次也能做计算，我们需要在开始的时候多压一个 -1 入栈，因为-1小于所有数组的值。</p>
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>维护一个单调递增栈，从左往右扫一次，对于扫到位置的element，如果element大于等于栈顶的值就压栈；否则，逐个弹出栈顶的值，直到element大于等于栈顶的值，弹栈过程中，更新矩形最大值。为了最后一次也能做计算，我们需要在最后多压一个 -1 入栈，因为 -1 小于所有数组的值。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int largestRectangleArea(int[] heights) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    Stack&lt;Integer&gt; stack &#x3D; new Stack&lt;&gt;();</span><br><span class="line">    int[] heightss &#x3D; new int[heights.length + 1];</span><br><span class="line">    System.arraycopy(heights, 0, heightss, 0, heights.length);</span><br><span class="line">    heightss[heights.length] &#x3D; -1;</span><br><span class="line"></span><br><span class="line">    int top &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; heightss.length; ++i) &#123;</span><br><span class="line">        if (stack.empty() || heightss[stack.peek()] &lt;&#x3D; heightss[i]) &#123;</span><br><span class="line">            stack.push(i);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            while (!stack.empty() &amp;&amp; heightss[stack.peek()] &gt; heightss[i]) &#123;</span><br><span class="line">                top &#x3D; stack.pop();</span><br><span class="line">                ans &#x3D; Math.max(ans, (i - top) * heightss[top]);</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; 不能用 stack.push(i)来代替下面两行，会破坏(i - top) * heightss[top]的计算</span><br><span class="line">            stack.push(top);</span><br><span class="line">            heightss[top] &#x3D; heightss[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -368,6 +368,97 @@
 <p>优化点：j更新前，如果与后面的元素相等可以跳过，因为j + 1位置的值肯定是已经参与更新过最佳答案，同理k更新前，如果与前面的元素相等也可以跳过。</p>
 <p>时间复杂度O（n<sup>2</sup>），空间复杂度O（log（n）），主要是排序时造成的空间复杂度。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int threeSumClosest(int[] nums, int target) &#123;</span><br><span class="line">    int n &#x3D; nums.length;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int ans &#x3D; Integer.MAX_VALUE &#x2F; 2;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i) &#123;</span><br><span class="line">        &#x2F;&#x2F;重复的要剔除</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int j &#x3D; i + 1;</span><br><span class="line">        int k &#x3D; n - 1;</span><br><span class="line">        while (j &lt; k) &#123;</span><br><span class="line">            int sum &#x3D; nums[i] + nums[j] + nums[k];</span><br><span class="line">            if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                return sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;比较距离更新最大值</span><br><span class="line">            if (Math.abs(sum - target) &lt; Math.abs(ans - target)) &#123;</span><br><span class="line">                ans &#x3D; sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (sum &gt; target) &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[k] &#x3D;&#x3D; nums[k - 1]) &#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                k--;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[j] &#x3D;&#x3D; nums[j + 1]) &#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>leetcode-10</title>
+    <url>/2020/08/24/leetcode-10/</url>
+    <content><![CDATA[<h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/</a></p>
+<p>给你一个字符串&nbsp;<code>s</code>&nbsp;和一个字符规律&nbsp;<code>p</code>，请你来实现一个支持 <code>&#39;.&#39;</code>&nbsp;和&nbsp;<code>&#39;*&#39;</code>&nbsp;的正则表达式匹配。</p>
+
+<pre>&#39;.&#39; 匹配任意单个字符
+&#39;*&#39; 匹配零个或多个前面的那一个元素
+</pre>
+
+<p>所谓匹配，是要涵盖&nbsp;<strong>整个&nbsp;</strong>字符串&nbsp;<code>s</code>的，而不是部分字符串。</p>
+
+<p><strong>说明:</strong></p>
+
+<ul>
+    <li><code>s</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母。</li>
+    <li><code>p</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母，以及字符&nbsp;<code>.</code>&nbsp;和&nbsp;<code>*</code>。</li>
+</ul>
+
+<p><strong>示例 1:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a&quot;
+<strong>输出:</strong> false
+<strong>解释:</strong> &quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。
+</pre>
+
+<p><strong>示例 2:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#39;a&#39;。因此，字符串 &quot;aa&quot; 可被视为 &#39;a&#39; 重复了一次。
+</pre>
+
+<p><strong>示例&nbsp;3:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;ab&quot;
+p = &quot;.*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;&quot;.*&quot; 表示可匹配零个或多个（&#39;*&#39;）任意字符（&#39;.&#39;）。
+</pre>
+
+<p><strong>示例 4:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aab&quot;
+p = &quot;c*a*b&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 表示零个或多个，这里 &#39;c&#39; 为 0 个, &#39;a&#39; 被重复一次。因此可以匹配字符串 &quot;aab&quot;。
+</pre>
+
+<p><strong>示例 5:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;mississippi&quot;
+p = &quot;mis*is*p*.&quot;
+<strong>输出:</strong> false</pre>
+
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>采用动态规划。假设以f[i][j]表示s字符串前i个字符能否与p字符串前j个字符相匹配。</p>
+<p>（1）如果j位置是字母，则直接匹配是否相等，如果相等，f[i][j]更新为f[i - 1][j - 1]，因为之前也要全都匹配上嘛。</p>
+<p>（2）如果j位置的值是 “.” ，直接放过，f[i][j]更新为f[i - 1][j - 1]，理由同（1）。</p>
+<p>（3）如果j位置的值是 “*“，考虑一下匹配规则，”*“ 是匹配零个或多个前面的那一个元素，如果我们暴力的去枚举这个结果，有点麻烦。我们换个思路，字符 + * 匹配的过程中只会出现两种情况（注意与上面不同，此时比较的字符串位置是i与j - 1，j - 1是因为需要取 “*“ 前面那个字符）：</p>
+<p>（i）匹配字符成功，将最后一个字符舍弃，f[i][j]更新为f[i - 1][j] or f[i][j - 2]。</p>
+<p>f[i - 1][j]是舍弃s[i]字符，举个例子，如下所示，因为s[i] 与 p[j - 1]匹配上了，此时如果舍弃s[i]需要满足 s 字符串前 i - 1 个字符与 p 字符串前 j 个字符都匹配上。这里的 j 可能不太好理解，带入下面的例子，cdcc与cdc<em>能够匹配上，所以 i 位置的c字母可以被舍弃。舍弃的角度是从p字符串出发的，因为c\</em>能匹配0个或者任意多个，所以s字符串有多个相同的字母的时候就可以看成舍弃了。</p>
+<p>其实当做是扩充匹配也行，cdccc的 i - 1位置的c字母与p字符串 j - 1位置的c字母能匹配，而且 i 位置的c字母与p字符串 j - 1位置的c字母能匹配，说明 i - 1 位置的字母与 i 位置的字母一样。如果cdcc与cdc*能匹配，那么cdccc与cdc*也能匹配上。这里理解成舍弃是因为下面还有一个舍弃的例子，为了理解一致。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line">cdc*a</span><br><span class="line">   j</span><br></pre></td></tr></table></figure>
+
+
+<p>f[i][j - 2]是舍弃p[j - 1]和p[j]两个字符，因为是字母 + 星号，要整体舍弃，举个例子，如下所示，因为s[i]与p[j-1]匹配上了，此时如果舍弃p[j - 1]和p[j]，需要满足 s 字符串前 i 个字符和 p 字符串前 j - 2 个字符都匹配上。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line"></span><br><span class="line">cdcccc*a</span><br><span class="line">      j</span><br></pre></td></tr></table></figure>
+
+
+<p>（ii）匹配字符失败就是说这个字符不能要，字母 + 星号一起舍弃，f[i][j]更新为f[i][j - 2]</p>
+<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public boolean isMatch(String s, String p) &#123;</span><br><span class="line">    int m &#x3D; s.length() + 1;</span><br><span class="line">    int n &#x3D; p.length() + 1;</span><br><span class="line">    boolean[][] find &#x3D; new boolean[m][n];</span><br><span class="line">    &#x2F;&#x2F;根据对f的定义，f[0][0]是最初空字符的位置</span><br><span class="line">    find[0][0] &#x3D; true;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; m; i++) &#123;</span><br><span class="line">        for (int j &#x3D; 1; j &lt; n; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F; &quot;*&quot; 的逻辑处理</span><br><span class="line">            if (p.charAt(j - 1) &#x3D;&#x3D; &#39;*&#39;) &#123;</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j - 1) ? find[i - 1][j] || find[i][j - 2] : find[i][j - 2];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F; &quot;.&quot; 与 字母 的逻辑处理</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j) &amp;&amp; find[i - 1][j - 1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return find[m - 1][n - 1];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean match(String s, String p, int i, int j) &#123;</span><br><span class="line">    &#x2F;&#x2F; i &#x3D; 0 不用处理，是空字符串的位置，是 &quot;.&quot; 或者相同的字母就是匹配上了</span><br><span class="line">    return i !&#x3D; 0 &amp;&amp; (p.charAt(j - 1) &#x3D;&#x3D; &#39;.&#39; || s.charAt(i - 1) &#x3D;&#x3D; p.charAt(j - 1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（m * n），m、n为字符串s、p的长度。</p>
+<p>空间复杂度：O（m * n），因为要存储所有的状态。</p>
 ]]></content>
       <categories>
         <category>algorithm</category>
