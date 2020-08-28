@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -358,6 +358,135 @@ p = &quot;mis*is*p*.&quot;
 
 <h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（m * n），m、n为字符串s、p的长度。</p>
 <p>空间复杂度：O（m * n），因为要存储所有的状态。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/06/leetcode-23/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/06/leetcode-23/" class="post-title-link" itemprop="url">leetcode-16</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-06 20:31:05" itemprop="dateCreated datePublished" datetime="2020-08-06T20:31:05+08:00">2020-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-28 16:07:37" itemprop="dateModified" datetime="2020-08-28T16:07:37+08:00">2020-08-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener">https://leetcode.com/problems/merge-k-sorted-lists/</a></p>
+<p>给你一个链表数组，每个链表都已经按升序排列。</p>
+
+<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
+
+<pre><strong>输入：</strong>lists = [[1,4,5],[1,3,4],[2,6]]
+<strong>输出：</strong>[1,1,2,3,4,4,5,6]
+<strong>解释：</strong>链表数组如下：
+[
+  1-&gt;4-&gt;5,
+  1-&gt;3-&gt;4,
+  2-&gt;6
+]
+将它们合并到一个有序链表中得到。
+1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+</pre>
+
+<p><strong>示例 2：</strong></p>
+
+<pre><strong>输入：</strong>lists = []
+<strong>输出：</strong>[]
+</pre>
+
+<p><strong>示例 3：</strong></p>
+
+<pre><strong>输入：</strong>lists = [[]]
+<strong>输出：</strong>[]
+</pre>
+
+<p>&nbsp;</p>
+
+<p><strong>提示：</strong></p>
+
+<ul>
+    <li><code>k == lists.length</code></li>
+    <li><code>0 &lt;= k &lt;= 10^4</code></li>
+    <li><code>0 &lt;= lists[i].length &lt;= 500</code></li>
+    <li><code>-10^4 &lt;= lists[i][j] &lt;= 10^4</code></li>
+    <li><code>lists[i]</code> 按 <strong>升序</strong> 排列</li>
+    <li><code>lists[i].length</code> 的总和不超过 <code>10^4</code></li>
+</ul>
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>分治法，类似归并排序，逐步的合并两个链表即可。</p>
+<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode mergeKLists(ListNode[] lists) &#123;</span><br><span class="line">    return merge(lists, 0, lists.length - 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode mergeTowListNode(ListNode l1, ListNode l2) &#123;</span><br><span class="line">    if (l1 &#x3D;&#x3D; null || l2 &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return l1 !&#x3D; null ? l1 : l2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ListNode head &#x3D; new ListNode(-1);</span><br><span class="line">    ListNode temp &#x3D; head;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;合并</span><br><span class="line">    while (l1 !&#x3D; null &amp;&amp; l2 !&#x3D; null) &#123;</span><br><span class="line">        if (l1.val &lt; l2.val) &#123;</span><br><span class="line">            temp.next &#x3D; l1;</span><br><span class="line">            l1 &#x3D; l1.next;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            temp.next &#x3D; l2;</span><br><span class="line">            l2 &#x3D; l2.next;</span><br><span class="line">        &#125;</span><br><span class="line">        temp &#x3D; temp.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;因为只剩一个链表，直接拼接即可</span><br><span class="line">    temp.next &#x3D; l1 !&#x3D; null ? l1 : l2;</span><br><span class="line"></span><br><span class="line">    return head.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode merge(ListNode[] lists, int l, int r) &#123;</span><br><span class="line">    if (l &#x3D;&#x3D; r) &#123;</span><br><span class="line">        return lists[l];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;处理空数组</span><br><span class="line">    if (l &gt; r) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int mid &#x3D; l + ((r - l) &gt;&gt; 1);</span><br><span class="line">    return mergeTowListNode(merge(lists, l, mid), merge(lists, mid + 1, r));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（kn * log(k)），类似归并排序，设n为所有链表的平均长度，类似二叉树一样看归并，则kn为每层归并需要排序的元素，log(k)为树高，相乘即为时间复杂度。</p>
+<p>空间复杂度：O（log(k)），树高就是空间复杂度，压栈所花费的空间。</p>
 
       
     </div>
@@ -1036,102 +1165,6 @@ p = &quot;mis*is*p*.&quot;
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">L     D     R</span><br><span class="line">E   O E   I I</span><br><span class="line">E C   I H   N</span><br><span class="line">T     S     G</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public String convert(String s, int numRows) &#123;</span><br><span class="line">    if (numRows &lt; 2) &#123;</span><br><span class="line">        return s;</span><br><span class="line">    &#125;</span><br><span class="line">    StringBuilder ans &#x3D; new StringBuilder();</span><br><span class="line">    int maxDistance &#x3D; (numRows - 1) * 2;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; numRows; ++i) &#123;</span><br><span class="line">        int distance &#x3D; i &#x3D;&#x3D; 0 || i &#x3D;&#x3D; numRows - 1 ? maxDistance : maxDistance - i * 2;</span><br><span class="line">        int idx &#x3D; i;</span><br><span class="line">        while (idx &lt; s.length()) &#123;</span><br><span class="line">            ans.append(s.charAt(idx));</span><br><span class="line">            idx +&#x3D; distance;</span><br><span class="line">            if (distance !&#x3D; maxDistance) &#123;</span><br><span class="line">                distance &#x3D; maxDistance - distance;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/24/leetcode-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/24/leetcode-4/" class="post-title-link" itemprop="url">leetcode-4</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-24 15:25:33" itemprop="dateCreated datePublished" datetime="2020-07-24T15:25:33+08:00">2020-07-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-27 17:13:46" itemprop="dateModified" datetime="2020-07-27T17:13:46+08:00">2020-07-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h4><p><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/" target="_blank" rel="noopener">https://leetcode.com/problems/median-of-two-sorted-arrays/</a></p>
-<p>题目描述：给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。</p>
-<p>请你找出这两个正序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。</p>
-<p>你可以假设 nums1 和 nums2 不会同时为空。</p>
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>简单思路：排序合并成一个大数组，类似归并排序的操作，然后求中位数即可。</p>
-<p>时间复杂度O（m + n)，空间复杂度O（m + n）。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;</span><br><span class="line">    int[] newArr &#x3D; new int[nums1.length + nums2.length];</span><br><span class="line"></span><br><span class="line">    int m &#x3D; 0, i &#x3D; 0, j &#x3D; 0;</span><br><span class="line">    while(i &lt; nums1.length &amp;&amp; j &lt; nums2.length) &#123;</span><br><span class="line">        newArr[m++] &#x3D; nums1[i] &lt; nums2[j] ? nums1[i++] : nums2[j++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    while(i &lt; nums1.length) &#123;</span><br><span class="line">        newArr[m++] &#x3D; nums1[i++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    while(j &lt; nums2.length) &#123;</span><br><span class="line">        newArr[m++] &#x3D; nums2[j++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(newArr.length % 2 &#x3D;&#x3D; 1) &#123;</span><br><span class="line">        return (double)newArr[newArr.length&#x2F;2];</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return (newArr[newArr.length&#x2F;2 - 1] + newArr[newArr.length&#x2F;2])&#x2F;2.0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>双指针法：类似归并的操作，只是不合成数组，用指针跑即可。</p>
-<p>时间复杂度O(m + n)，实际时间复杂度只有O（m + n + 1) / 2），空间复杂度O（1）。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;</span><br><span class="line">    int m &#x3D; nums1.length;</span><br><span class="line">    int n &#x3D; nums2.length;</span><br><span class="line">    &#x2F;&#x2F;这里也可以处理一下溢出totalL &#x3D; m + (n - m + 1) &#x2F; 2</span><br><span class="line">    int totalL &#x3D; (m + n + 1) &#x2F; 2;</span><br><span class="line"></span><br><span class="line">    int p1 &#x3D; 0;</span><br><span class="line">    int p2 &#x3D; 0;</span><br><span class="line">    while (p1 &lt; m &amp;&amp; p2 &lt; n &amp;&amp; p1 + p2 &lt; totalL) &#123;</span><br><span class="line">        if (nums1[p1] &gt; nums2[p2]) &#123;</span><br><span class="line">            p2++;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            p1++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    while (p1 &lt; m &amp;&amp; p1 + p2 &lt; totalL) &#123;</span><br><span class="line">        p1++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    while (p2 &lt; n &amp;&amp; p1 + p2 &lt; totalL) &#123;</span><br><span class="line">        p2++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int maxLeft1 &#x3D; p1 &#x3D;&#x3D; 0 ? Integer.MIN_VALUE : nums1[p1 - 1];</span><br><span class="line">    int maxLeft2 &#x3D; p2 &#x3D;&#x3D; 0 ? Integer.MIN_VALUE : nums2[p2 - 1];</span><br><span class="line">    int maxRight1 &#x3D; p1 &#x3D;&#x3D; m ? Integer.MAX_VALUE : nums1[p1];</span><br><span class="line">    int maxRight2 &#x3D; p2 &#x3D;&#x3D; n ? Integer.MAX_VALUE : nums2[p2];</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;分配律处理溢出 (m + n) % 2 &#x3D; m % 2 + n % 2</span><br><span class="line">    if (m % 2 + n % 2 &#x3D;&#x3D; 1) &#123;</span><br><span class="line">        return Math.max(maxLeft1, maxLeft2);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return (double) (Math.max(maxLeft1, maxLeft2) + Math.min(maxRight1, maxRight2)) &#x2F; 2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>二分法：用分割线的思路，对于两个数组求中位数，其实就是在找一个中间分割点使得分割点左边的元素与右边元素大致相等（大致是因为数量的奇偶）。根据这个思路，我们尝试对两个数组分别切一刀，使得</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">数组1的左边个数 + 数组2的左边个数 ~&#x3D; 数组1的右边个数 + 数组2的右边个数。</span><br></pre></td></tr></table></figure>
-<p>考虑到对数组1切的一刀已经能够确定一刀后左右两边剩下的个数了，即能够推出数组2的一刀应该在哪里。假设数组1的长度为m，数组2的长度为n，那么左右两边的个数大致相等的情况下，个数应该为(m+n+1)/2，如果数组1的一刀落在i位置，数组2的一刀落在j位置，j应该满足：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">j &#x3D; (m + n + 1) &#x2F; 2 - i;</span><br></pre></td></tr></table></figure>
-<p>如此一来，我们便可以在数组1中进行二分查找，然后根据数量关系在数组2切第二刀，比较两刀左右元素的大小关系来调整二分的缩小方向，最终得到答案。</p>
-<p>时间复杂度O(log(min(m,n)))，m为nums1的长度，n为nums2的长度。空间复杂度O（1）。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;</span><br><span class="line">    &#x2F;&#x2F;这样可以得到O(log(min(m,n)))的复杂度，因为我们只二分第一个数组</span><br><span class="line">    if (nums1.length &gt; nums2.length) &#123;</span><br><span class="line">        return findMedianSortedArrays(nums2, nums1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int m &#x3D; nums1.length;</span><br><span class="line">    int n &#x3D; nums2.length;</span><br><span class="line">    &#x2F;&#x2F;这里也可以处理一下溢出totalL &#x3D; m + (n - m + 1) &#x2F; 2</span><br><span class="line">    int totalL &#x3D; (m + n + 1) &#x2F; 2;</span><br><span class="line"></span><br><span class="line">    int l &#x3D; 0;</span><br><span class="line">    int r &#x3D; nums1.length - 1;</span><br><span class="line"></span><br><span class="line">    while (l &lt;&#x3D; r) &#123;</span><br><span class="line">        int i &#x3D; l + (r - l) &#x2F; 2;</span><br><span class="line">        int j &#x3D; totalL - i;</span><br><span class="line">        &#x2F;*</span><br><span class="line">        满足的条件是 nums1[i] &gt;&#x3D; nums2[j - 1] &amp;&amp; nums1[i - 1] &lt;&#x3D; nums2[j]</span><br><span class="line">        取反就是 nums1[i] &lt; nums2[j - 1] || nums2[i - 1] &gt; nums1[j]，取其中一个条件即可</span><br><span class="line">        考虑题目条件：两个数组不会同时为空，而且前面已经处理成nums1.length &lt;&#x3D; nums2.length，i - 1有越界风险，采用nums1[i] &lt; nums2[j - 1]</span><br><span class="line">        *&#x2F;</span><br><span class="line">        if (nums1[i] &lt; nums2[j - 1]) &#123;</span><br><span class="line">            l &#x3D; i + 1;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            r &#x3D; i - 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int i &#x3D; l;</span><br><span class="line">    int j &#x3D; totalL - i;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;处理切割点落在数组头尾的情况</span><br><span class="line">    int maxLeft1 &#x3D; i &#x3D;&#x3D; 0 ? Integer.MIN_VALUE : nums1[i - 1];</span><br><span class="line">    int maxLeft2 &#x3D; j &#x3D;&#x3D; 0 ? Integer.MIN_VALUE : nums2[j - 1];</span><br><span class="line">    int maxRight1 &#x3D; i &#x3D;&#x3D; m ? Integer.MAX_VALUE : nums1[i];</span><br><span class="line">    int maxRight2 &#x3D; j &#x3D;&#x3D; n ? Integer.MAX_VALUE : nums2[j];</span><br><span class="line">    &#x2F;&#x2F;分配律处理溢出 (m + n) % 2 &#x3D; m % 2 + n % 2</span><br><span class="line">    if (m % 2 + n % 2 &#x3D;&#x3D; 1) &#123;</span><br><span class="line">        return Math.max(maxLeft1, maxLeft2);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return (double) (Math.max(maxLeft1, maxLeft2) + Math.min(maxRight1, maxRight2)) &#x2F; 2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>

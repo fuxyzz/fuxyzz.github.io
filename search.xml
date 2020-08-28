@@ -468,4 +468,68 @@ p = &quot;mis*is*p*.&quot;
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode-16</title>
+    <url>/2020/08/06/leetcode-23/</url>
+    <content><![CDATA[<h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener">https://leetcode.com/problems/merge-k-sorted-lists/</a></p>
+<p>给你一个链表数组，每个链表都已经按升序排列。</p>
+
+<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例 1：</strong></p>
+
+<pre><strong>输入：</strong>lists = [[1,4,5],[1,3,4],[2,6]]
+<strong>输出：</strong>[1,1,2,3,4,4,5,6]
+<strong>解释：</strong>链表数组如下：
+[
+  1-&gt;4-&gt;5,
+  1-&gt;3-&gt;4,
+  2-&gt;6
+]
+将它们合并到一个有序链表中得到。
+1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+</pre>
+
+<p><strong>示例 2：</strong></p>
+
+<pre><strong>输入：</strong>lists = []
+<strong>输出：</strong>[]
+</pre>
+
+<p><strong>示例 3：</strong></p>
+
+<pre><strong>输入：</strong>lists = [[]]
+<strong>输出：</strong>[]
+</pre>
+
+<p>&nbsp;</p>
+
+<p><strong>提示：</strong></p>
+
+<ul>
+    <li><code>k == lists.length</code></li>
+    <li><code>0 &lt;= k &lt;= 10^4</code></li>
+    <li><code>0 &lt;= lists[i].length &lt;= 500</code></li>
+    <li><code>-10^4 &lt;= lists[i][j] &lt;= 10^4</code></li>
+    <li><code>lists[i]</code> 按 <strong>升序</strong> 排列</li>
+    <li><code>lists[i].length</code> 的总和不超过 <code>10^4</code></li>
+</ul>
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>分治法，类似归并排序，逐步的合并两个链表即可。</p>
+<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode mergeKLists(ListNode[] lists) &#123;</span><br><span class="line">    return merge(lists, 0, lists.length - 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode mergeTowListNode(ListNode l1, ListNode l2) &#123;</span><br><span class="line">    if (l1 &#x3D;&#x3D; null || l2 &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return l1 !&#x3D; null ? l1 : l2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ListNode head &#x3D; new ListNode(-1);</span><br><span class="line">    ListNode temp &#x3D; head;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;合并</span><br><span class="line">    while (l1 !&#x3D; null &amp;&amp; l2 !&#x3D; null) &#123;</span><br><span class="line">        if (l1.val &lt; l2.val) &#123;</span><br><span class="line">            temp.next &#x3D; l1;</span><br><span class="line">            l1 &#x3D; l1.next;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            temp.next &#x3D; l2;</span><br><span class="line">            l2 &#x3D; l2.next;</span><br><span class="line">        &#125;</span><br><span class="line">        temp &#x3D; temp.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;因为只剩一个链表，直接拼接即可</span><br><span class="line">    temp.next &#x3D; l1 !&#x3D; null ? l1 : l2;</span><br><span class="line"></span><br><span class="line">    return head.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode merge(ListNode[] lists, int l, int r) &#123;</span><br><span class="line">    if (l &#x3D;&#x3D; r) &#123;</span><br><span class="line">        return lists[l];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;处理空数组</span><br><span class="line">    if (l &gt; r) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int mid &#x3D; l + ((r - l) &gt;&gt; 1);</span><br><span class="line">    return mergeTowListNode(merge(lists, l, mid), merge(lists, mid + 1, r));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（kn * log(k)），类似归并排序，设n为所有链表的平均长度，类似二叉树一样看归并，则kn为每层归并需要排序的元素，log(k)为树高，相乘即为时间复杂度。</p>
+<p>空间复杂度：O（log(k)），树高就是空间复杂度，压栈所花费的空间。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
 </search>
