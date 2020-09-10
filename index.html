@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,83 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/10/leetcode-28/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/10/leetcode-28/" class="post-title-link" itemprop="url">leetcode-28</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-10 13:37:10 / 修改时间：13:37:51" itemprop="dateCreated datePublished" datetime="2020-09-10T13:37:10+08:00">2020-09-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/implement-strstr/" target="_blank" rel="noopener">https://leetcode.com/problems/implement-strstr/</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>rabin karp，一种滑动窗口的做法，一直复用之前的计算，使得时间复杂度降低。考虑一下字符的ASCII码，先计算haystack字符串起始位置起needle长度的哈希值，哈希算法使用质数相乘，反复循环needle长度最后得到哈希值。此后，再次移动的时候只要减去第一位字符ASCII码的“偏移计算值”再加上新字符的字符的ASCII码即可。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int strStr(String haystack, String needle) &#123;</span><br><span class="line">        if (needle.length() &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (haystack.length() &lt; needle.length()) &#123;</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        char[] haystackArr &#x3D; haystack.toCharArray();</span><br><span class="line">        char[] needleArr &#x3D; needle.toCharArray();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;使用质数，减少哈希冲突</span><br><span class="line">        long primeNumber &#x3D; 31;</span><br><span class="line">        long haystackHash &#x3D; 0;</span><br><span class="line">        long needleHash &#x3D; 0;</span><br><span class="line">        long pow &#x3D; 1;</span><br><span class="line">        long mod &#x3D; Long.MAX_VALUE &gt;&gt; 1;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; needleArr.length; ++i) &#123;</span><br><span class="line">            haystackHash &#x3D; haystackHash * primeNumber + (haystackArr[i] - &#39;\0&#39;);</span><br><span class="line">            haystackHash %&#x3D; mod;</span><br><span class="line">            needleHash &#x3D; needleHash * primeNumber + (needleArr[i] - &#39;\0&#39;);</span><br><span class="line">            needleHash %&#x3D; mod;</span><br><span class="line">            pow *&#x3D; primeNumber % mod;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (haystackHash &#x3D;&#x3D; needleHash &amp;&amp; haystack.substring(0, needle.length()).equals(needle)) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int i &#x3D; 1; i &lt; haystackArr.length - needleArr.length + 1; ++i) &#123;</span><br><span class="line">            haystackHash &#x3D; (haystackHash * primeNumber - (haystackArr[i - 1] - &#39;\0&#39;) * pow) + (haystackArr[i + needle.length() - 1] - &#39;\0&#39;);</span><br><span class="line">            haystackHash %&#x3D; mod;</span><br><span class="line">            &#x2F;&#x2F;以防万一，处理哈希冲突</span><br><span class="line">            if (haystackHash &#x3D;&#x3D; needleHash &amp;&amp; haystack.substring(i, i + needle.length()).equals(needle)) &#123;</span><br><span class="line">                return i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历一次，每个字符只参与一次计算。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1163,92 +1240,10 @@ p = &quot;mis*is*p*.&quot;
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/27/leetcode-84/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/27/leetcode-84/" class="post-title-link" itemprop="url">leetcode-84</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-27 15:26:33" itemprop="dateCreated datePublished" datetime="2020-07-27T15:26:33+08:00">2020-07-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-20 10:12:03" itemprop="dateModified" datetime="2020-08-20T10:12:03+08:00">2020-08-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">https://leetcode.com/problems/largest-rectangle-in-histogram/</a></p>
-<p>题目描述：给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p>
-<p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>维护一个单调递增栈，从左往右扫一次，对于扫到位置的element，如果element大于等于栈顶的值就压栈；否则，逐个弹出栈顶的值，直到element大于等于栈顶的值，弹栈过程中，更新矩形最大值。为了最后一次也能做计算，我们需要在最后多压一个 -1 入栈，因为 -1 小于所有数组的值。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int largestRectangleArea(int[] heights) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    Stack&lt;Integer&gt; stack &#x3D; new Stack&lt;&gt;();</span><br><span class="line">    int[] heightss &#x3D; new int[heights.length + 1];</span><br><span class="line">    System.arraycopy(heights, 0, heightss, 0, heights.length);</span><br><span class="line">    heightss[heights.length] &#x3D; -1;</span><br><span class="line"></span><br><span class="line">    int top &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; heightss.length; ++i) &#123;</span><br><span class="line">        if (stack.empty() || heightss[stack.peek()] &lt;&#x3D; heightss[i]) &#123;</span><br><span class="line">            stack.push(i);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            while (!stack.empty() &amp;&amp; heightss[stack.peek()] &gt; heightss[i]) &#123;</span><br><span class="line">                top &#x3D; stack.pop();</span><br><span class="line">                ans &#x3D; Math.max(ans, (i - top) * heightss[top]);</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; 不能用 stack.push(i)来代替下面两行，会破坏(i - top) * heightss[top]的计算</span><br><span class="line">            stack.push(top);</span><br><span class="line">            heightss[top] &#x3D; heightss[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
