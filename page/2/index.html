@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,96 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/27/leetcode-42/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/27/leetcode-42/" class="post-title-link" itemprop="url">leetcode-42</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-27 15:28:54 / 修改时间：15:51:49" itemprop="dateCreated datePublished" datetime="2020-07-27T15:28:54+08:00">2020-07-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener">https://leetcode.com/problems/trapping-rain-water/</a></p>
+<p>题目描述：给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。</p>
+<p><img src="http://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/rainwatertrap.png" alt="avatar"></p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入: [0,1,0,2,1,0,1,3,2,1,2,1]</span><br><span class="line">输出: 6</span><br></pre></td></tr></table></figure>
+
+<p>dp思路分析：对于输入的高度数组height，处于i位置的点，设maxLeft[i]是从最左边到i位置为止最高的点，maxRight[i]是从最右边位置到i为止最高的点，它所能承接的雨水是min(maxLeft, maxRight) - height[i]。<br>这里暴力的话，时间复杂度达到n^2，通过预处理，左右各横扫一次，得到最大的值。</p>
+<p>时间复杂度O(n)，空间复杂度O(n)。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int trap(int[] height) &#123;</span><br><span class="line">    int len &#x3D; height.length;</span><br><span class="line">    if (len &lt; 2) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    int maxLeft[] &#x3D; new int[len];</span><br><span class="line">    int maxRight[] &#x3D; new int[len];</span><br><span class="line"></span><br><span class="line">    maxLeft[0] &#x3D; height[0];</span><br><span class="line">    for (int i &#x3D; 1; i &lt; len - 1; ++i) &#123;</span><br><span class="line">        maxLeft[i] &#x3D; Math.max(maxLeft[i - 1], height[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    maxRight[len - 1] &#x3D; height[len - 1];</span><br><span class="line">    for (int i &#x3D; len - 2; i &gt; 0; --i) &#123;</span><br><span class="line">        maxRight[i] &#x3D; Math.max(maxRight[i + 1], height[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 1; i &lt; len - 1; ++i) &#123;</span><br><span class="line">        ans +&#x3D; Math.min(maxLeft[i], maxRight[i]) - height[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的可以优化一下，因为最后遍历累加答案的时候，可以顺便处理maxLeft，即maxLeft不是一个数组而是一个处理到i位置为止最大的值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int trap(int[] height) &#123;</span><br><span class="line">    int len &#x3D; height.length;</span><br><span class="line">    if (len &lt; 2) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    int maxRight[] &#x3D; new int[len];</span><br><span class="line">    maxRight[len - 1] &#x3D; height[len - 1];</span><br><span class="line">    for (int i &#x3D; len - 2; i &gt; 0; --i) &#123;</span><br><span class="line">        maxRight[i] &#x3D; Math.max(maxRight[i + 1], height[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int maxLeft &#x3D; height[0];</span><br><span class="line">    for (int i &#x3D; 1; i &lt; len - 1; ++i) &#123;</span><br><span class="line">        maxLeft &#x3D; Math.max(maxLeft, height[i]);</span><br><span class="line">        ans +&#x3D; Math.min(maxLeft, maxRight[i]) - height[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>单调栈思路分析：对于位置i，i位置所能接的最大雨水取决于左右大中，最低的那个；使用单调递减栈，当出现递增的时候，开始结算雨水，采取每个位置结算多层雨水，累加得到答案。这种方式比较直观，类似模拟从左往右倒水的过程。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int trap(int[] height) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    Stack&lt;Integer&gt; stack &#x3D; new Stack&lt;&gt;();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; height.length; ++i) &#123;</span><br><span class="line">        while (!stack.empty() &amp;&amp; height[stack.peek()] &lt; height[i]) &#123;</span><br><span class="line">            int top &#x3D; stack.pop();</span><br><span class="line">            if (stack.empty()) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            ans +&#x3D; (Math.min(height[stack.peek()], height[i]) - height[top]) * (i - stack.peek() - 1);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>双指针思路：使用左右指针，类似dp的思路，当前位置所能更新的最大值是左右中最高中最低那个减去当前高度。具体是左右指针向中间靠拢，靠拢的过程中维护更新左右的最大值。每次，我们从左右中挑选高度较低那边的指针进行遍历，如果高度比维护的最大值更大就更新，否则就接雨水，累加答案。</p>
+<p>时间复杂度O(n)，空间复杂度O(1)。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int trap(int[] height) &#123;</span><br><span class="line">    if (height.length &lt; 2) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    int maxLeft &#x3D; 0;</span><br><span class="line">    int maxRight &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    int left &#x3D; 0;</span><br><span class="line">    int right &#x3D; height.length - 1;</span><br><span class="line">    while (left &lt; right) &#123;</span><br><span class="line">        if (height[left] &lt; height[right]) &#123;</span><br><span class="line">            if (height[left] &gt;&#x3D; maxLeft) &#123;</span><br><span class="line">                maxLeft &#x3D; height[left];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                ans +&#x3D; maxLeft - height[left];</span><br><span class="line">            &#125;</span><br><span class="line">            left++;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            if (height[right] &gt;&#x3D; maxRight) &#123;</span><br><span class="line">                maxRight &#x3D; height[right];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                ans +&#x3D; maxRight - height[right];</span><br><span class="line">            &#125;</span><br><span class="line">            right--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -948,80 +1038,6 @@
 
 <p>coding技巧，只要后面比之前大，加上差值即可，会凑成每个单调递增区间的差值。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 1; i &lt; prices.length; i++) &#123;</span><br><span class="line">        if (prices[i] &gt; prices[i - 1]) &#123;</span><br><span class="line">            ans +&#x3D; prices[i] - prices[i - 1];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-121/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/20/leetcode-121/" class="post-title-link" itemprop="url">leetcode 121</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-20 15:57:50 / 修改时间：15:58:30" itemprop="dateCreated datePublished" datetime="2020-07-20T15:57:50+08:00">2020-07-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
-<p>往后的比之前最小的差值即可。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int min &#x3D; Integer.MAX_VALUE;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; prices.length; i++) &#123;</span><br><span class="line">        if (prices[i] &lt; min) &#123;</span><br><span class="line">            min &#x3D; prices[i];</span><br><span class="line">        &#125; else if (prices[i] - min &gt; ans) &#123;</span><br><span class="line">            ans &#x3D; prices[i] - min;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
