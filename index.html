@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,83 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/11/leetcode-18/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/11/leetcode-18/" class="post-title-link" itemprop="url">leetcode-18</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-11 18:28:52 / 修改时间：18:29:20" itemprop="dateCreated datePublished" datetime="2020-09-11T18:28:52+08:00">2020-09-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/4sum/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>跟<a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">三数之和</a>一样的做法。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F; 没有4个数就bye bye</span><br><span class="line">    if (nums.length &lt; 4) &#123;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 排序一下</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int len &#x3D; nums.length;</span><br><span class="line">    int left &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; i为第一个数</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len - 3; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">        if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] &gt; target) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;重复的结果需要去重</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">        if (nums[i] + nums[len - 1] + nums[len - 2] + nums[len - 3] &lt; target) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int j &#x3D; i + 1; j &lt; len - 2; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] &gt; target) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;去重</span><br><span class="line">            if (j &gt; i + 1 &amp;&amp; nums[j] &#x3D;&#x3D; nums[j - 1]) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[len - 1] + nums[len - 2] &lt; target) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            int k &#x3D; j + 1;</span><br><span class="line">            int l &#x3D; len - 1;</span><br><span class="line">            while (k &lt; l) &#123;</span><br><span class="line">                int sum &#x3D; nums[i] + nums[j] + nums[k] + nums[l];</span><br><span class="line">                if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                    List&lt;Integer&gt; subAns &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">                    subAns.add(nums[i]);</span><br><span class="line">                    subAns.add(nums[j]);</span><br><span class="line">                    subAns.add(nums[k]);</span><br><span class="line">                    subAns.add(nums[l]);</span><br><span class="line">                    ans.add(subAns);</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125; else if (sum &lt; target) &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：最惨就是O（n<sup>3</sup>），两层循环加上一次区间枚举，但是有搜索剪枝优化，总体小于O（n<sup>3</sup>）。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1137,96 +1214,6 @@ p = &quot;mis*is*p*.&quot;
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int reverse(int x) &#123;</span><br><span class="line">    long ans &#x3D; 0;</span><br><span class="line">    while (x !&#x3D; 0) &#123;</span><br><span class="line">        ans &#x3D; ans * 10 + x % 10;</span><br><span class="line">        x &#x2F;&#x3D; 10;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans &gt; 0x7fffffff || ans &lt; 0x80000000 ? 0 : (int) ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>溢出的其他处理方式：<br>值与Integer.MAX_VALUE/10和Interger.MIN_VALUE/10进行比较，还有 x%10 与 7 和 x%10 与 -8的比较。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/28/leetcode-15/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/28/leetcode-15/" class="post-title-link" itemprop="url">leetcode-15</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-28 01:30:26 / 修改时间：01:42:30" itemprop="dateCreated datePublished" datetime="2020-07-28T01:30:26+08:00">2020-07-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h4><p><a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">https://leetcode.com/problems/3sum/</a></p>
-<p>给你一个包含 <em>n</em> 个整数的数组&nbsp;<code>nums</code>，判断&nbsp;<code>nums</code>&nbsp;中是否存在三个元素 <em>a，b，c ，</em>使得&nbsp;<em>a + b + c = </em>0 ？请你找出所有满足条件且不重复的三元组。</p>
-
-<p><strong>注意：</strong>答案中不可以包含重复的三元组。</p>
-
-<p><strong>示例：</strong></p>
-
-<pre>给定数组 nums = [-1, 0, 1, 2, -1, -4]，
-
-满足要求的三元组集合为：
-[
-  [-1, 0, 1],
-  [-1, -1, 2]
-]
-</pre>
-
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>暴力的话O（n<sup>3</sup>）。超过O（n<sup>2</sup>）的时候，我们就可以考虑排序了 XD，因为一般的排序算法不会超过O（n<sup>2</sup>）。如果是排序后的数组，那么我们可以考虑指针来做。使用两次循环组合前两个数，再使用一个尾指针初始化指向数组末尾，如果尾指针指向位置的值加上循环组合的两个数超过0，则尾指针向前移动，枚举所有的答案。</p>
-<p>时间复杂度O（n<sup>2</sup>），空间复杂度O（log（n）），主要是排序时造成的空间复杂度。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; threeSum(int[] nums) &#123;</span><br><span class="line">    int n &#x3D; nums.length;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i) &#123;</span><br><span class="line">        &#x2F;&#x2F;重复的要剔除</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int r &#x3D; n - 1;</span><br><span class="line">        for (int j &#x3D; i + 1; j &lt; r; ++j) &#123;</span><br><span class="line">            &#x2F;&#x2F;重复的要剔除</span><br><span class="line">            if (j &gt; i + 1 &amp;&amp; nums[j] &#x3D;&#x3D; nums[j - 1]) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;结果太大，尾指针往回走</span><br><span class="line">            while (j &lt; r &amp;&amp; nums[i] + nums[j] + nums[r] &gt; 0) &#123;</span><br><span class="line">                --r;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;不可能第二个数和第三个数同时使用同一个数，有点类似数组越界</span><br><span class="line">            if (j &#x3D;&#x3D; r) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;组合答案</span><br><span class="line">            if (nums[i] + nums[j] + nums[r] &#x3D;&#x3D; 0) &#123;</span><br><span class="line">                List&lt;Integer&gt; subAns &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">                subAns.add(nums[i]);</span><br><span class="line">                subAns.add(nums[j]);</span><br><span class="line">                subAns.add(nums[r]);</span><br><span class="line">                ans.add(subAns);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
