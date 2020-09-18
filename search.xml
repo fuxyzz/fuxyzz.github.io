@@ -755,4 +755,22 @@ for (int i = 0; i &lt; len; i++) {
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode-239</title>
+    <url>/2020/09/18/leetcode-239/</url>
+    <content><![CDATA[<h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>使用单调队列。队列存的元素是单调递增的，队头保存的是当前窗口的最大值。每次走到i位置的时候，当i位置的元素减去队头元素的位置不小于k，删除队头的元素，如果进来的元素大于等于队尾的元素，删除队尾的元素，大于删掉是为了维护单调性，等于是因为重复了可以直接剔除，不剔除也行。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int[] maxSlidingWindow(int[] nums, int k) &#123;</span><br><span class="line">        int len &#x3D; nums.length;</span><br><span class="line">        &#x2F;&#x2F;最后返回的只有len - k + 1个</span><br><span class="line">        int[] ans &#x3D; new int[len - k + 1];</span><br><span class="line">        Deque&lt;Integer&gt; q &#x3D; new ArrayDeque&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        for (int i &#x3D; 0; i &lt; len; ++i) &#123;</span><br><span class="line">            &#x2F;&#x2F;清理到只剩k-1个</span><br><span class="line">            while (!q.isEmpty() &amp;&amp; i - q.peekFirst() &gt;&#x3D; k) &#123;</span><br><span class="line">                q.removeFirst();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;此时进来的大于等于末尾的也要清末尾的，因为不是最大的，前面一步决定了区间</span><br><span class="line">            while (!q.isEmpty() &amp;&amp; nums[q.peekLast()] &lt;&#x3D; nums[i]) &#123;</span><br><span class="line">                q.removeLast();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;添加到队尾</span><br><span class="line">            q.addLast(i);</span><br><span class="line"></span><br><span class="line">            if (i &gt;&#x3D; k - 1) &#123;</span><br><span class="line">                ans[i - k + 1] &#x3D; nums[q.peekFirst()];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），只遍历一次。</p>
+<p>空间复杂度：O（k），辅助使用的队列最多使用空间是k。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
 </search>
