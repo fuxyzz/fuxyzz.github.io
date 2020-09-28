@@ -1004,4 +1004,22 @@ for (int i = 0; i &lt; len; i++) {
         <tag>mysql</tag>
       </tags>
   </entry>
+  <entry>
+    <title>leetcode-371</title>
+    <url>/2020/09/28/leetcode-371/</url>
+    <content><![CDATA[<h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/sum-of-two-integers/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>模拟计算机的加法操作即可，先进行异或操作，再进行进位的操作。这里提一下为什么可以这样做，因为异或的本质是无进位加法，在此之上进行进位操作后就可以得到答案。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int getSum(int a, int b) &#123;</span><br><span class="line">    if (b &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        return a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int sum &#x3D; a ^ b;</span><br><span class="line">    &#x2F;&#x2F;进位</span><br><span class="line">    int carry &#x3D; (a &amp; b) &lt;&lt; 1;</span><br><span class="line"></span><br><span class="line">    return getSum(sum, carry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（1），因为最差就是a和b相等，且二进制全1的情况，int最高是32，是常数级别。</p>
+<p>空间复杂度：O（1），尾递归，没有栈的消耗。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+        <category>leetcode</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
 </search>
