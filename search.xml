@@ -835,49 +835,6 @@ for (int i = 0; i &lt; len; i++) {
       </tags>
   </entry>
   <entry>
-    <title>浅谈java中的锁</title>
-    <url>/2020/09/22/%E6%B5%85%E8%B0%88java%E4%B8%AD%E7%9A%84%E9%94%81/</url>
-    <content><![CDATA[<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>锁是在多进程并发竞争资源的时候保证数据稳定的手段，宏观的思想是将并行的请求串行化。串行化会引起效率降低，于是便出现了多种多样的锁在应对不同的场景下使得效率尽可能的高。</p>
-<p>java中的锁：synchronized，ReentrantLock（线程独占），Semaphore（线程共享），CountDownLatch（线程共享）等等。</p>
-<h1 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h1><p>JDK1.6以前都是重量级锁，锁粒度太大，并发度受到相当大的限制，JDK1.6以后虚拟机中底层优化了锁的机制，对synchronized实现了几种锁，分别是：偏向锁，轻量级锁，重量级锁。一般使用synchronized后，当有新的请求来到，如果有请求正在占用则加入队列排队。锁的升级：偏向锁-》轻量级锁-》重量级锁。java虚拟机默认开启偏向锁和轻量级锁，也可以通过启动参数使用无锁。</p>
-<p>重量级锁：重量级锁使用monitor实现，底层使用了操作系统的mutex lock来实现，所以也称互斥锁。操作系统的线程切换需要从用户态转换到内核态，成本很高，在jdk1.6以前只有这一种锁，为了减少获得锁和释放锁带来的性能消耗，引入了轻量级锁和偏向锁。</p>
-<p>轻量级锁：适用于没有多线程竞争，线程交替执行同步代码区的情况。一旦同一时间有多个线程同时请求同一把锁的时候就会膨胀为重量级锁。轻量级锁会有多次CAS操作，因为多线程会竞争锁。加锁过程：</p>
-<p>（1）判断锁状态是否为无锁，如果是就将当前线程的栈帧建立一个锁记录（Lock Record），存储锁对象（即我们使用synchronized时指定的对象）的mark word，官方称为displaced mark word（因为原来的mark word会被替代）</p>
-<p>（2）拷贝对象头的mark word复制到线程的栈帧的锁记录中</p>
-<p>（3）使用CAS操作将对象头的mark word更新为指向锁记录的指针（就在此时被替代了，猜测是为了让其他线程判断是否有线程已经获取锁）</p>
-<p>（4）如果（3）更新成功，则当前线程就拥有了锁对象，可以进入同步代码区</p>
-<p>（5）如果（3）更新失败，判断锁对象头的mark word是否指向自己，如果是则说明拥有锁对象，可以进入同步代码区，如果不是则说明存在多个线程竞争锁，需要升级为重量级锁</p>
-<p>偏向锁：适用于单线程的场景，偏向指的是会偏向第一个获得偏向锁的线程，如果再次访问和退出同步代码区的时候不会进行加锁和解锁操作，而是做以下的操作：<br>（1）load-and-test，判断当前线程id与markword中的线程id是否一致，一致说明成功获得了锁继续执行代码，不一致执行（2）<br>（2）检查对象是否还可偏向，未偏向则执行CAS操作来竞争锁，也就是第一次获取锁时的操作；如果已经偏向，而且不是偏向自己，则说明存在竞争，升级为轻量级锁</p>
-<p>适应性自旋（Adaptive Spinning）：该锁设计的目的是为了不加入队列排队，认为被锁的代码区可能已经被访问完，只是由于线程上下文切换的原因没有及时的让出资源，通过循环占用cpu消耗无意义的时间来等待。出现的时间点：当线程在获取轻量级锁的过程中执行CAS操作失败时，是要通过自旋来获取重量级锁的。JDK中采用与普通自旋不同的操作，如果自旋成功了，下次可自旋次数增加，如果自旋失败了，下次自旋次数减少。自旋是为了让轻量级锁不升级为重量级锁，一旦升级为重量级锁就不再会有自旋操作。JDK1.5之前的版本是固定次数的自旋，JDK1.6之后改为适应性自旋。</p>
-<p>（1）如果平均负载小于CPUs则一直自旋<br>（2）如果有超过(CPUs/2)个线程正在自旋，则后来线程直接阻塞<br>（3）如果正在自旋的线程发现Owner发生了变化则延迟自旋时间（自旋计数）或进入阻塞<br>（4）如果CPU处于节电模式则停止自旋<br>（5）自旋时间的最坏情况是CPU的存储延迟（CPU A存储了一个数据，到CPU B得知这个数据直接的时间差）<br>（6）自旋时会适当放弃线程优先级之间的差异</p>
-<p>释放偏向锁（偏向锁升级为轻量级锁）：开销大。执行步骤：<br>（1）等待全局安全点<br>（2）停止拥有锁的线程，遍历线程栈，存在锁记录的要修复记录和mark word，置为无锁状态<br>（3）唤醒线程，升级锁</p>
-<p>获取轻量级锁：线程尝试获取锁，如果锁对象的mark word对应的线程还在占用则修改mark word的，修改重量级锁的标志位，代表升级为重量级锁；如果对应的线程没有占用则表示获取锁成功。</p>
-<p>释放轻量级锁：释放的时候查看mark word与获取锁时拷贝的mark word值是否一致，如果不一致说明有其他线程尝试来竞争锁，则需要升级为重量级锁。此时需要解决一个问题，mark word的值被修改了，但是修改这个值的线程没有占用，则判断一下mark word对应的线程是否持有锁，如果没有，通过CAS修改值。</p>
-<p>全局安全点（在这个时间点上没有字节码正在执行）</p>
-<p>锁粗化：循环时加锁，例如循环中使用StringBuffer.append()方法，会造成一直加锁释放锁（反复进出临界区），效率低下。</p>
-<h1 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h1><p>ReentrantLock底层依赖AQS（AbstractQueuedSynchronizer），AQS底层依赖CAS操作。</p>
-<p>关注ReentrantLock的lock和unlock方法。</p>
-<p>ReentrantLock有两个锁的选择：FairSync（公平锁）和NonfairSync（非公平锁），默认使用非公平锁，非公平锁的吞吐量更高。两个锁的lock最终都是用到AQS的acquire方法</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final void acquire(int arg) &#123;</span><br><span class="line">    if (!tryAcquire(arg) &amp;&amp;</span><br><span class="line">        acquireQueued(addWaiter(Node.EXCLUSIVE), arg))</span><br><span class="line">        selfInterrupt();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>tryAcquire方法由两个锁各自实现，区别在于公平锁每次都是由队列的头部元素去获取锁，所以多了一个队头的判断。</p>
-<p>addWaiter方法将线程加入等待队列尾部。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private Node addWaiter(Node mode) &#123;</span><br><span class="line">    Node node &#x3D; new Node(Thread.currentThread(), mode);</span><br><span class="line">    &#x2F;&#x2F; Try the fast path of enq; backup to full enq on failure</span><br><span class="line">    Node pred &#x3D; tail;</span><br><span class="line">    if (pred !&#x3D; null) &#123;</span><br><span class="line">        node.prev &#x3D; pred;</span><br><span class="line">        if (compareAndSetTail(pred, node)) &#123;</span><br><span class="line">            pred.next &#x3D; node;</span><br><span class="line">            return node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    enq(node);</span><br><span class="line">    return node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>acquireQueued方法自旋获取资源，返回是否中断过（中断过表示线程在等待过程中休息被唤醒过，前置结点可能释放资源了）。如果自旋获取失败则直接出队（防止出现线程饥饿）。shouldParkAfterFailedAcquire方法获取前置结点是否有signal状态（这个状态代表释放资源后会通知后继结点），parkAndCheckInterrupt方法获取线程是否被中断过。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">final boolean acquireQueued(final Node node, int arg) &#123;</span><br><span class="line">    boolean failed &#x3D; true;</span><br><span class="line">    try &#123;</span><br><span class="line">        boolean interrupted &#x3D; false;</span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            final Node p &#x3D; node.predecessor();</span><br><span class="line">            if (p &#x3D;&#x3D; head &amp;&amp; tryAcquire(arg)) &#123;</span><br><span class="line">                setHead(node);</span><br><span class="line">                p.next &#x3D; null; &#x2F;&#x2F; help GC</span><br><span class="line">                failed &#x3D; false;</span><br><span class="line">                return interrupted;</span><br><span class="line">            &#125;</span><br><span class="line">            if (shouldParkAfterFailedAcquire(p, node) &amp;&amp;</span><br><span class="line">                parkAndCheckInterrupt())</span><br><span class="line">                interrupted &#x3D; true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        if (failed)</span><br><span class="line">            cancelAcquire(node);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>acquire的selfInterrupt方法表示中断线程，唤醒线程执行代码。为何要判断历史是否中断过，如果没有中断过，说明没有被唤醒执行，说明历史上一直在排队还没有获取过cpu资源（挺惨的）。如果被中断过说明已经被中断唤醒，已经在running了，不能去中断执行。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected final boolean tryRelease(int releases) &#123;</span><br><span class="line">    int c &#x3D; getState() - releases;</span><br><span class="line">    if (Thread.currentThread() !&#x3D; getExclusiveOwnerThread())</span><br><span class="line">        throw new IllegalMonitorStateException();</span><br><span class="line">    boolean free &#x3D; false;</span><br><span class="line">    if (c &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        free &#x3D; true;</span><br><span class="line">        setExclusiveOwnerThread(null);</span><br><span class="line">    &#125;</span><br><span class="line">    setState(c);</span><br><span class="line">    return free;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>tryRelease是子类自行实现的，父类直接抛出了异常，因为有些子类并不需要这些方法，不需要实现，所以需要的子类自行实现即可。ReentrantLock内部类Sync继承Aqs，实现了上述的代码，这个对于公平锁和非公平锁都是一样的，所以不是在NonfairSync和FairSync去实现（锁的时候在两个子类去实现是因为一个是竞争，一个是排队。释放的时候只能一个一个串行化的释放，所以是一样的，在父类Sync实现即可）。</p>
-<p>注：这里的中断不是指线程正在运行然后被中断运行，而是指被其他线程进行中断操作请求响应处理。例如a线程给b线程发送了中断的指令请求响应，此时b线程收到后保存上下文的信息，响应中断，执行指令。</p>
-]]></content>
-      <categories>
-        <category>java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>static为什么不能修饰外部类</title>
     <url>/2020/09/22/static%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E4%BF%AE%E9%A5%B0%E5%A4%96%E9%83%A8%E7%B1%BB/</url>
     <content><![CDATA[<p>static修饰的为类成员,会随着类的加载而加载,比如静态代码块,静态成员,静态方法(这里只是加载,并没有调用)等等,可以想象一下,如果把一个Class文件中的外部类设为static,目的难道是让这个类随着应用的启动而加载吗？如果在这次使用过程中根本没有使用过这个类,那么是不是就会浪费内存。这样来说设计不合理,总而言之,设计不合理的地方,Java是不会让它存在的。</p>
@@ -1020,6 +977,112 @@ for (int i = 0; i &lt; len; i++) {
       </categories>
       <tags>
         <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中的锁</title>
+    <url>/2020/10/09/Java%E4%B8%AD%E7%9A%84%E9%94%81/</url>
+    <content><![CDATA[<h1 id="乐观锁和悲观锁"><a href="#乐观锁和悲观锁" class="headerlink" title="乐观锁和悲观锁"></a>乐观锁和悲观锁</h1><p>在了解java中的锁之前，我们需要先了解乐观锁和悲观锁。</p>
+<p>悲观锁是指数据并发的时候，认为在使用数据的时候会有其他线程来修改数据，因此在获取数据的时候会进行加锁。</p>
+<p>乐观锁是指数据并发的时候，乐观锁认为在使用数据的时候不会有其他线程来修改数据，因此只在更新数据的时候判断有没有其他线程更新了数据（ABA问题可以用时间戳或者版本号解决）。</p>
+<p>应用场景：乐观锁适合读多写少，不加锁的特点使得性能能够大幅提升。悲观锁适合写多读少，先加锁可以保证写操作数据正确。</p>
+<h1 id="java中的锁实现"><a href="#java中的锁实现" class="headerlink" title="java中的锁实现"></a>java中的锁实现</h1><h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>通过无锁编程，常用的是CAS算法实现，例如并发包下的Atomic包下的类，例如AtomicInteger，通过CAS自旋实现。</p>
+<p>CAS全称Campare And Swap，在不使用锁的情况下实现多线程的变量同步。CAS涉及三个操作：</p>
+<p>（1）读取需要读写的内存值</p>
+<p>（2）比较值</p>
+<p>（3）写入新值</p>
+<p>底层操作系统通过类似原语的原子操作保证比较和写入是一个原子操作，一般情况下写入是不断重试的操作。</p>
+<p>举个例子：AtomicInteger的getAndIncrement方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final int getAndAddInt(Object var1, long var2, int var4) &#123;</span><br><span class="line">    int var5;</span><br><span class="line">    do &#123;</span><br><span class="line">        var5 &#x3D; this.getIntVolatile(var1, var2);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;自旋直至成功</span><br><span class="line">    while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">    return var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CAS存在的问题：</p>
+<p>（1）CAS会引起ABA问题，JDK从1.5开始提供了AtomicStampedReference类来解决ABA问题。</p>
+<p>（2）自旋开销问题，如果长时间CAS操作不成功，会一直自旋，浪费CPU资源。</p>
+<p>（3）保证一个共享变量的原子性，不能保证多个变量操作时的原子性。Java从1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，可以把多个变量放在一个对象里来进行CAS操作。</p>
+<p>关于自旋：唤醒或阻塞一个线程需要操作系统切换CPU，这种状态转换需要耗费处理器的时间，如果同步代码块中的内容非常简单，状态转换时间有可能比用户代码执行时间还要长。很多场景下，同步资源等待锁的情况很少，为了一小段时间去切换线程，非常的得不偿失。如果有多个CPU，能够让两个或以上的线程同时并行的执行，就可以让后请求的线程不阻塞不放弃CPU的执行时间，等待前面的线程是否很快就会释放锁。自旋锁有限制次数，默认是10次，可以用-XX:PreBlockSpin更改，如果达到限制次数没有成功获得锁，就需要阻塞线程（或者说挂起吧）。</p>
+<p>自旋锁在JDK1.4.2中引入，使用-XX:+UseSpinning来开启。JDK 6中为默认开启，并且引入了适应性自旋锁。</p>
+<p>自适应的意思是自旋的次数不再固定，由上一次在同一个锁上自旋次数及拥有者的状态来决定。如果在同一个锁对象上自旋等待成功获得过锁，并且拥有锁的线程在运行中，那么JVM认为很可能再次成功获取锁，允许将这次的自旋次数提高。如果对于某个锁，自旋很少成功，后面尝试获取这个锁的时候获取失败直接阻塞，不进行自旋操作。</p>
+<p>自旋锁常见的锁形式：TicketLock、CLHlock和MCSlock。</p>
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><p>Synchronized在JDK1.6以前是悲观锁的实现，1.6引入了无锁，偏向锁，轻量级锁，重量级锁。由于无锁是CAS实现的乐观锁，1.6不能单纯的将Synchronized认为是悲观锁。</p>
+<p>先探究一下Synchronized实现线程同步的原理。主要依赖两个东西，JAVA对象头和Monitor。</p>
+<p>JAVA对象头在Hotspot虚拟机里包含两部分数据，Mark Word（标记字段），Klass Pointer（类型指针）。</p>
+<p>Mark Word：默认存储对象的HashCode，分代年龄，锁标志位信息。存储的都是与对象自身无关的信息，运行期间Mark Word的信息会根据锁状态的不同发生改变。</p>
+<p>Klass Pointer：对象指向它类元数据的指针，JVM通过它确定对象是哪个类的实例。</p>
+<p>Monitor：一种同步机制，依赖底层操作系统的Mutex Lock（互斥锁）实现线程同步。每个JAVA对象都有一把Monitor锁。Monitor是线程私有的数据结构，每个线程都有Monitor Record列表，同时有全局共享的可用列表。每一个被锁的对象都会和一个Monitor关联，同时Monitor有一个Owner字段存放拥有该锁的线程的唯一标志，表示锁被该线程占用。</p>
+<p>锁状态及Mark Word对于标志位</p>
+<table>
+<thead>
+<tr>
+<th align="center">锁状态</th>
+<th align="center">存储内容</th>
+<th align="center">标志位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">无锁</td>
+<td align="center">对象HashCode，分代年龄，偏向锁标志位（0）</td>
+<td align="center">01</td>
+</tr>
+<tr>
+<td align="center">偏向锁</td>
+<td align="center">偏向线程，偏向时间戳，分代年龄，偏向锁标志位（1）</td>
+<td align="center">01</td>
+</tr>
+<tr>
+<td align="center">轻量级锁</td>
+<td align="center">执行栈中锁记录的指针</td>
+<td align="center">00</td>
+</tr>
+<tr>
+<td align="center">重量级锁</td>
+<td align="center">指向重量级锁的指针</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">GC标志</td>
+<td align="center">空，没有记录信息</td>
+<td align="center">11</td>
+</tr>
+</tbody></table>
+<p>无锁：</p>
+<p>多个线程都能访问和修改同一个资源，只有一个成功，底层依赖CAS实现。</p>
+<p>偏向锁：</p>
+<p>一段同步代码块一直被一个线程访问，那么该线程就会自动获取锁，降低获取的代价。应用的场景是在无多线程竞争的场景下尽量减少不必要的轻量级锁执行，因为执行的过程设计多次的获取和释放CAS原子指令，偏向锁通过更新偏向线程ID的时候执行一次CAS指令即可。</p>
+<p>偏向锁只有在其他线程尝试竞争偏向锁的时候释放锁，线程不会主动释放偏向锁。偏向锁释放时机在全局安全点，先暂停拥有偏向锁的线程，判断对象是否处于锁定状态。释放偏向锁后升级为轻量级锁状态。</p>
+<p>1.6以后默认开启，可以用-XX:-UseBiasedLocking=false关闭。</p>
+<p>轻量级锁：</p>
+<p>当锁是偏向锁的时候，被另外的线程访问，偏向锁就会升级为轻量级锁。其他线程会使用自旋锁获取锁资源，提高性能。</p>
+<p>代码进入同步块的时候，如果对象的锁状态为无锁状态，JVM在当前线程的栈帧中建立一个Lock Record列表，存储对象目前Mark Word的副本。</p>
+<p>存储对象Mark Word副本成功后，使用CAS指针将对象的Mark Word更新为指向Lock Record的指针，将Lock Record的Owner指针指向对象的Mark Word。</p>
+<p>如果更新成功，线程就拥有了锁资源。</p>
+<p>如果更新失败，JVM先检查对象的Mark Word是否指向当前线程的栈帧，如果是说明当前线程已经拥有了锁资源，继续执行，否则说明处于多线程竞争中。</p>
+<p>如果只有一个等待线程，线程通过自旋等待锁资源。如果自旋次数超过限制次数，或者一个线程在持有锁，一个在自旋，此时又有更多线程尝试获取锁资源，则升级为重量级锁。</p>
+<p>重量级锁：</p>
+<p>Mark Word中存储指向重量级锁的指针，等待的线程都会进入阻塞状态。</p>
+<p>结论及注意事项：</p>
+<p>（1）锁只能升级不能降级</p>
+<p>（2）从上述的描述很容易看出锁是对象级别的，不是所有对象都是同一锁级别的</p>
+<p>（3）偏向锁通过对比Mark Word解决锁问题，减少CAS操作</p>
+<p>（4）轻量级锁通过CAS操作和自旋解决锁问题，避免线程阻塞和唤醒影响性能</p>
+<p>（5）重量级锁将拥有锁以外的线程全部阻塞</p>
+<h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p>ReentrantLock底层实现了公平锁和非公平锁，默认使用非公平锁。</p>
+<p>公平锁是按申请锁的时间顺序获取锁，进入队列等待获取，公平锁的优点是不会造成饿死现象。缺点是吞吐效率相对非公平锁要低，等待队列中除了第一个线程外其他线程全部阻塞，CPU唤醒阻塞线程的开销比非公平锁要大。</p>
+<p>非公平锁是多个线程加锁时直接获取锁，获取不到才会到等待队列中进行排队，如果此时锁刚好可用就无需阻塞直接获取到锁，所以非公平锁可能会出现后申请锁资源却先获取到锁资源的情况。非公平锁的优点是减少唤起线程的开销，整体的吞吐率更高，因为线程有几率不阻塞直接获取锁，CPU不必唤醒所有线程。缺点是处于等待队列中的线程可能会饿死，或者等待很久才会获得锁。</p>
+<p>在源码中，公平锁比非公平锁在获取锁的时候多了一个判断，通过hasQueuedPredecessors判断当前线程是否处于队列的头部。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final boolean hasQueuedPredecessors() &#123;</span><br><span class="line">    &#x2F;&#x2F; The correctness of this depends on head being initialized</span><br><span class="line">    &#x2F;&#x2F; before tail and on head.next being accurate if the current</span><br><span class="line">    &#x2F;&#x2F; thread is first in queue.</span><br><span class="line">    Node t &#x3D; tail; &#x2F;&#x2F; Read fields in reverse initialization order</span><br><span class="line">    Node h &#x3D; head;</span><br><span class="line">    Node s;</span><br><span class="line">    return h !&#x3D; t &amp;&amp;</span><br><span class="line">        ((s &#x3D; h.next) &#x3D;&#x3D; null || s.thread !&#x3D; Thread.currentThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结一下：公平锁是排队，非公平锁是插队。</p>
+<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>可重入锁又名递归锁，指同一个线程在外层方法获取锁的时候，再进入该线程的内层方法会自动获取锁（前提是同一个对象或者class），不会因为之前获取过还没释放而阻塞。Synchronized和ReentrantLock都是可冲入锁，可重入锁可以一定程度上避免死锁。</p>
+<h3 id="共享锁和排他锁"><a href="#共享锁和排他锁" class="headerlink" title="共享锁和排他锁"></a>共享锁和排他锁</h3><p>共享锁是指锁可以被多个线程持有，如果线程A对数据Data加了共享锁后，其他线程也只能对Data加共享锁，不能加排他锁。获取共享锁的线程只能读，不能修改Data。</p>
+<p>排他锁是指锁只能被一个线程持有，如果给一个数据加上排他锁，其他线程不能对数据再加上任何类型的锁。获得排他锁的线程既可以读也可以写。Synchronized和ReentrantLock都是排他锁。</p>
+<p>ReentrantReadWriteLock实现了共享锁和排他锁，内部有两把锁，ReadLock和WriteLock。ReadLock就是读锁，是共享锁的实现，WriteLock是写锁，是排他锁的实现。</p>
+<p>在AQS中有个int变量state，表示多少线程获取了锁。在排他锁的情况下，这个变量是0或者1（如果是可重入锁state表示重入的次数），共享锁中就是持有锁的数量。在ReentrantReadWriteLock的实现中，直接将state变量对半切分了，高16位用于统计读锁个数，低16位用于统计写锁个数。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>所有的锁最终都是用到了CAS进行数据保证，甚至利用CAS避免线程阻塞使得从用户态切换到内核态，但是为了尽可能的减少CAS操作（因为涉及到缓存失效，其他线程需要从主存中重新获取，开销挺大），做了其他的一些优化。Synchronized和ReentrantLock效率上在JDK1.6版本以后几乎没有性能的差距，在并发量不高的情况下Synchronized也许效率会更高。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
 </search>
