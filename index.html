@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,100 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/" class="post-title-link" itemprop="url">Java内存模型（JMM）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-14 09:28:42 / 修改时间：09:29:26" itemprop="dateCreated datePublished" datetime="2020-10-14T09:28:42+08:00">2020-10-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Java Memory Model，简称JMM，翻译为Java内存模型。具体是指Java中线程的工作方式。</p>
+<p>前置知识：线程有自己的工作内存，各个线程之间是不共享自己工作内存数据的，线程之间也是不能直接进行通信。</p>
+<p>并发情况下，多个线程可能同时读取了同个变量（拷贝了副本），当这些线程同时进行修改的时候，其他工作线程对变量不可见，这就会导致出现并发修改同个变量错误的问题。为了解决这个问题，提出了Java内存模型。</p>
+<h3 id="工作流程图"><a href="#工作流程图" class="headerlink" title="工作流程图"></a>工作流程图</h3><p><img src="https://s1.ax1x.com/2020/10/13/0fjZPs.png" alt="avatar"></p>
+<p>如图所示，多线程并发共享变量的时候，用一系列的原子操作来进行。</p>
+<h3 id="JMM中的数据原子操作"><a href="#JMM中的数据原子操作" class="headerlink" title="JMM中的数据原子操作"></a>JMM中的数据原子操作</h3><p>read：从主内存中读取数据</p>
+<p>load：将read读取到的数据写入线程的工作内存中</p>
+<p>use：从工作内存中读取数据进行计算</p>
+<p>assign：将计算好的值重新写入工作内存中</p>
+<p>store：将工作内存中的数据写入主内存</p>
+<p>write：将store写入的值赋值给主内存中的变量</p>
+<p>lock：将主内存变量加锁，标志为独占状态</p>
+<p>unlock：将主内存变量解锁，标志为其他线程可以锁定该变量</p>
+<p>lock和unlock是早期解决不同线程之间变量同步的方案，通过加锁的方式将并发操作变为串行化操作来实现。在当今服务器CPU核心很多的情况下，这种操作会大大降低效率。后续的方案是MESI缓存一致性协议，CPU通过总线嗅探机制感知数据的变化从而将自己的缓存数据失效来实现，同时为了解决多个线程同时并发修改的问题，锁定变量操作改为在store的时候进行加锁，降低锁的力度，更高效。</p>
+<p>Java中是通过volatile关键字修饰变量来达到的。注意volatile不能保证原子性，假设有两个线程获取了变量i，都进行i++ 操作，线程1与线程2都执行到assign，然后线程1先执行store，此时由于总线嗅探机制，线程2会重新从主存中获取i的值，然后执行store和write，相当于没有进行i++ 操作，这也是因为i++并不是一个原子操作的原因。</p>
+<h3 id="高并发三大特性"><a href="#高并发三大特性" class="headerlink" title="高并发三大特性"></a>高并发三大特性</h3><p>高并发三大特性：原子性，有序性，一致性（可见性）。</p>
+<p>volatile保证了有序性和一致性，有序性是通过禁止指令重排序实现，一致性通过底层的MESI缓存一致性协议实现。</p>
+<p>Synchronized保证了原子性，有序性和一致性。原子性通过monitorenter和monitorexit实现，底层是调用了JMM中原子操作lock和unlock，可以理解是由于锁将代码串行化执行保证了原子性。一致性是通过在unlock之前必须先将变量同步回主存（即执行store和write）。有序性与原子性一样也是通过串行化执行来实现。</p>
+<h3 id="happends-before（先行发生）原则"><a href="#happends-before（先行发生）原则" class="headerlink" title="happends-before（先行发生）原则"></a>happends-before（先行发生）原则</h3><p>程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作</p>
+<p>锁定规则：一个unLock操作先行发生于后面对同一个锁的lock操作</p>
+<p>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作</p>
+<p>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C</p>
+<p>线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作</p>
+<p>线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生</p>
+<p>线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行</p>
+<p>对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始</p>
+<p>这8条规则适用单线程，jvm会将没有数据依赖的语句进行指令重排序，多线程可能会出现问题。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1048,83 +1142,6 @@
 
 <h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），只遍历一次。</p>
 <p>空间复杂度：O（k），辅助使用的队列最多使用空间是k。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/14/leetcode-94/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/14/leetcode-94/" class="post-title-link" itemprop="url">leetcode-94</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-14 12:29:18 / 修改时间：12:29:59" itemprop="dateCreated datePublished" datetime="2020-09-14T12:29:18+08:00">2020-09-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/" target="_blank" rel="noopener">原题链接</a></p>
-<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>中序遍历是左中右，通过栈模拟即可。</p>
-<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;Integer&gt; inorderTraversal(TreeNode root) &#123;</span><br><span class="line">    List&lt;Integer&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    if (root &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Deque&lt;TreeNode&gt; stack &#x3D; new ArrayDeque&lt;&gt;();</span><br><span class="line">    while (root !&#x3D; null || !stack.isEmpty()) &#123;</span><br><span class="line">        while (root !&#x3D; null) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root &#x3D; root.left;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        root &#x3D; stack.pop();</span><br><span class="line">        list.add(root.val);</span><br><span class="line">        root &#x3D; root.right;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），每个结点只会被访问一次。</p>
-<p>空间复杂度：O（n），空间复杂度取决于栈最多压入的元素，最差是单链表的情况。</p>
 
       
     </div>
