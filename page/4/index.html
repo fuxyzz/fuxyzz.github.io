@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,97 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-188/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-188/" class="post-title-link" itemprop="url">leetcode 188</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-20 16:00:41 / 修改时间：16:01:11" itemprop="dateCreated datePublished" datetime="2020-07-20T16:00:41+08:00">2020-07-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
+<p>由于买卖次数不确定，只能用dp做。</p>
+<p>状态位表示：</p>
+<p>（1）dp[i][yes][j]表示第i天持有股票且历史（包括本次买入）的持有股票数量j；</p>
+<p>（2）dp[i][no][j]表示第i天无持有股票且历史（包括本次卖出）的抛售股票数量为j；</p>
+<p>则有</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;当天持有股票且最大利润的结果为前一天历史持有j只股票与前一天历史抛售j-1只股票后在当天买入的最大值</span><br><span class="line">dp[i][yes][j] &#x3D; max( dp[i-1][yes][j] , dp[i-1][no][j-1] - prices[i] );</span><br><span class="line">&#x2F;&#x2F;当天无持有股票且最大利润的结果为前一天历史抛售j只股票与前一天历史持有j只股票后在当天卖出的最大值</span><br><span class="line">dp[i][no][j] &#x3D; max( dp[i-1][no][j] , dp[i-1][yes][j] + prices[i] );</span><br></pre></td></tr></table></figure>
+
+<p>注意到yes和no这一维其实可以用两个数组就可以降下来，考虑状态位优化：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;buy表示当前持有股票状态</span><br><span class="line">buy[i][j] &#x3D; max( buy[i-1][j] , sell[i-1][j-1] - prices[i] );</span><br><span class="line">&#x2F;&#x2F;sell表示当前无持有股票状态</span><br><span class="line">sell[i][j] &#x3D; max( sell[i-1][j] , buy[i-1][j] + prices[i] );</span><br></pre></td></tr></table></figure>
+<p>再次观察式子，后一天的状态跟前一天其实是无关的。</p>
+<p>（1）对于buy[i][j] = max( buy[i-1][j] , sell[i-1][j-1] - prices[i] )，当前历史持有j只股票只跟前一天的买入和前一天的j-1次买入有关，前一天的j-1很重要，如果是j则需要用数组来copy上一次的sell数组。</p>
+<p>（2）对于sell[i][j] = max( sell[i-1][j] , buy[i-1][j] + prices[i] )，当前历史持有j只股票只跟前一天为止卖出了j只股票和包括今天持有股票且历史持有j次有关。而且buy[i-1][j]不可能被上式buy[i][j]的更新影响，因为当天买入股票又卖出股票的情况不会比前一天买入低价当天卖出高价更大。</p>
+<p>最终优化为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;此时可以简化buy[j]的意义为交易小于等于j次且手头持有股票时的最大利润</span><br><span class="line">buy[j] &#x3D; Math.max(sell[j - 1] - prices[i], buy[j]);</span><br><span class="line">&#x2F;&#x2F;此时可以简化sell[j]的意义为交易小于等于j次且手头没有股票时的最大利润</span><br><span class="line">sell[j] &#x3D; Math.max(sell[j], buy[j] + prices[i]);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int k, int[] prices) &#123;</span><br><span class="line">        int len &#x3D; prices.length;</span><br><span class="line">        int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">        if (k &gt;&#x3D; (len &gt;&gt; 1)) &#123;</span><br><span class="line">            for (int i &#x3D; 1; i &lt; len; i++) &#123;</span><br><span class="line">                ans +&#x3D; prices[i] &gt; prices[i - 1] ? prices[i] - prices[i - 1] : 0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            int[] buy &#x3D; new int[k + 1];</span><br><span class="line">            int[] sell &#x3D; new int[k + 1];</span><br><span class="line">            &#x2F;&#x2F;不填充就不买入了，而且必须填充所有的，因为第一天最后无论交易多少次手上只要持有，必定是亏损</span><br><span class="line">            &#x2F;&#x2F;可以用Integer.MIN_VALUE &gt;&gt; 1初始化，除以2是为了防止sell[j - 1] - prices[i]溢出，也可以用意义更为明确的-prices[0]</span><br><span class="line">            Arrays.fill(buy, Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            &#x2F;&#x2F;可以不填充卖出，有买入才有卖出</span><br><span class="line">            &#x2F;&#x2F;Arrays.fill(sell, Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            for (int i &#x3D; 1; i &lt; len; i++) &#123;</span><br><span class="line">                for (int j &#x3D; 1; j &lt;&#x3D; k &amp;&amp; j &lt;&#x3D; i; j++) &#123;</span><br><span class="line">                    buy[j] &#x3D; Math.max(sell[j - 1] - prices[i], buy[j]);</span><br><span class="line">                    sell[j] &#x3D; Math.max(sell[j], buy[j] + prices[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;可以不用遍历，可能i在小于k的时候拿到最大值，但是更新i+1的时候会拿i的值比较刷新，因为要保证当前是利润最大的</span><br><span class="line">            &#x2F;&#x2F;或者理解成i+1次的时候可以通过当天买入卖出凑次数，虽然实际上并非如此</span><br><span class="line">            &#x2F;&#x2F;for (int i &#x3D; 0; i &lt;&#x3D; k; i++) &#123;</span><br><span class="line">            &#x2F;&#x2F;    ans &#x3D; Math.max(sell[i], ans);</span><br><span class="line">            &#x2F;&#x2F;&#125;</span><br><span class="line">            &#x2F;&#x2F;答案一定在最终卖出的时候取得，如果最后还持有股票，那么一定不会达到最大的利润</span><br><span class="line">            ans &#x3D; sell[k];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>二维dp数组写法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int k, int[] prices) &#123;</span><br><span class="line">        int len &#x3D; prices.length;</span><br><span class="line">        int ans &#x3D; 0;</span><br><span class="line">        if(k &gt;&#x3D; (len &gt;&gt; 1)) &#123;</span><br><span class="line">            for(int i &#x3D; 1; i &lt; len; ++i)&#123;</span><br><span class="line">                if(prices[i] &gt; prices[i - 1])&#123;</span><br><span class="line">                    ans +&#x3D; prices[i] - prices[i-1];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            int[][] dp &#x3D; new int[2][k + 1];</span><br><span class="line">            Arrays.fill(dp[0], Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            &#x2F;&#x2F;可用Arrays.fill(dp[0], -prices[0]);</span><br><span class="line"></span><br><span class="line">            for(int i &#x3D; 1; i &lt; len; ++i)&#123;</span><br><span class="line">                for(int j &#x3D; 1; j &lt;&#x3D; k &amp;&amp; j &lt;&#x3D; i; ++j)&#123;</span><br><span class="line">                    dp[0][j] &#x3D; Math.max( dp[0][j] , dp[1][j - 1] - prices[i]);</span><br><span class="line">                    dp[1][j] &#x3D; Math.max( dp[1][j] , dp[0][j] + prices[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;	</span><br><span class="line"></span><br><span class="line">            ans &#x3D; dp[1][k];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
