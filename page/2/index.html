@@ -182,7 +182,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">39</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,6 +223,232 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/static%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E4%BF%AE%E9%A5%B0%E5%A4%96%E9%83%A8%E7%B1%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/static%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E4%BF%AE%E9%A5%B0%E5%A4%96%E9%83%A8%E7%B1%BB/" class="post-title-link" itemprop="url">static为什么不能修饰外部类</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-22 09:57:18 / 修改时间：09:57:38" itemprop="dateCreated datePublished" datetime="2020-09-22T09:57:18+08:00">2020-09-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>static修饰的为类成员,会随着类的加载而加载,比如静态代码块,静态成员,静态方法(这里只是加载,并没有调用)等等,可以想象一下,如果把一个Class文件中的外部类设为static,目的难道是让这个类随着应用的启动而加载吗？如果在这次使用过程中根本没有使用过这个类,那么是不是就会浪费内存。这样来说设计不合理,总而言之,设计不合理的地方,Java是不会让它存在的。</p>
+<p>而为什么内部类可以使用static修饰呢,因为内部类算是类的成员了,如果没有使用静态来修饰,那么在创建内部类的时候就需要先有一个外部类的对象,如果我们一直在使用内部类,那么内存中就会一直存在外部类的引用,而我们有时候只需要使用内部类,不需要外部类,那么还是会浪费内存,甚至会造成内存溢出。使用static修饰内部类之后,内部类在创建对象时就不需要有外部类对象的引用了。</p>
+<p>结论:static可以用来修饰内部类,但是不可以用来修饰外部类</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/aop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/aop/" class="post-title-link" itemprop="url">aop</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-22 09:54:58 / 修改时间：09:55:25" itemprop="dateCreated datePublished" datetime="2020-09-22T09:54:58+08:00">2020-09-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>aop概念：Aspect Oriented Programming，可以翻译成面向切面编程。</p>
+<p>aop基础：aop是使用代理模式，通过反射技术动态的在运行时植入代码（定义切面，植入运行时代码）。动态植入的代码与被植入的代码段之间可以理解成是通过桥梁连接生成的，相比于继承体系的实现更加的解耦。</p>
+<p>常见的aop应用：日志收集，权限校验等。</p>
+<p>spring中的aop：定义了前置通知（before），后置通知（afterReturning），最终通知（after），异常通知（exception），环绕通知（Around)。方法执行顺序如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">try&#123;</span><br><span class="line">            try&#123;</span><br><span class="line">                doBefore();&#x2F;&#x2F;对应@Before注解的方法切面逻辑  </span><br><span class="line">                method.invoke();</span><br><span class="line">            &#125;finally&#123;</span><br><span class="line">                doAfter();&#x2F;&#x2F;对应@After注解的方法切面逻辑  </span><br><span class="line">            &#125;</span><br><span class="line">            doAfterReturning();&#x2F;&#x2F;对应@AfterReturning注解的方法切面逻辑  </span><br><span class="line">        &#125;catch(Exception e)&#123;</span><br><span class="line">            doAfterThrowing();&#x2F;&#x2F;对应@AfterThrowing注解的方法切面逻辑  </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码缺少了环绕通知，环绕通知是更为强大，可以重新定义上述的顺序，一般写了环绕通知就不需要再写其他的通知，统一管理。</p>
+<p>基于注解的aop通知类AopLog，位于com.aop，注解里面的表达式是配置对哪些方法进行作用对，这里配置成拦截所有public的方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package com.aop;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.*;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">@Component(&quot;log&quot;)</span><br><span class="line">@Aspect</span><br><span class="line">public class AopLog &#123;</span><br><span class="line">    static long startTime &#x3D; 0;</span><br><span class="line">    static long endTime &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    @Before(&quot;execution(public * *(..))&quot;)</span><br><span class="line">    public void before() &#123;</span><br><span class="line">        System.out.println(&quot;前置通知&quot;);</span><br><span class="line">        startTime &#x3D; System.currentTimeMillis();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @AfterReturning(pointcut &#x3D; &quot;execution(public * *(..))&quot;)</span><br><span class="line">    public void afterReturn() &#123;</span><br><span class="line">        System.out.println(&quot;后置通知&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @After(&quot;execution(public * *(..))&quot;)</span><br><span class="line">    public void after() &#123;</span><br><span class="line">        System.out.println(&quot;最终通知&quot;);</span><br><span class="line">        endTime &#x3D; System.currentTimeMillis();</span><br><span class="line">        System.out.println(startTime);</span><br><span class="line">        System.out.println(endTime);</span><br><span class="line">        System.out.println(&quot;耗时&quot; + (endTime - startTime) + &quot;毫秒&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @AfterThrowing(&quot;execution(public * *(..))&quot;)</span><br><span class="line">    public void myException() &#123;</span><br><span class="line">        System.out.println(&quot;异常&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Around(&quot;execution(public * *(..))&quot;)</span><br><span class="line">    public Object around(ProceedingJoinPoint pjp) &#123;</span><br><span class="line">        Object result &#x3D; null;</span><br><span class="line">        try &#123;</span><br><span class="line">            &#x2F;&#x2F;可以在这里写入请求参数日志</span><br><span class="line">            System.out.println(&quot;before&quot;);</span><br><span class="line">            startTime &#x3D; System.currentTimeMillis();</span><br><span class="line">            &#x2F;&#x2F;目标方法的执行</span><br><span class="line">            result &#x3D; pjp.proceed();</span><br><span class="line">        &#125; catch (Throwable t) &#123;</span><br><span class="line">            &#x2F;&#x2F;可以在这里写入异常日志</span><br><span class="line">            System.out.println(&quot;exception&quot;);</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            &#x2F;&#x2F;可以在这里统计接口耗时</span><br><span class="line">            System.out.println(&quot;after&quot;);</span><br><span class="line">            endTime &#x3D; System.currentTimeMillis();</span><br><span class="line">            System.out.println(startTime);</span><br><span class="line">            System.out.println(endTime);</span><br><span class="line">            System.out.println(&quot;耗时&quot; + (endTime - startTime) + &quot;毫秒&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>People类，位于com.bean，使用aop拦截print方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package com.bean;</span><br><span class="line"></span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">@Component(&quot;people&quot;)</span><br><span class="line">public class People &#123;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name &#x3D; name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void print(String res)&#123;</span><br><span class="line">        &#x2F;&#x2F;测试异常</span><br><span class="line">&#x2F;&#x2F;        int a &#x3D; 1&#x2F;0;</span><br><span class="line">        System.out.println(res);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>applicationContext.xml配置文件，配置IOC和AOP等</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot; encoding&#x3D;&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans&quot;</span><br><span class="line">       xmlns:xsi&#x3D;&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2001&#x2F;XMLSchema-instance&quot;</span><br><span class="line">       xmlns:aop&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;aop&quot;</span><br><span class="line">       xmlns:context&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;context&quot;</span><br><span class="line">       xsi:schemaLocation&#x3D;&quot;http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans</span><br><span class="line">http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;beans&#x2F;spring-beans.xsd</span><br><span class="line">http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;context http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;context&#x2F;spring-context.xsd</span><br><span class="line">http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;aop http:&#x2F;&#x2F;www.springframework.org&#x2F;schema&#x2F;aop&#x2F;spring-aop.xsd</span><br><span class="line">&quot;&gt;</span><br><span class="line">    &lt;!--开启AOP--&gt;</span><br><span class="line">    &lt;aop:aspectj-autoproxy&gt;&lt;&#x2F;aop:aspectj-autoproxy&gt;</span><br><span class="line">    &lt;!--指定IOC容器的扫描包--&gt;</span><br><span class="line">    &lt;context:component-scan base-package&#x3D;&quot;com.aop,com.bean&quot;&gt;&lt;&#x2F;context:component-scan&gt;</span><br><span class="line"></span><br><span class="line">&lt;&#x2F;beans&gt;</span><br></pre></td></tr></table></figure>
+<p>测试类</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import com.bean.People;</span><br><span class="line">import com.bean.User;</span><br><span class="line">import org.springframework.context.ApplicationContext;</span><br><span class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line"></span><br><span class="line">public class AopTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        aopTest(&quot;aop&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void aopTest(String res) &#123;</span><br><span class="line">        ApplicationContext context &#x3D; new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);</span><br><span class="line">        People p &#x3D; (People) context.getBean(&quot;people&quot;);</span><br><span class="line">        p.print(&quot;aop&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注释AopLog的环绕通知的代码运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">前置通知</span><br><span class="line">aop</span><br><span class="line">最终通知</span><br><span class="line">1551160014037</span><br><span class="line">1551160014060</span><br><span class="line">耗时23毫秒</span><br><span class="line">后置通知</span><br></pre></td></tr></table></figure>
+<p>注释AopLog除环绕通知之外的代码运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">before</span><br><span class="line">aop</span><br><span class="line">after</span><br><span class="line">1551159843371</span><br><span class="line">1551159843396</span><br><span class="line">耗时25毫秒</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/java%E4%B8%AD%E7%9A%84%E2%80%9C%E9%9A%90%E8%97%8F%E2%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/java%E4%B8%AD%E7%9A%84%E2%80%9C%E9%9A%90%E8%97%8F%E2%80%9D/" class="post-title-link" itemprop="url">java中的“隐藏”</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-22 09:27:28 / 修改时间：09:27:56" itemprop="dateCreated datePublished" datetime="2020-09-22T09:27:28+08:00">2020-09-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Parent&#123;</span><br><span class="line">    public static void print()&#123;</span><br><span class="line">        System.out.print(&quot;parent&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Son extends Parent&#123;</span><br><span class="line">    public static void print()&#123;</span><br><span class="line">        System.out.print(&quot;Son&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Parent p &#x3D; new Son();</span><br><span class="line">        p.print();</span><br><span class="line">        &#x2F;&#x2F;输出parent</span><br><span class="line">        Son s &#x3D; new Son();</span><br><span class="line">        s.print();</span><br><span class="line">        &#x2F;&#x2F;输出son</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>理解继承的本质：为何与非静态方法调用的方法不一致？其实是因为设计上的原因，静态方法本身是为了不创建实例就能够直接使用的方法（例如Parent.print()），而且静态方法本质上是类方法，只属于本类，不应该被继承。于是继承的时候这个方法不能被重写（overwrite），而是被隐藏。此时应该是由句柄决定调用的是父类还是子类的方法。其实非静态方法也是如此，父类方法被重写了，最终句柄指向的方法就是被重写的方法。</p>
+<p>结论：所有对象调用的方法是根据句柄来决定的，看透本质即可（了解隐藏，重写的实际运作）。</p>
+<p>注：这也是静态绑定，final，static，private等方法都是这样的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -825,393 +1051,6 @@ for (int i = 0; i &lt; len; i++) {
 
 <h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历数组的复杂度。</p>
 <p>空间复杂度：O（1）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/08/leetcode-25/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/08/leetcode-25/" class="post-title-link" itemprop="url">leetcode-25</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-08 17:18:10 / 修改时间：17:32:52" itemprop="dateCreated datePublished" datetime="2020-09-08T17:18:10+08:00">2020-09-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/reverse-nodes-in-k-group/" target="_blank" rel="noopener">https://leetcode.com/problems/reverse-nodes-in-k-group/</a></p>
-<p>给你一个链表，每&nbsp;<em>k&nbsp;</em>个节点一组进行翻转，请你返回翻转后的链表。</p>
-
-<p><em>k&nbsp;</em>是一个正整数，它的值小于或等于链表的长度。</p>
-
-<p>如果节点总数不是&nbsp;<em>k&nbsp;</em>的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
-
-<p>&nbsp;</p>
-
-<p><strong>示例：</strong></p>
-
-<p>给你这个链表：<code>1-&gt;2-&gt;3-&gt;4-&gt;5</code></p>
-
-<p>当&nbsp;<em>k&nbsp;</em>= 2 时，应当返回: <code>2-&gt;1-&gt;4-&gt;3-&gt;5</code></p>
-
-<p>当&nbsp;<em>k&nbsp;</em>= 3 时，应当返回: <code>3-&gt;2-&gt;1-&gt;4-&gt;5</code></p>
-
-<p>&nbsp;</p>
-
-<p><strong>说明：</strong></p>
-
-<ul>
-    <li>你的算法只能使用常数的额外空间。</li>
-    <li><strong>你不能只是单纯的改变节点内部的值</strong>，而是需要实际进行节点交换。</li>
-</ul>
-
-<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>反转k个结点，尾结点指向下k个结点的头结点，递归或者迭代处理都可以，递归会有函数压栈的空间消耗，不太满足题意。</p>
-<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><p>递归</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode reverseKGroup(ListNode head, int k) &#123;</span><br><span class="line">    if (head &#x3D;&#x3D; null || head.next &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return head;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 循环后得到的tail是下一轮循环的开始结点，k个数，k-1次next指向到末尾，k次next指向到末尾的下一个结点</span><br><span class="line">     * 所以reverse函数需要处理的是左闭右开的情况</span><br><span class="line">     *&#x2F;</span><br><span class="line">    ListNode tail &#x3D; head;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; k; i++) &#123;</span><br><span class="line">        if (tail &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tail &#x3D; tail.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;反转k个结点得到最前的结点</span><br><span class="line">    ListNode pre &#x3D; reverse(head, tail);</span><br><span class="line">    &#x2F;&#x2F;head经过反转是最后一个结点，下一个结点拼接后面返回后续链表的最前结点</span><br><span class="line">    head.next &#x3D; reverseKGroup(tail, k);</span><br><span class="line"></span><br><span class="line">    return pre;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode reverse(ListNode head, ListNode tail) &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * pre是head的前一个结点，初始化为null是为了处理最后一个结点的下一个结点应该为null的情况</span><br><span class="line">     * 写成tail也行，但是写成tail的意义不一样，这样会连接下一段链表，但是意义不大，后续链表还会交换，还要重新连接</span><br><span class="line">     *&#x2F;</span><br><span class="line">    ListNode pre &#x3D; null;</span><br><span class="line">    ListNode next &#x3D; null;</span><br><span class="line">    &#x2F;&#x2F;判断条件是左闭右开</span><br><span class="line">    while (head !&#x3D; tail) &#123;</span><br><span class="line">        next &#x3D; head.next;</span><br><span class="line">        head.next &#x3D; pre;</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        head &#x3D; next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return pre;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>迭代</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode reverseKGroup(ListNode head, int k) &#123;</span><br><span class="line">    ListNode newHead &#x3D; new ListNode(-1);</span><br><span class="line">    newHead.next &#x3D; head;</span><br><span class="line">    &#x2F;&#x2F;pre的作用是作为每一组头结点的前驱结点，为了反转后把上一组的尾结点指向下一组新的头结点</span><br><span class="line">    ListNode pre &#x3D; newHead;</span><br><span class="line"></span><br><span class="line">    while (head !&#x3D; null) &#123;</span><br><span class="line">        ListNode tail &#x3D; pre;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; k; ++i) &#123;</span><br><span class="line">            tail &#x3D; tail.next;</span><br><span class="line">            if (tail &#x3D;&#x3D; null) &#123;</span><br><span class="line">                return newHead.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;**</span><br><span class="line">         * 反转k个结点</span><br><span class="line">         * 注意虽然是传引用，但是里面不是改变对象的属性，而是直接改变了句柄，不会改变head和tail的指向</span><br><span class="line">         * 反转后head是尾结点，tail是头结点</span><br><span class="line">         *&#x2F;</span><br><span class="line">        reverse(head, tail);</span><br><span class="line">        &#x2F;&#x2F;pre后驱要从指向head改为tail，因为反转后tail是头</span><br><span class="line">        pre.next &#x3D; tail;</span><br><span class="line">        &#x2F;&#x2F;pre更新为下一组头的前驱结点</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        &#x2F;&#x2F;head指向下一组的头结点</span><br><span class="line">        head &#x3D; head.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return newHead.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void reverse(ListNode head, ListNode tail) &#123;</span><br><span class="line">    &#x2F;&#x2F;初始化为下一组的头结点，为了先接上后面的链表</span><br><span class="line">    ListNode pre &#x3D; tail.next;</span><br><span class="line">    ListNode next &#x3D; null;</span><br><span class="line">    while (pre !&#x3D; tail) &#123;</span><br><span class="line">        next &#x3D; head.next;</span><br><span class="line">        head.next &#x3D; pre;</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        head &#x3D; next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><h4 id="递归："><a href="#递归：" class="headerlink" title="递归："></a>递归：</h4><p>时间复杂度：O（n），遍历一次，加上处理反转时的遍历，也是2n，量级依旧是n。</p>
-<p>空间复杂度：O（n/k），函数压栈的空间消耗。</p>
-<h4 id="迭代："><a href="#迭代：" class="headerlink" title="迭代："></a>迭代：</h4><p>时间复杂度：O（n），遍历一次，加上处理反转时的遍历，也是2n，量级依旧是n。</p>
-<p>空间复杂度：O（1）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/24/leetcode-10/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/24/leetcode-10/" class="post-title-link" itemprop="url">leetcode-10</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-24 10:55:35 / 修改时间：11:08:06" itemprop="dateCreated datePublished" datetime="2020-08-24T10:55:35+08:00">2020-08-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/</a></p>
-<p>给你一个字符串&nbsp;<code>s</code>&nbsp;和一个字符规律&nbsp;<code>p</code>，请你来实现一个支持 <code>&#39;.&#39;</code>&nbsp;和&nbsp;<code>&#39;*&#39;</code>&nbsp;的正则表达式匹配。</p>
-
-<pre>&#39;.&#39; 匹配任意单个字符
-&#39;*&#39; 匹配零个或多个前面的那一个元素
-</pre>
-
-<p>所谓匹配，是要涵盖&nbsp;<strong>整个&nbsp;</strong>字符串&nbsp;<code>s</code>的，而不是部分字符串。</p>
-
-<p><strong>说明:</strong></p>
-
-<ul>
-    <li><code>s</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母。</li>
-    <li><code>p</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母，以及字符&nbsp;<code>.</code>&nbsp;和&nbsp;<code>*</code>。</li>
-</ul>
-
-<p><strong>示例 1:</strong></p>
-
-<pre><strong>输入:</strong>
-s = &quot;aa&quot;
-p = &quot;a&quot;
-<strong>输出:</strong> false
-<strong>解释:</strong> &quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。
-</pre>
-
-<p><strong>示例 2:</strong></p>
-
-<pre><strong>输入:</strong>
-s = &quot;aa&quot;
-p = &quot;a*&quot;
-<strong>输出:</strong> true
-<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#39;a&#39;。因此，字符串 &quot;aa&quot; 可被视为 &#39;a&#39; 重复了一次。
-</pre>
-
-<p><strong>示例&nbsp;3:</strong></p>
-
-<pre><strong>输入:</strong>
-s = &quot;ab&quot;
-p = &quot;.*&quot;
-<strong>输出:</strong> true
-<strong>解释:</strong>&nbsp;&quot;.*&quot; 表示可匹配零个或多个（&#39;*&#39;）任意字符（&#39;.&#39;）。
-</pre>
-
-<p><strong>示例 4:</strong></p>
-
-<pre><strong>输入:</strong>
-s = &quot;aab&quot;
-p = &quot;c*a*b&quot;
-<strong>输出:</strong> true
-<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 表示零个或多个，这里 &#39;c&#39; 为 0 个, &#39;a&#39; 被重复一次。因此可以匹配字符串 &quot;aab&quot;。
-</pre>
-
-<p><strong>示例 5:</strong></p>
-
-<pre><strong>输入:</strong>
-s = &quot;mississippi&quot;
-p = &quot;mis*is*p*.&quot;
-<strong>输出:</strong> false</pre>
-
-
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>采用动态规划。假设以f[i][j]表示s字符串前i个字符能否与p字符串前j个字符相匹配。</p>
-<p>（1）如果j位置是字母，则直接匹配是否相等，如果相等，f[i][j]更新为f[i - 1][j - 1]，因为之前也要全都匹配上嘛。</p>
-<p>（2）如果j位置的值是 “.” ，直接放过，f[i][j]更新为f[i - 1][j - 1]，理由同（1）。</p>
-<p>（3）如果j位置的值是 “*“，考虑一下匹配规则，”*“ 是匹配零个或多个前面的那一个元素，如果我们暴力的去枚举这个结果，有点麻烦。我们换个思路，字符 + * 匹配的过程中只会出现两种情况（注意与上面不同，此时比较的字符串位置是i与j - 1，j - 1是因为需要取 “*“ 前面那个字符）：</p>
-<p>（i）匹配字符成功，将最后一个字符舍弃，f[i][j]更新为f[i - 1][j] or f[i][j - 2]。</p>
-<p>f[i - 1][j]是舍弃s[i]字符，举个例子，如下所示，因为s[i] 与 p[j - 1]匹配上了，此时如果舍弃s[i]需要满足 s 字符串前 i - 1 个字符与 p 字符串前 j 个字符都匹配上。这里的 j 可能不太好理解，带入下面的例子，cdcc与cdc<em>能够匹配上，所以 i 位置的c字母可以被舍弃。舍弃的角度是从p字符串出发的，因为c\</em>能匹配0个或者任意多个，所以s字符串有多个相同的字母的时候就可以看成舍弃了。</p>
-<p>其实当做是扩充匹配也行，cdccc的 i - 1位置的c字母与p字符串 j - 1位置的c字母能匹配，而且 i 位置的c字母与p字符串 j - 1位置的c字母能匹配，说明 i - 1 位置的字母与 i 位置的字母一样。如果cdcc与cdc*能匹配，那么cdccc与cdc*也能匹配上。这里理解成舍弃是因为下面还有一个舍弃的例子，为了理解一致。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line">cdc*a</span><br><span class="line">   j</span><br></pre></td></tr></table></figure>
-
-
-<p>f[i][j - 2]是舍弃p[j - 1]和p[j]两个字符，因为是字母 + 星号，要整体舍弃，举个例子，如下所示，因为s[i]与p[j-1]匹配上了，此时如果舍弃p[j - 1]和p[j]，需要满足 s 字符串前 i 个字符和 p 字符串前 j - 2 个字符都匹配上。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line"></span><br><span class="line">cdcccc*a</span><br><span class="line">      j</span><br></pre></td></tr></table></figure>
-
-
-<p>（ii）匹配字符失败就是说这个字符不能要，字母 + 星号一起舍弃，f[i][j]更新为f[i][j - 2]</p>
-<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public boolean isMatch(String s, String p) &#123;</span><br><span class="line">    int m &#x3D; s.length() + 1;</span><br><span class="line">    int n &#x3D; p.length() + 1;</span><br><span class="line">    boolean[][] find &#x3D; new boolean[m][n];</span><br><span class="line">    &#x2F;&#x2F;根据对f的定义，f[0][0]是最初空字符的位置</span><br><span class="line">    find[0][0] &#x3D; true;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; m; i++) &#123;</span><br><span class="line">        for (int j &#x3D; 1; j &lt; n; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F; &quot;*&quot; 的逻辑处理</span><br><span class="line">            if (p.charAt(j - 1) &#x3D;&#x3D; &#39;*&#39;) &#123;</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j - 1) ? find[i - 1][j] || find[i][j - 2] : find[i][j - 2];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F; &quot;.&quot; 与 字母 的逻辑处理</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j) &amp;&amp; find[i - 1][j - 1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return find[m - 1][n - 1];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean match(String s, String p, int i, int j) &#123;</span><br><span class="line">    &#x2F;&#x2F; i &#x3D; 0 不用处理，是空字符串的位置，是 &quot;.&quot; 或者相同的字母就是匹配上了</span><br><span class="line">    return i !&#x3D; 0 &amp;&amp; (p.charAt(j - 1) &#x3D;&#x3D; &#39;.&#39; || s.charAt(i - 1) &#x3D;&#x3D; p.charAt(j - 1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（m * n），m、n为字符串s、p的长度。</p>
-<p>空间复杂度：O（m * n），因为要存储所有的状态。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/06/leetcode-23/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/06/leetcode-23/" class="post-title-link" itemprop="url">leetcode-16</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-08-06 20:31:05" itemprop="dateCreated datePublished" datetime="2020-08-06T20:31:05+08:00">2020-08-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-28 16:07:37" itemprop="dateModified" datetime="2020-08-28T16:07:37+08:00">2020-08-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener">https://leetcode.com/problems/merge-k-sorted-lists/</a></p>
-<p>给你一个链表数组，每个链表都已经按升序排列。</p>
-
-<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
-
-<p>&nbsp;</p>
-
-<p><strong>示例 1：</strong></p>
-
-<pre><strong>输入：</strong>lists = [[1,4,5],[1,3,4],[2,6]]
-<strong>输出：</strong>[1,1,2,3,4,4,5,6]
-<strong>解释：</strong>链表数组如下：
-[
-  1-&gt;4-&gt;5,
-  1-&gt;3-&gt;4,
-  2-&gt;6
-]
-将它们合并到一个有序链表中得到。
-1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
-</pre>
-
-<p><strong>示例 2：</strong></p>
-
-<pre><strong>输入：</strong>lists = []
-<strong>输出：</strong>[]
-</pre>
-
-<p><strong>示例 3：</strong></p>
-
-<pre><strong>输入：</strong>lists = [[]]
-<strong>输出：</strong>[]
-</pre>
-
-<p>&nbsp;</p>
-
-<p><strong>提示：</strong></p>
-
-<ul>
-    <li><code>k == lists.length</code></li>
-    <li><code>0 &lt;= k &lt;= 10^4</code></li>
-    <li><code>0 &lt;= lists[i].length &lt;= 500</code></li>
-    <li><code>-10^4 &lt;= lists[i][j] &lt;= 10^4</code></li>
-    <li><code>lists[i]</code> 按 <strong>升序</strong> 排列</li>
-    <li><code>lists[i].length</code> 的总和不超过 <code>10^4</code></li>
-</ul>
-
-<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>分治法，类似归并排序，逐步的合并两个链表即可。</p>
-<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode mergeKLists(ListNode[] lists) &#123;</span><br><span class="line">    return merge(lists, 0, lists.length - 1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode mergeTowListNode(ListNode l1, ListNode l2) &#123;</span><br><span class="line">    if (l1 &#x3D;&#x3D; null || l2 &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return l1 !&#x3D; null ? l1 : l2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ListNode head &#x3D; new ListNode(-1);</span><br><span class="line">    ListNode temp &#x3D; head;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;合并</span><br><span class="line">    while (l1 !&#x3D; null &amp;&amp; l2 !&#x3D; null) &#123;</span><br><span class="line">        if (l1.val &lt; l2.val) &#123;</span><br><span class="line">            temp.next &#x3D; l1;</span><br><span class="line">            l1 &#x3D; l1.next;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            temp.next &#x3D; l2;</span><br><span class="line">            l2 &#x3D; l2.next;</span><br><span class="line">        &#125;</span><br><span class="line">        temp &#x3D; temp.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;因为只剩一个链表，直接拼接即可</span><br><span class="line">    temp.next &#x3D; l1 !&#x3D; null ? l1 : l2;</span><br><span class="line"></span><br><span class="line">    return head.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode merge(ListNode[] lists, int l, int r) &#123;</span><br><span class="line">    if (l &#x3D;&#x3D; r) &#123;</span><br><span class="line">        return lists[l];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;处理空数组</span><br><span class="line">    if (l &gt; r) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int mid &#x3D; l + ((r - l) &gt;&gt; 1);</span><br><span class="line">    return mergeTowListNode(merge(lists, l, mid), merge(lists, mid + 1, r));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（kn * log(k)），类似归并排序，设n为所有链表的平均长度，类似二叉树一样看归并，则kn为每层归并需要排序的元素，log(k)为树高，相乘即为时间复杂度。</p>
-<p>空间复杂度：O（log(k)），树高就是空间复杂度，压栈所花费的空间。</p>
 
       
     </div>
