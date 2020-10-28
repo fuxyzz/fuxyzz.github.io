@@ -1353,4 +1353,30 @@ for (int i = 0; i &lt; len; i++) {
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>分布式共识之Raft</title>
+    <url>/2020/10/28/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86%E4%B9%8BRaft/</url>
+    <content><![CDATA[<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Raft是一个分布式共识协议。通过实现election（选举）和log replication（日志复制）实现共识。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>（1）每个结点只能有三种状态：follower，candidate，leader，且所有的结点初始化为follower。如果follower都不能接收到leader的心跳，他们就可以成为candidate。然后candidate向其他结点请求向自己投票。所有的结点都会响应投票，最终获得大多数投票的candidate会成为leader,这个过程叫做leader election（选举leader）。</p>
+<p>（2）所有对系统的改变都会经过leader，每个改变都会当做一个entry写入leader结点的log中，要提交entry到log中必须满足结点先将entry复制到follower结点中。然后leader等待直到大多数的结点已经将entry写入log，然后entry就能够在leader结点上提交，然后leader通知所有的follower结点开始提交它们的entry到log中。如此这样的操作过程，整个集群就能够保持一致性，这个过程被称作log relipcation（日志复制）。</p>
+<h2 id="选举的细节"><a href="#选举的细节" class="headerlink" title="选举的细节"></a>选举的细节</h2><p>（1）在Raft中，有两项超时设置来控制选举。第一项是选举超时，指的是一名follower等待成为candidate的时间，随机设置在150到300ms之间的值。选举超时后，follower成为candidate并开始新一轮的选举并给自己投上一票，然后给其他结点发送投票的信息，如果接收消息的结点在当前这一轮选举周期内没有投过票（注意新一轮选举周期的投票要重新算，即每个结点在每个周期都可以有一次投票机会），则投票给候选者。接着结点重置选举超时。一旦有一个candidate获得了大多数的投票，那么它将成为leader。</p>
+<p>（2）follower成为leader后，就会开始发送追加entry消息到它的各个follower结点。这个消息会按照心跳超时的间隔进行发送，各个follower会响应每个消息，这就是第二项超时时间，心跳超时。leader的选举任期将会持续到有一个follower停止收到心跳（停止收到就是leader挂了，但是这里不是停止收到一次的意思，毕竟网络可能会有丢包，一般会设置心跳包次数，超过多少次才当做leader挂了）并成为candidate。</p>
+<p>再讲一下超时时间的细节：这里是所有结点都设置选举时间，由于随机超时时间值不同，最后只有超时时间先到的结点成为candidate。极端条件下，有两个结点的随机超时时间值相同，那么可以通过拆分投票的方式，就是都成为candidate，看各个follower结点给两位candidate投票的情况。如果再次处于极端条件下，两个结点的投票相等，那么就会重新发起一次选举，重新走选举超时那一套逻辑。这种情况可以拓展为多个结点的情况。</p>
+<h2 id="日志复制的细节"><a href="#日志复制的细节" class="headerlink" title="日志复制的细节"></a>日志复制的细节</h2><p>（1）日志复制通过使用与心跳消息类似的entry消息。</p>
+<p>（2）当有新的改变尝试时会先经过leader，leader将改变追加到log中，然后将改变在下一次的心跳中发送给各个follower，当大多数的follower确认后就可以进行提交操作。</p>
+<p>（3）在分区的情况下也能够达到共识。</p>
+<p>假设有5个结点，leader为a，由于机房连通性问题，ab归为一个分区（leader为a，不用重新选），cde归为一个分区（leader为c，假设是重新选出来的，重新选，election term + 1），那么如果有客户端尝试对a和b分区的leader发起更新，由于结点数量只有2，没有达到大多数复制结点，则在ab的日志中是存在未提交状态的entry。如果有客户端尝试对cde的leader（c）发起更新，由于结点数量为3，达到大多数复制结点，则提交成功。后续，由于机房连通性问题解决后，结点通过对比term，term较低者下台（a下台），然后a与b回滚未提交的数据，并拉取leader（此时leader为c）的数据。</p>
+<p>可能会有疑问：如果上面的例子，起始的leader为c，那么ab的分区就会重新选举，ecection term+1，而cde的leader不变。如果此时有客户端请求c进行了新的更改，在网络连通之后，因为a的term值较高，会将cde的数据抹去，这样岂不是将正常请求更新的数据删除了？</p>
+<p>不会出现这种情况，因为ab分区的结点只有2个，不满足大多数，不能够选举成功。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://raft.github.io/raft.pdf" target="_blank" rel="noopener">paper</a></p>
+<p><a href="https://raft.github.io/" target="_blank" rel="noopener">web site</a></p>
+<p><a href="http://thesecretlivesofdata.com/raft/" target="_blank" rel="noopener">animate</a></p>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>分布式</tag>
+      </tags>
+  </entry>
 </search>
