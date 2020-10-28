@@ -956,9 +956,11 @@ for (int i = 0; i &lt; len; i++) {
 ]]></content>
       <categories>
         <category>mysql</category>
+        <category>lock</category>
       </categories>
       <tags>
         <tag>mysql</tag>
+        <tag>lock</tag>
       </tags>
   </entry>
   <entry>
@@ -1080,9 +1082,11 @@ for (int i = 0; i &lt; len; i++) {
 ]]></content>
       <categories>
         <category>Java</category>
+        <category>lock</category>
       </categories>
       <tags>
         <tag>Java</tag>
+        <tag>lock</tag>
       </tags>
   </entry>
   <entry>
@@ -1377,6 +1381,21 @@ for (int i = 0; i &lt; len; i++) {
       </categories>
       <tags>
         <tag>分布式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于redis的分布式锁</title>
+    <url>/2020/10/28/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>分布式</category>
+        <category>lock</category>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>分布式</tag>
+        <tag>lock</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
 </search>
