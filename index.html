@@ -182,20 +182,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,6 +223,109 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">DMA与零拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-29 14:27:48 / 修改时间：15:00:15" itemprop="dateCreated datePublished" datetime="2020-10-29T14:27:48+08:00">2020-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/io/" itemprop="url" rel="index"><span itemprop="name">io</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h1><h3 id="为什么要有DMA？"><a href="#为什么要有DMA？" class="headerlink" title="为什么要有DMA？"></a>为什么要有DMA？</h3><p>传统IO工作方式：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，接着CPU发送指令给磁盘控制器</p>
+<p>（2）磁盘控制器收到指令，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（3）CPU收到中断信号响应中断，将磁盘控制器缓冲区的数据拷贝到自己的寄存器，然后拷贝到内存中，数据在拷贝期间CPU无法执行其他任务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/simple_io.png" alt="传统IO工作方式"></p>
+<p>CPU在IO期间无法执行任务，降低了系统工作的整体性能，于是引入了DMA</p>
+<h3 id="DMA概念及工作方式"><a href="#DMA概念及工作方式" class="headerlink" title="DMA概念及工作方式"></a>DMA概念及工作方式</h3><p>DMA全称Direct Memory Access，直译直接内存访问，作用是将CPU搬运数据的工作委托给DMA，解放CPU在数据搬运过程中的阻塞时间。具体工作方式如下：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，CPU将IO请求发送给DMA</p>
+<p>（2）DMA收到指令后，将IO请求发送给磁盘</p>
+<p>（3）磁盘收到IO请求后，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（4）DMA响应中断信号，将磁盘缓冲区数据拷贝到内核缓冲区，缓冲区满后产生中断信号</p>
+<p>（5）CPU响应中断信号，将内核缓冲区的数据拷贝到用户态缓冲区，系统调用返回</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/DMA_IO.png" alt="DMA工作方式"></p>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h3 id="常规的文件传输时的IO消耗"><a href="#常规的文件传输时的IO消耗" class="headerlink" title="常规的文件传输时的IO消耗"></a>常规的文件传输时的IO消耗</h3><p>基于DMA改进的IO方式在文件传输上发送4次内核态与用户态的切换，4次数据拷贝。</p>
+<h5 id="4次内核态与用户态切换"><a href="#4次内核态与用户态切换" class="headerlink" title="4次内核态与用户态切换"></a>4次内核态与用户态切换</h5><p>（1）系统调用read，从用户态切换到内核态</p>
+<p>（2）内核完成任务返回，从内核态切换到用户态</p>
+<p>（3）系统调用write，从用户态切换到内核态</p>
+<p>（4）内核完成任务返回，从内核态切换到用户态</p>
+<h5 id="4次数据拷贝"><a href="#4次数据拷贝" class="headerlink" title="4次数据拷贝"></a>4次数据拷贝</h5><p>（1）DMA将磁盘数据拷贝到操作系统内核缓冲区</p>
+<p>（2）CPU将内核缓冲区的数据拷贝到用户缓冲区</p>
+<p>（3）CPU将用户缓冲区的数据拷贝到socket缓冲区</p>
+<p>（4）DMA将socket缓冲区数据拷贝到物理网卡缓冲区</p>
+<p>拷贝一份数据经过4次内核态与用户态的切换和4次的数据拷贝，在并发场景下这个IO消耗会被无限方法，考虑如何优化它。</p>
+<h3 id="零拷贝对文件传输的优化思路"><a href="#零拷贝对文件传输的优化思路" class="headerlink" title="零拷贝对文件传输的优化思路"></a>零拷贝对文件传输的优化思路</h3><h4 id="mmap-write"><a href="#mmap-write" class="headerlink" title="mmap + write"></a>mmap + write</h4><p>mmap全称memory map，直译内存映射，作用是将内核缓冲区的数据映射到用户缓冲区，这样就不需要read，省去了一次数据拷贝，过程从read + write变为mmap + write。通过这种方式仍然需要4次上下文切换。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/mmap_write.png" alt="mmap + write"></p>
+<h4 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h4><p>sendfile是linux 2.1版本中提供的函数，用于代替 read 和 write 2个系统调用，这样就减少了1次系统调用，2次上下文切换。sendfile提供的系统调用可以将内核缓冲区的数据之间拷贝到socket缓冲区。通过这种方式只有2次上下文切换和3次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_1.png" alt="sendfile1"></p>
+<p>linux 2.4版本，如果网卡还支持SG—DMA（The Scatter-Gather Direct Memory Access），可以直接将内核缓冲区的数据直接拷贝到网卡的缓冲区。这样又减少了1次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_2.png" alt="sendfile2"></p>
+<h4 id="零拷贝总结"><a href="#零拷贝总结" class="headerlink" title="零拷贝总结"></a>零拷贝总结</h4><p>零拷贝只有2次上下文切换和2次数据拷贝，数据拷贝是由DMA进行的，不需要经过CPU。</p>
+<h2 id="零拷贝的缺点及解决方案"><a href="#零拷贝的缺点及解决方案" class="headerlink" title="零拷贝的缺点及解决方案"></a>零拷贝的缺点及解决方案</h2><p>零拷贝是基于PageCache，PageCache是磁盘高速缓存，也是我们上面说的内核缓冲区。PageCache是内存中的一部分，对应磁盘上的block，如果读取文件时在PageCache中命中则直接从内存读取，否则从磁盘中读取。PageCache内部使用LRU进行内存淘汰。由于PageCache本身不能太大，拷贝大文件的时候很容易出现PageCache的缓存命中率降低，甚至影响其他小文件的传输。在这种情况下，我们可以不使用基于PageCache的内核缓冲区，而是直接将磁盘的数据加载到用户缓冲区，这种方式称为直接IO，相对的使用PageCache的方式称为缓冲IO。</p>
+<p>对于大文件，可以用异步IO + 直接IO（对于磁盘，异步IO只支持直接IO）的方式来解决：</p>
+<p>（1）内核发起读请求，不等待数据拷贝完成就直接返回</p>
+<p>（2）内核将数据拷贝到用户缓冲区后，通知进程处理数据</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/aio.png" alt="aio"></p>
+<h2 id="工程选型"><a href="#工程选型" class="headerlink" title="工程选型"></a>工程选型</h2><h5 id="小文件传输：零拷贝"><a href="#小文件传输：零拷贝" class="headerlink" title="小文件传输：零拷贝"></a>小文件传输：零拷贝</h5><h5 id="大文件传输：异步IO-直接IO"><a href="#大文件传输：异步IO-直接IO" class="headerlink" title="大文件传输：异步IO + 直接IO"></a>大文件传输：异步IO + 直接IO</h5><p>零拷贝在java nio，nginx和kafka都有使用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1153,83 +1256,6 @@
 <p>ReentrantReadWriteLock实现了共享锁和排他锁，内部有两把锁，ReadLock和WriteLock。ReadLock就是读锁，是共享锁的实现，WriteLock是写锁，是排他锁的实现。</p>
 <p>在AQS中有个int变量state，表示多少线程获取了锁。在排他锁的情况下，这个变量是0或者1（如果是可重入锁state表示重入的次数），共享锁中就是持有锁的数量。在ReentrantReadWriteLock的实现中，直接将state变量对半切分了，高16位用于统计读锁个数，低16位用于统计写锁个数。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>所有的锁最终都是用到了CAS进行数据保证，甚至利用CAS避免线程阻塞使得从用户态切换到内核态，但是为了尽可能的减少CAS操作（因为涉及到缓存失效，其他线程需要从主存中重新获取，开销挺大），做了其他的一些优化。Synchronized和ReentrantLock效率上在JDK1.6版本以后几乎没有性能的差距，在并发量不高的情况下Synchronized也许效率会更高。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/28/leetcode-371/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/28/leetcode-371/" class="post-title-link" itemprop="url">leetcode-371</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-28 12:31:38 / 修改时间：12:32:12" itemprop="dateCreated datePublished" datetime="2020-09-28T12:31:38+08:00">2020-09-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/sum-of-two-integers/" target="_blank" rel="noopener">原题链接</a></p>
-<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>模拟计算机的加法操作即可，先进行异或操作，再进行进位的操作。这里提一下为什么可以这样做，因为异或的本质是无进位加法，在此之上进行进位操作后就可以得到答案。</p>
-<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int getSum(int a, int b) &#123;</span><br><span class="line">    if (b &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        return a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int sum &#x3D; a ^ b;</span><br><span class="line">    &#x2F;&#x2F;进位</span><br><span class="line">    int carry &#x3D; (a &amp; b) &lt;&lt; 1;</span><br><span class="line"></span><br><span class="line">    return getSum(sum, carry);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（1），因为最差就是a和b相等，且二进制全1的情况，int最高是32，是常数级别。</p>
-<p>空间复杂度：O（1），尾递归，没有栈的消耗。</p>
 
       
     </div>

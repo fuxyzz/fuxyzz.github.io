@@ -1398,4 +1398,51 @@ for (int i = 0; i &lt; len; i++) {
         <tag>redis</tag>
       </tags>
   </entry>
+  <entry>
+    <title>DMA与零拷贝</title>
+    <url>/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/</url>
+    <content><![CDATA[<h1 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h1><h3 id="为什么要有DMA？"><a href="#为什么要有DMA？" class="headerlink" title="为什么要有DMA？"></a>为什么要有DMA？</h3><p>传统IO工作方式：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，接着CPU发送指令给磁盘控制器</p>
+<p>（2）磁盘控制器收到指令，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（3）CPU收到中断信号响应中断，将磁盘控制器缓冲区的数据拷贝到自己的寄存器，然后拷贝到内存中，数据在拷贝期间CPU无法执行其他任务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/simple_io.png" alt="传统IO工作方式"></p>
+<p>CPU在IO期间无法执行任务，降低了系统工作的整体性能，于是引入了DMA</p>
+<h3 id="DMA概念及工作方式"><a href="#DMA概念及工作方式" class="headerlink" title="DMA概念及工作方式"></a>DMA概念及工作方式</h3><p>DMA全称Direct Memory Access，直译直接内存访问，作用是将CPU搬运数据的工作委托给DMA，解放CPU在数据搬运过程中的阻塞时间。具体工作方式如下：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，CPU将IO请求发送给DMA</p>
+<p>（2）DMA收到指令后，将IO请求发送给磁盘</p>
+<p>（3）磁盘收到IO请求后，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（4）DMA响应中断信号，将磁盘缓冲区数据拷贝到内核缓冲区，缓冲区满后产生中断信号</p>
+<p>（5）CPU响应中断信号，将内核缓冲区的数据拷贝到用户态缓冲区，系统调用返回</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/DMA_IO.png" alt="DMA工作方式"></p>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h3 id="常规的文件传输时的IO消耗"><a href="#常规的文件传输时的IO消耗" class="headerlink" title="常规的文件传输时的IO消耗"></a>常规的文件传输时的IO消耗</h3><p>基于DMA改进的IO方式在文件传输上发送4次内核态与用户态的切换，4次数据拷贝。</p>
+<h5 id="4次内核态与用户态切换"><a href="#4次内核态与用户态切换" class="headerlink" title="4次内核态与用户态切换"></a>4次内核态与用户态切换</h5><p>（1）系统调用read，从用户态切换到内核态</p>
+<p>（2）内核完成任务返回，从内核态切换到用户态</p>
+<p>（3）系统调用write，从用户态切换到内核态</p>
+<p>（4）内核完成任务返回，从内核态切换到用户态</p>
+<h5 id="4次数据拷贝"><a href="#4次数据拷贝" class="headerlink" title="4次数据拷贝"></a>4次数据拷贝</h5><p>（1）DMA将磁盘数据拷贝到操作系统内核缓冲区</p>
+<p>（2）CPU将内核缓冲区的数据拷贝到用户缓冲区</p>
+<p>（3）CPU将用户缓冲区的数据拷贝到socket缓冲区</p>
+<p>（4）DMA将socket缓冲区数据拷贝到物理网卡缓冲区</p>
+<p>拷贝一份数据经过4次内核态与用户态的切换和4次的数据拷贝，在并发场景下这个IO消耗会被无限方法，考虑如何优化它。</p>
+<h3 id="零拷贝对文件传输的优化思路"><a href="#零拷贝对文件传输的优化思路" class="headerlink" title="零拷贝对文件传输的优化思路"></a>零拷贝对文件传输的优化思路</h3><h4 id="mmap-write"><a href="#mmap-write" class="headerlink" title="mmap + write"></a>mmap + write</h4><p>mmap全称memory map，直译内存映射，作用是将内核缓冲区的数据映射到用户缓冲区，这样就不需要read，省去了一次数据拷贝，过程从read + write变为mmap + write。通过这种方式仍然需要4次上下文切换。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/mmap_write.png" alt="mmap + write"></p>
+<h4 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h4><p>sendfile是linux 2.1版本中提供的函数，用于代替 read 和 write 2个系统调用，这样就减少了1次系统调用，2次上下文切换。sendfile提供的系统调用可以将内核缓冲区的数据之间拷贝到socket缓冲区。通过这种方式只有2次上下文切换和3次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_1.png" alt="sendfile1"></p>
+<p>linux 2.4版本，如果网卡还支持SG—DMA（The Scatter-Gather Direct Memory Access），可以直接将内核缓冲区的数据直接拷贝到网卡的缓冲区。这样又减少了1次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_2.png" alt="sendfile2"></p>
+<h4 id="零拷贝总结"><a href="#零拷贝总结" class="headerlink" title="零拷贝总结"></a>零拷贝总结</h4><p>零拷贝只有2次上下文切换和2次数据拷贝，数据拷贝是由DMA进行的，不需要经过CPU。</p>
+<h2 id="零拷贝的缺点及解决方案"><a href="#零拷贝的缺点及解决方案" class="headerlink" title="零拷贝的缺点及解决方案"></a>零拷贝的缺点及解决方案</h2><p>零拷贝是基于PageCache，PageCache是磁盘高速缓存，也是我们上面说的内核缓冲区。PageCache是内存中的一部分，对应磁盘上的block，如果读取文件时在PageCache中命中则直接从内存读取，否则从磁盘中读取。PageCache内部使用LRU进行内存淘汰。由于PageCache本身不能太大，拷贝大文件的时候很容易出现PageCache的缓存命中率降低，甚至影响其他小文件的传输。在这种情况下，我们可以不使用基于PageCache的内核缓冲区，而是直接将磁盘的数据加载到用户缓冲区，这种方式称为直接IO，相对的使用PageCache的方式称为缓冲IO。</p>
+<p>对于大文件，可以用异步IO + 直接IO（对于磁盘，异步IO只支持直接IO）的方式来解决：</p>
+<p>（1）内核发起读请求，不等待数据拷贝完成就直接返回</p>
+<p>（2）内核将数据拷贝到用户缓冲区后，通知进程处理数据</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/aio.png" alt="aio"></p>
+<h2 id="工程选型"><a href="#工程选型" class="headerlink" title="工程选型"></a>工程选型</h2><h5 id="小文件传输：零拷贝"><a href="#小文件传输：零拷贝" class="headerlink" title="小文件传输：零拷贝"></a>小文件传输：零拷贝</h5><h5 id="大文件传输：异步IO-直接IO"><a href="#大文件传输：异步IO-直接IO" class="headerlink" title="大文件传输：异步IO + 直接IO"></a>大文件传输：异步IO + 直接IO</h5><p>零拷贝在java nio，nginx和kafka都有使用。</p>
+]]></content>
+      <categories>
+        <category>io</category>
+      </categories>
+      <tags>
+        <tag>io</tag>
+      </tags>
+  </entry>
 </search>
