@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="volatile保证可见行，有序性，不保证原子性。涉及的计算机知识：为了使得程序能够高速的运行，cpu会将内存中的值复制一份到高速缓冲区（Cache），后续直接使用Cache中的值。这种做法在单核cpu是ok，在多核cpu涉及多线程的操作时，就可能会出现数据不一致的情况。解决办法有：（1）在总线上加LOCK#（2）使用MESI缓存一致性协议两种办法都是在硬件层面实现。早期的时候是使用第一种方法来解">
+  <meta name="description" content="Java中的NIO与操作系统的NIOJava是New IO，操作系统是Non blocking Io。 Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBloc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java的volatile关键字">
-<meta property="og:url" content="https://fuxyzz.github.io/2020/09/22/java%E7%9A%84volatile%E5%85%B3%E9%94%AE%E5%AD%97/index.html">
+<meta property="og:title" content="有关IO">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/index.html">
 <meta property="og:site_name" content="fuxyzz&#39;s blog">
-<meta property="og:description" content="volatile保证可见行，有序性，不保证原子性。涉及的计算机知识：为了使得程序能够高速的运行，cpu会将内存中的值复制一份到高速缓冲区（Cache），后续直接使用Cache中的值。这种做法在单核cpu是ok，在多核cpu涉及多线程的操作时，就可能会出现数据不一致的情况。解决办法有：（1）在总线上加LOCK#（2）使用MESI缓存一致性协议两种办法都是在硬件层面实现。早期的时候是使用第一种方法来解">
+<meta property="og:description" content="Java中的NIO与操作系统的NIOJava是New IO，操作系统是Non blocking Io。 Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBloc">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-09-22T02:20:41.000Z">
-<meta property="article:modified_time" content="2020-09-22T02:21:04.033Z">
+<meta property="article:published_time" content="2020-11-16T05:03:47.000Z">
+<meta property="article:modified_time" content="2020-11-30T03:39:19.319Z">
 <meta property="article:author" content="fuxyzz">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="IO">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://fuxyzz.github.io/2020/09/22/java%E7%9A%84volatile%E5%85%B3%E9%94%AE%E5%AD%97/">
+<link rel="canonical" href="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>java的volatile关键字 | fuxyzz's blog</title>
+  <title>有关IO | fuxyzz's blog</title>
   
 
 
@@ -174,6 +174,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中的NIO与操作系统的NIO"><span class="nav-number">1.</span> <span class="nav-text">Java中的NIO与操作系统的NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO多路复用"><span class="nav-number">2.</span> <span class="nav-text">IO多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#同步IO多路复用："><span class="nav-number">2.0.1.</span> <span class="nav-text">同步IO多路复用：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#异步IO多路复用："><span class="nav-number">2.0.2.</span> <span class="nav-text">异步IO多路复用：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty的选型"><span class="nav-number">3.</span> <span class="nav-text">netty的选型</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -233,7 +234,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/java%E7%9A%84volatile%E5%85%B3%E9%94%AE%E5%AD%97/">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -246,7 +247,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          java的volatile关键字
+          有关IO
         </h1>
 
         <div class="post-meta">
@@ -255,17 +256,23 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-22 10:20:41 / 修改时间：10:21:04" itemprop="dateCreated datePublished" datetime="2020-09-22T10:20:41+08:00">2020-09-22</time>
+              <time title="创建时间：2020-11-16 13:03:47" itemprop="dateCreated datePublished" datetime="2020-11-16T13:03:47+08:00">2020-11-16</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-30 11:39:19" itemprop="dateModified" datetime="2020-11-30T11:39:19+08:00">2020-11-30</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                  <a href="/categories/IO/" itemprop="url" rel="index"><span itemprop="name">IO</span></a>
                 </span>
             </span>
 
@@ -287,9 +294,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>volatile保证可见行，有序性，不保证原子性。<br><br/></br><br>涉及的计算机知识：为了使得程序能够高速的运行，cpu会将内存中的值复制一份到高速缓冲区（Cache），后续直接使用Cache中的值。这种做法在单核cpu是ok，在多核cpu涉及多线程的操作时，就可能会出现数据不一致的情况。解决办法有：<br></br></br><br>（1）在总线上加LOCK#<br></br><br>（2）使用MESI缓存一致性协议<br></br></br><br>两种办法都是在硬件层面实现。早期的时候是使用第一种方法来解决，通过在总线上加锁，阻塞其他cpu对其他硬件的访问（如内存），直到当前cpu使用后释放锁，这样就保证了数据的一致性。但是这样的操作会出现同一时刻只有一个cpu访问内存，导致程序执行效率大大降低。<br></br></br><br>于是Intel推出了MESI缓存一致性协议。缓存一致性协议保证了所有cpu中的变量副本都是一致的，具体的实现是cpu写数据的时候，如果发现该变量是共享变量，会发出信号通知其他cpu将该变量置为失效，当其他cpu再次访问该变量时，发现变量失效了就会进入内存中获取最新的值。<br></br></br><br>JMM（java memory model）中规定所有的变量都是存在于主存，每个线程都有自己的工作内存（类似cpu中的Cache），线程只能操作自己的工作内存，不能访问和操作其他线程的工作内存。如果线程操作一个非共享变量，首先将变量从内存中拷贝到cpu的Cache中再进行操作。volatile实际上通过将变量标记为共享变量，被标记为共享的变量一旦被修改，就会强制更新内存，其他cpu在总线上通过嗅探这个变量的地址被改变就会将缓存该变量的缓存行设为无效，下次其他线程就会从内存中重新加载这个变量，这样就保证了数据的一致性。<br></br></br><br>先看一段代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static boolean flag &#x3D; false;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    Thread t &#x3D; new Thread(() -&gt; test());</span><br><span class="line">    t.start();</span><br><span class="line">    while (!flag) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void test() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;停止100毫秒是为了保证子线程在主线程之后执行</span><br><span class="line">        Thread.sleep(100);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    flag &#x3D; true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的代码会进入死循环，新建线程对flag的修改对主线程并不可见，对flag用volatile修饰则能够解决死循环。<br></br></br><br>volatile解决有序性：volatile会禁止指令重排序，通过类似内存屏障的方式，在变量赋值后进行load addl $0x0, (%esp)操作。指令重排序的时候不能将后面的指令重排序到内存屏障之前的位置。<br></br></br><br>拓展的相关知识：false sharing（有关MESI），synchronized，lock。</p>
+        <h3 id="Java中的NIO与操作系统的NIO"><a href="#Java中的NIO与操作系统的NIO" class="headerlink" title="Java中的NIO与操作系统的NIO"></a>Java中的NIO与操作系统的NIO</h3><p>Java是New IO，操作系统是Non blocking Io。</p>
+<p>Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBlocking()方法是一个native方法，调用底层操作系统设置为非阻塞的IO。对应JDK中的ServerSocketChannel.accept()方法直接返回，如果没有返回null，有就返回socket（实际上是对应底层的fd）。以及SocketChannel.read()也是直接返回，如果没有返回-1，有就返回客户端目前传输的信息长度。</p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>IO多路复用是用来解决大量客户端连接，C10K这样的问题。C10K是假设有一万个客户端进行连接，那么在普通的Java NIO程序中，使用for循环进行系统调用遍历，那么每进行一次for循环就要进行一万次的系统调用，系统调用时间开销太大。解决思路就是想办法将一万次的系统调用合并为一次系统调用，这种解决的方法就是IO多路复用。</p>
+<h5 id="同步IO多路复用："><a href="#同步IO多路复用：" class="headerlink" title="同步IO多路复用："></a>同步IO多路复用：</h5><p>select：传入fd数组，函数会遍历fd，返回数量（读fd的数量，写fd的数量），不会返回具体的fd。一般我们根据返回的数量判断是否要进行IO操作。fd数量限制在1024。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/select.2.html" target="_blank" rel="noopener">select参考手册</a></p>
+<p>poll：与select基本无差，去除了1024的限制，是基于链表的实现。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/poll.2.html" target="_blank" rel="noopener">poll参考手册</a></p>
+<p>epoll：基于事件订阅回调的实现，相比select和poll，时间复杂度降低为O(1)。而且epoll会在内核开辟空间保留fd。epoll会使用mmap加快内存与内核之间的数据搬运，具体是将fd集合存放在映射出来的内存，用户态每次直接从这块内存的中取fd进行读取即可。</p>
+<p><a href="https://man7.org/linux/man-pages/man7/epoll.7.html" target="_blank" rel="noopener">epoll参考手册</a></p>
+<p>本质上select，poll与epoll都是同步IO多路复用，同步是指函数都是返回了是否有IO准备就绪，当返回就绪了，依旧要自行遍历所有的fd将数据取出，遍历取数据过程仍然是同步阻塞的。</p>
+<h5 id="异步IO多路复用："><a href="#异步IO多路复用：" class="headerlink" title="异步IO多路复用："></a>异步IO多路复用：</h5><p>Java 1.7版本引入了异步IO模型（AIO），底层通过线程池管理线程进行数据搬运，基于一种回调的机制进行操作。即等到数据搬运完成后回调通知处理，将搬运数据的操作委托给线程池。中间还使用了ReentrantReadWriteLock优化了读写。</p>
+<h3 id="netty的选型"><a href="#netty的选型" class="headerlink" title="netty的选型"></a>netty的选型</h3><p>netty使用NIO模型，原因如下：</p>
+<p>（1）linux没有很好的实现AIO，windows上的AIO实现很好，但是netty的开发人员并没有将windows认为是主流的服务器</p>
+<p>（2）AIO需要预先分配内存空间，如果NIO是需要时才分配空间，这会造成AIO在流量很大但数据量很小的情况下出现内存浪费的问题</p>
 
     </div>
 
@@ -299,7 +317,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/IO/" rel="tag"># IO</a>
           </div>
 
         
@@ -308,13 +326,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/22/static%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E8%83%BD%E4%BF%AE%E9%A5%B0%E5%A4%96%E9%83%A8%E7%B1%BB/" rel="prev" title="static为什么不能修饰外部类">
-      <i class="fa fa-chevron-left"></i> static为什么不能修饰外部类
+    <a href="/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/" rel="prev" title="DMA与零拷贝">
+      <i class="fa fa-chevron-left"></i> DMA与零拷贝
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/09/22/%E6%B5%8B%E8%AF%95mysql8%E5%9C%A8innodb%E4%B8%8B%E4%B8%8D%E5%90%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E9%94%81%E6%83%85%E5%86%B5/" rel="next" title="测试mysql8在innodb下不同隔离级别的锁情况">
-      测试mysql8在innodb下不同隔离级别的锁情况 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
