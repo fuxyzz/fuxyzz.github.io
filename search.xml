@@ -1513,4 +1513,68 @@ for (int i = 0; i &lt; len; i++) {
         <tag>algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>redis底层数据结构简介</title>
+    <url>/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>redis顶层的数据结构是hash，string，set，sorted set，list，底层是用dict，sds，ziplist，quicklist，skiplist等数据结构组合而成。</p>
+<h3 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h3><p>dict是dictionary的简称，字典的意思，与Java中的HashMap类似，实现上有些许的区别。</p>
+<p>dict中存在ht（hash table简称）数组，数组大小为2，索引0位为当前hash table，索引1位为正在进行重哈希的hash table（如果有正在进行的话），标识正在进行重哈希的变量是rehashidx，默认值为-1，没有进行重哈希，不为-1则是标识当前正在进行重哈希的位置。</p>
+<p>redis将重哈希的操作分散到各个CRUD的操作中，每次CRUD的时候都将进行一部分的重哈希工作，具体是按空bucket来算工作量。例如每次重哈希的时候设定如果查找过程中遇到超过10个空bucket则本次工作结束。相对于Java中的HashMap，redis的重哈希似乎并没有将链表上的值进行再离散化。Java中HashMap的重哈希离散化如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;高位参与运算，使重哈希时有可能让链表分成两份</span><br><span class="line">hash &#x3D; (h &#x3D; key.hash) ^ (h &gt;&gt;&gt; 16)</span><br><span class="line">bucket &#x3D; hash &amp; (table - 1)</span><br></pre></td></tr></table></figure>
+
+<p>dict处理哈希冲突的方式是链地址法，没有像Java的HashMap进行红黑树的优化。</p>
+<p>dict使用MurmurHash2算法来计算bucket的key，算法的优点是输入的值是有规律的，算法仍然能给出一个较好的随机分布性（离散）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;整数hash</span><br><span class="line">unsigned int dictIntHashFunction(unsigned int key)</span><br><span class="line">&#123;</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 15);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 10);</span><br><span class="line">    key +&#x3D;  (key &lt;&lt; 3);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 6);</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 11);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 16);</span><br><span class="line">    return key;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;字符串hash</span><br><span class="line">unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) &#123;</span><br><span class="line">    unsigned int hash &#x3D; (unsigned int)dict_hash_function_seed;</span><br><span class="line">    while (len--)</span><br><span class="line">        hash &#x3D; ((hash &lt;&lt; 5) + hash) + (tolower(*buf++)); &#x2F;* hash * 33 + c *&#x2F;</span><br><span class="line">    return hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>dict重哈希的依据是 结点数 / 哈希表大小 &gt; 5。</p>
+<h3 id="sds"><a href="#sds" class="headerlink" title="sds"></a>sds</h3><p>sds全称simple dynamic string，redis实现的sds是可动态拓展的，而且二进制安全。</p>
+<p>redis的实现中，分为两种字符串，一种是静态不变的sdshr5（可存动态的，只是容量小，而且会引发内存重新分配），一种是可变的（有多个，sdshr8，sdshr16，sdshr32，sdshr64，区别是最大长度不一样）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct __attribute__ ((__packed__)) sdshdr5 &#123;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, and 5 msb of string length *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr8 &#123;</span><br><span class="line">    uint8_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint8_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr16 &#123;</span><br><span class="line">    uint16_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint16_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr32 &#123;</span><br><span class="line">    uint32_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint32_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr64 &#123;</span><br><span class="line">    uint64_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint64_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>不变的sds使用flags的低三位标识类型，高5位标识长度。</p>
+<p>可变的sds使用len标识长度，alloc标识最大可分配长度，flags使用低3位标识类型。当字符串变化时，如果长度超过buff一开始分配的空间大小则会重新分配内存，如果长度超过alloc可表示的最大值则会更换类型（例如sdshr32 -&gt; sdshr64）。当已有字符串的时候，buff数组在申请的时候会申请更多的空间，方便后续追加。</p>
+<h3 id="ziplist"><a href="#ziplist" class="headerlink" title="ziplist"></a>ziplist</h3><p>ziplist直译是压缩表，说到表很容易想到的是哈希表，redis中的hash是ziplist和dict两种方案结合实现，在数据较小的情况下位ziplist，在数据量达到一定条件的情况下会转成dict。</p>
+<p>ziplist的结构大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;zlbytes&gt;&lt;zltail&gt;&lt;zllen&gt;&lt;entry&gt;...&lt;entry&gt;&lt;zlend&gt;</span><br></pre></td></tr></table></figure>
+
+<p>zlibytes：32bit，表示ziplist占用的总字节数（包括zlibytes本身）</p>
+<p>zltail：32bit，表示最后一个entry相对偏移字节数。方便在队尾push和pop。</p>
+<p>zllen：16bit，表示entry的数量。只有16bit，最大表示 2<sup>16</sup> - 1。当zllen值在小于等于 2<sup>16</sup> - 2时，zllen表示entry的数量；当zllen值等于2<sup>16</sup> - 1时，标识zllen已无法表示entry的数量，ziplist会使用遍历ziplist的方式统计entry的数量。</p>
+<p>entry：数据项。</p>
+<p>zlend：ziplist的最后1个字节，标识结束，值为255。</p>
+<p>从ziplist使用相对偏移的方式寻址说明redis希望使用内存紧凑的方式来尽可能的消除内存碎片（使用连续分配的内存）。但是这种方式带来的代价就是在增删改的时候可能会造成如果需要内存增加的时候后面的内存已经被占用，为了还是用内存紧凑的方式，需要重新分配内存，而且要大规模的迁移数据，所以ziplist在相对数据较少的情况下使用（数据少时进行迁移数据也少，但这并不意味着redis在较少数据下使用ziplist是因为效率比dict高，更多的是空间上的考虑，空间换时间减少内存碎片）。</p>
+<p>满足以下任一条件，hash底层从ziplist转为dict：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;file-value超过512，或者说ziplist的entry超过1024</span><br><span class="line">hash-max-ziplist-entries &#x3D; 512</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;插入的value长度超过64</span><br><span class="line">hash-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+
+<p>再说hash-max-ziplist-entries，因为ziplist实现hash的时候采用field-value相连的方式，存储两个entry，第一个为field，第二个为value。因为前面有zlibytes，zltail，zllen，第一个entry是第4位，存filed，第5个entry存value，以此类推，偶数项存field，奇数项存value。</p>
+<h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><p>quicklist是redis提供的list的底层实现。quicklist可以理解为Java中的LinkedList，使用链表的方式进行实现，中间的结点用ziplist辅助实现。</p>
+<p>使用ziplist作为结点辅助的理由：</p>
+<p>（1）quicklist为了支持在两端进行快速的push和pop，需要在每个结点上增加两个额外的指针保存头和尾</p>
+<p>（2）结点过多容易造成内存碎片</p>
+<p>（3）ziplist不造成内存碎片，但是有重新分配内存的情况</p>
+<p>因此quicklist结合双向链表和ziplist的优点，并提供进阶配置对ziplist进行定制。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">* 值为正表示按entry数限制ziplist长度</span><br><span class="line">* 值为负时：</span><br><span class="line">* -5，每个ziplist不能超过64Kb</span><br><span class="line">* -4，每个ziplist不能超过32Kb</span><br><span class="line">* -3，每个ziplist不能超过16Kb</span><br><span class="line">* -2，每个ziplist不能超过8Kb（默认值）</span><br><span class="line">* -1，每个ziplist不能超过4Kb</span><br><span class="line">*&#x2F;</span><br><span class="line">list-max-ziplist-size &#x3D; -2</span><br></pre></td></tr></table></figure>
+
+<p>quicklist大概长这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;...&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以认为一个 <prePoint><ziplist><nextPoint> 是一个quicklistNode。</p>
+<p>quicklist有两个指针head和tail分别指向头部的quicklistNode和尾部的quicklistNode。</p>
+<h3 id="skiplist"><a href="#skiplist" class="headerlink" title="skiplist"></a>skiplist</h3><p>skiplist的结构如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/skiplist.png" alt="skiplist"></p>
+<p>skiplist是空间和时间上的折中做法。相比哈希表，哈希表能够O（1）时间内查询，但是会浪费空间。相比平衡树，两者的查找时间都是O（log n），但是skiplist的平均指针数会更少，这取决于生成单个结点的层数。</p>
+<p>单个结点生成的层数的计算依赖两个变量</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">p &#x3D; 1&#x2F;4</span><br><span class="line">maxLevel &#x3D; 32</span><br></pre></td></tr></table></figure>
+<p>计算函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int getLevel()&#123;</span><br><span class="line">    int level &#x3D; 1;</span><br><span class="line">    while Math.random() &lt; p &amp;&amp; level &lt; maxLevel &#123;</span><br><span class="line">        level++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return level;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从skiplist的结构上可以看出，skiplist无法满足zset中的一些操作，例如根据data获取score，所以还用了dict辅助。在数据量较少的情况下，zset是用ziplist实现的，数据量达到一定时，用skiplist和dict实现。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;score 和 member的存储对数量超过这个值就转成skiplist 和 dict</span><br><span class="line">zset_max_ziplist_entries &#x3D; 128</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;任意一个插入的member存储占用超过这个值就转成skiplist 和 dict</span><br><span class="line">zset-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
 </search>
