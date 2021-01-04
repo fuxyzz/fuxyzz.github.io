@@ -182,20 +182,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,6 +223,78 @@
 
         <div class="content index posts-expand">
           
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/19/Java%E4%B8%AD%E7%9A%84retry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/19/Java%E4%B8%AD%E7%9A%84retry/" class="post-title-link" itemprop="url">Java中的retry</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-19 11:38:44 / 修改时间：11:45:56" itemprop="dateCreated datePublished" datetime="2020-10-19T11:38:44+08:00">2020-10-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>最近在看线程池源码的时候看到有关阻塞队列源码中使用了 <em>retry</em> ，有点懵逼，查阅资料总结一下。</p>
+<p><em>retry</em> 是作用于循环中，用于提前中断循环，可以搭配 <em>continue</em> 和 <em>break</em> 使用。使用时在循环之前声明 <em>retry:</em> ，在需要中断的地方使用 <em>break retry</em> 或者 <em>continue retry</em>。看起来很像goto。</p>
+<p>搭配continue：中断整个嵌套循环循环，从 <em>retry:</em> 标记的循环继续执行，注意这里可能有坑，你标记写在第几层循环，就是从哪里开始。</p>
+<p>搭配break：中断标记开始的循环，注意标记外层的循环继续执行。</p>
+<h3 id="code"><a href="#code" class="headerlink" title="code"></a>code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">    &#x2F;&#x2F;retry写最外层循环</span><br><span class="line">    public static void testBreak() &#123;</span><br><span class="line">        retry:</span><br><span class="line">        for (int i &#x3D; 0; i &lt; 3; i++) &#123;</span><br><span class="line">            for (int j &#x3D; 0; j &lt; 3; j++) &#123;</span><br><span class="line">                for (int k &#x3D; 0; k &lt; 3; k++) &#123;</span><br><span class="line">                    System.out.println(i + &quot; &quot; + j + &quot; &quot; + k);</span><br><span class="line">                    if (k &#x3D;&#x3D; 1) &#123;</span><br><span class="line">                        break retry;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;*</span><br><span class="line">    输出：</span><br><span class="line">    0 0 0</span><br><span class="line">    0 0 1</span><br><span class="line">    *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;retry写第二层循环</span><br><span class="line">    public static void testBreak2() &#123;</span><br><span class="line">&#x2F;&#x2F;        retry:</span><br><span class="line">        for (int i &#x3D; 0; i &lt; 3; i++) &#123;</span><br><span class="line">            retry:</span><br><span class="line">            for (int j &#x3D; 0; j &lt; 3; j++) &#123;</span><br><span class="line">                for (int k &#x3D; 0; k &lt; 3; k++) &#123;</span><br><span class="line">                    System.out.println(i + &quot; &quot; + j + &quot; &quot; + k);</span><br><span class="line">                    if (k &#x3D;&#x3D; 1) &#123;</span><br><span class="line">                        break retry;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;*</span><br><span class="line">    输出：</span><br><span class="line">    0 0 0</span><br><span class="line">    0 0 1</span><br><span class="line">    1 0 0</span><br><span class="line">    1 0 1</span><br><span class="line">    2 0 0</span><br><span class="line">    2 0 1</span><br><span class="line">    *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;retry写最外层循环</span><br><span class="line">    public static void testContinue1() &#123;</span><br><span class="line">        retry:</span><br><span class="line">        for (int i &#x3D; 0; i &lt; 5; i++) &#123;</span><br><span class="line">            for (int j &#x3D; 0; j &lt; 5; j++) &#123;</span><br><span class="line">                for (int k &#x3D; 0; k &lt; 5; k++) &#123;</span><br><span class="line">                    System.out.println(i + &quot; &quot; + j + &quot; &quot; + k);</span><br><span class="line">                    if (k &#x3D;&#x3D; 1) &#123;</span><br><span class="line">                        continue retry;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;*</span><br><span class="line">    输出：</span><br><span class="line">    0 0 0</span><br><span class="line">    0 0 1</span><br><span class="line">    1 0 0</span><br><span class="line">    1 0 1</span><br><span class="line">    2 0 0</span><br><span class="line">    2 0 1</span><br><span class="line">    *&#x2F;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;retry写第二层循环</span><br><span class="line">    public static void testContinue2() &#123;</span><br><span class="line">&#x2F;&#x2F;        retry:</span><br><span class="line">        for (int i &#x3D; 0; i &lt; 3; i++) &#123;</span><br><span class="line">            retry:</span><br><span class="line">            for (int j &#x3D; 0; j &lt; 3; j++) &#123;</span><br><span class="line">                for (int k &#x3D; 0; k &lt; 3; k++) &#123;</span><br><span class="line">                    System.out.println(i + &quot; &quot; + j + &quot; &quot; + k);</span><br><span class="line">                    if (k &#x3D;&#x3D; 1) &#123;</span><br><span class="line">                        continue retry;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;*</span><br><span class="line">    输出：</span><br><span class="line">    0 0 0</span><br><span class="line">    0 0 1</span><br><span class="line">    0 1 0</span><br><span class="line">    0 1 1</span><br><span class="line">    0 2 0</span><br><span class="line">    0 2 1</span><br><span class="line">    1 0 0</span><br><span class="line">    1 0 1</span><br><span class="line">    1 1 0</span><br><span class="line">    1 1 1</span><br><span class="line">    1 2 0</span><br><span class="line">    1 2 1</span><br><span class="line">    2 0 0</span><br><span class="line">    2 0 1</span><br><span class="line">    2 1 0</span><br><span class="line">    2 1 1</span><br><span class="line">    2 2 0</span><br><span class="line">    2 2 1</span><br><span class="line">    *&#x2F;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1128,79 +1200,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/shallow-copy-deep-copy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="fuxyzz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="fuxyzz's blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/22/shallow-copy-deep-copy/" class="post-title-link" itemprop="url">shallow copy&deep copy</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-22 09:24:23 / 修改时间：09:26:11" itemprop="dateCreated datePublished" datetime="2020-09-22T09:24:23+08:00">2020-09-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="拷贝前提"><a href="#拷贝前提" class="headerlink" title="拷贝前提"></a>拷贝前提</h4><p>拷贝需要实现Cloneable接口，实现clone方法，基本是调用super.clone()方法（会调用Object的clone方法，这个方法是native，由jvm进行调用）。</p>
-<h4 id="shallow-copy（浅拷贝）"><a href="#shallow-copy（浅拷贝）" class="headerlink" title="shallow copy（浅拷贝）"></a>shallow copy（浅拷贝）</h4><p>直接进行拷贝对象的成员变量，对基本数据类型不影响，对对象类型有影响（直接拷贝了对象引用，拷贝后操作的成员变量是同一个对象引用，可能出现与期望不一致的情况，类似Context）。</p>
-<h4 id="deep-copy（深拷贝）"><a href="#deep-copy（深拷贝）" class="headerlink" title="deep copy（深拷贝）"></a>deep copy（深拷贝）</h4><p>对对象的每一层进行对象拷贝，拷贝后操作的成员变量不是同一个对象引用。</p>
-<p>（1）可以在实现clone方法的时候自行实现所有关联成员变量的拷贝，如果对象的层级很多需要实现大量的成员变量的clone方法。<br>（2）可以使用序列化和反序列化的方式进行，用到IO，可能会慢一点。需要注意的是被transient修饰的成员无法被拷贝。这种方式需要实现Serializable接口，不需要实现Cloneable接口和clone方法。</p>
-<p>实现Serializable的code</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    public static volatile boolean flag &#x3D; false;</span><br><span class="line">    static ReentrantLock lock &#x3D; new ReentrantLock();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws CloneNotSupportedException, IOException, ClassNotFoundException &#123;</span><br><span class="line">        Test a &#x3D; new Test();</span><br><span class="line">        Sub er &#x3D; new Sub();</span><br><span class="line">        er.setB(10);</span><br><span class="line">        a.setEr(er);</span><br><span class="line">&#x2F;&#x2F;        Per b &#x3D; (Per) a.clone();</span><br><span class="line">        ByteArrayOutputStream bos &#x3D; new ByteArrayOutputStream();</span><br><span class="line">        ObjectOutputStream oos &#x3D; new ObjectOutputStream(bos);</span><br><span class="line">        oos.writeObject(a);</span><br><span class="line">        oos.flush();</span><br><span class="line">        ObjectInputStream ois &#x3D; new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));</span><br><span class="line">        Test b &#x3D; (Test) ois.readObject();</span><br><span class="line">        System.out.println(a.getSub().getB());</span><br><span class="line">        System.out.println(b.getSub().getB());</span><br><span class="line">        er.setB(1);</span><br><span class="line">        System.out.println(a.getSub().getB());</span><br><span class="line">        System.out.println(b.getSub().getB());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Test implements Serializable &#123;</span><br><span class="line">    private Sub sub;</span><br><span class="line"></span><br><span class="line">    public Sub getSub() &#123;</span><br><span class="line">        return sub;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setEr(Sub sub) &#123;</span><br><span class="line">        this.sub. &#x3D; sub;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Sub implements Serializable &#123;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    public int getB() &#123;</span><br><span class="line">        return b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setB(int b) &#123;</span><br><span class="line">        this.b &#x3D; b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1245,8 +1244,8 @@
 
 <div class="copyright">
   
-  &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
