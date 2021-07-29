@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、题目描述https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;regular-expression-matching&#x2F; 给你一个字符串&amp;nbsp;s&amp;nbsp;和一个字符规律&amp;nbsp;p，请你来实现一个支持 &#39;.&#39;&amp;nbsp;和&amp;nbsp;&#39;*&#39;&amp;nbsp;的正则表达式匹配。  &#39;.&#39; 匹配任意单个字符 &#39;*&#39; 匹配零个或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode-10">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/08/24/leetcode-10/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="一、题目描述https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;regular-expression-matching&#x2F; 给你一个字符串&amp;nbsp;s&amp;nbsp;和一个字符规律&amp;nbsp;p，请你来实现一个支持 &#39;.&#39;&amp;nbsp;和&amp;nbsp;&#39;*&#39;&amp;nbsp;的正则表达式匹配。  &#39;.&#39; 匹配任意单个字符 &#39;*&#39; 匹配零个或">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-24T02:55:35.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.050Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/08/24/leetcode-10/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>leetcode-10 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、题目描述"><span class="nav-number">1.</span> <span class="nav-text">一、题目描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、思路"><span class="nav-number">2.</span> <span class="nav-text">二、思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、code"><span class="nav-number">3.</span> <span class="nav-text">三、code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、复杂度分析"><span class="nav-number">4.</span> <span class="nav-text">四、复杂度分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/24/leetcode-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode-10
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-24 10:55:35" itemprop="dateCreated datePublished" datetime="2020-08-24T10:55:35+08:00">2020-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/</a></p>
+<p>给你一个字符串&nbsp;<code>s</code>&nbsp;和一个字符规律&nbsp;<code>p</code>，请你来实现一个支持 <code>&#39;.&#39;</code>&nbsp;和&nbsp;<code>&#39;*&#39;</code>&nbsp;的正则表达式匹配。</p>
+
+<pre>&#39;.&#39; 匹配任意单个字符
+&#39;*&#39; 匹配零个或多个前面的那一个元素
+</pre>
+
+<p>所谓匹配，是要涵盖&nbsp;<strong>整个&nbsp;</strong>字符串&nbsp;<code>s</code>的，而不是部分字符串。</p>
+
+<p><strong>说明:</strong></p>
+
+<ul>
+    <li><code>s</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母。</li>
+    <li><code>p</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母，以及字符&nbsp;<code>.</code>&nbsp;和&nbsp;<code>*</code>。</li>
+</ul>
+
+<p><strong>示例 1:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a&quot;
+<strong>输出:</strong> false
+<strong>解释:</strong> &quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。
+</pre>
+
+<p><strong>示例 2:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#39;a&#39;。因此，字符串 &quot;aa&quot; 可被视为 &#39;a&#39; 重复了一次。
+</pre>
+
+<p><strong>示例&nbsp;3:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;ab&quot;
+p = &quot;.*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;&quot;.*&quot; 表示可匹配零个或多个（&#39;*&#39;）任意字符（&#39;.&#39;）。
+</pre>
+
+<p><strong>示例 4:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aab&quot;
+p = &quot;c*a*b&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 表示零个或多个，这里 &#39;c&#39; 为 0 个, &#39;a&#39; 被重复一次。因此可以匹配字符串 &quot;aab&quot;。
+</pre>
+
+<p><strong>示例 5:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;mississippi&quot;
+p = &quot;mis*is*p*.&quot;
+<strong>输出:</strong> false</pre>
+
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>采用动态规划。假设以f[i][j]表示s字符串前i个字符能否与p字符串前j个字符相匹配。</p>
+<p>（1）如果j位置是字母，则直接匹配是否相等，如果相等，f[i][j]更新为f[i - 1][j - 1]，因为之前也要全都匹配上嘛。</p>
+<p>（2）如果j位置的值是 “.” ，直接放过，f[i][j]更新为f[i - 1][j - 1]，理由同（1）。</p>
+<p>（3）如果j位置的值是 “*“，考虑一下匹配规则，”*“ 是匹配零个或多个前面的那一个元素，如果我们暴力的去枚举这个结果，有点麻烦。我们换个思路，字符 + * 匹配的过程中只会出现两种情况（注意与上面不同，此时比较的字符串位置是i与j - 1，j - 1是因为需要取 “*“ 前面那个字符）：</p>
+<p>（i）匹配字符成功，将最后一个字符舍弃，f[i][j]更新为f[i - 1][j] or f[i][j - 2]。</p>
+<p>f[i - 1][j]是舍弃s[i]字符，举个例子，如下所示，因为s[i] 与 p[j - 1]匹配上了，此时如果舍弃s[i]需要满足 s 字符串前 i - 1 个字符与 p 字符串前 j 个字符都匹配上。这里的 j 可能不太好理解，带入下面的例子，cdcc与cdc<em>能够匹配上，所以 i 位置的c字母可以被舍弃。舍弃的角度是从p字符串出发的，因为c\</em>能匹配0个或者任意多个，所以s字符串有多个相同的字母的时候就可以看成舍弃了。</p>
+<p>其实当做是扩充匹配也行，cdccc的 i - 1位置的c字母与p字符串 j - 1位置的c字母能匹配，而且 i 位置的c字母与p字符串 j - 1位置的c字母能匹配，说明 i - 1 位置的字母与 i 位置的字母一样。如果cdcc与cdc*能匹配，那么cdccc与cdc*也能匹配上。这里理解成舍弃是因为下面还有一个舍弃的例子，为了理解一致。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line">cdc*a</span><br><span class="line">   j</span><br></pre></td></tr></table></figure>
+
+
+<p>f[i][j - 2]是舍弃p[j - 1]和p[j]两个字符，因为是字母 + 星号，要整体舍弃，举个例子，如下所示，因为s[i]与p[j-1]匹配上了，此时如果舍弃p[j - 1]和p[j]，需要满足 s 字符串前 i 个字符和 p 字符串前 j - 2 个字符都匹配上。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line"></span><br><span class="line">cdcccc*a</span><br><span class="line">      j</span><br></pre></td></tr></table></figure>
+
+
+<p>（ii）匹配字符失败就是说这个字符不能要，字母 + 星号一起舍弃，f[i][j]更新为f[i][j - 2]</p>
+<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public boolean isMatch(String s, String p) &#123;</span><br><span class="line">    int m &#x3D; s.length() + 1;</span><br><span class="line">    int n &#x3D; p.length() + 1;</span><br><span class="line">    boolean[][] find &#x3D; new boolean[m][n];</span><br><span class="line">    &#x2F;&#x2F;根据对f的定义，f[0][0]是最初空字符的位置</span><br><span class="line">    find[0][0] &#x3D; true;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; m; i++) &#123;</span><br><span class="line">        for (int j &#x3D; 1; j &lt; n; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F; &quot;*&quot; 的逻辑处理</span><br><span class="line">            if (p.charAt(j - 1) &#x3D;&#x3D; &#39;*&#39;) &#123;</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j - 1) ? find[i - 1][j] || find[i][j - 2] : find[i][j - 2];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F; &quot;.&quot; 与 字母 的逻辑处理</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j) &amp;&amp; find[i - 1][j - 1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return find[m - 1][n - 1];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean match(String s, String p, int i, int j) &#123;</span><br><span class="line">    &#x2F;&#x2F; i &#x3D; 0 不用处理，是空字符串的位置，是 &quot;.&quot; 或者相同的字母就是匹配上了</span><br><span class="line">    return i !&#x3D; 0 &amp;&amp; (p.charAt(j - 1) &#x3D;&#x3D; &#39;.&#39; || s.charAt(i - 1) &#x3D;&#x3D; p.charAt(j - 1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（m * n），m、n为字符串s、p的长度。</p>
+<p>空间复杂度：O（m * n），因为要存储所有的状态。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/06/leetcode-16/" rel="prev" title="leetcode-16">
+      <i class="fa fa-chevron-left"></i> leetcode-16
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/08/leetcode-25/" rel="next" title="leetcode-25">
+      leetcode-25 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

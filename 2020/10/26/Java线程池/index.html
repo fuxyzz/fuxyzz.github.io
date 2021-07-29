@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="概念前置知识： 线程是调度CPU的最小单位，也叫轻量级进程LWP（light weight process）。 内核级线程（kernel level threads，简称KLT）  线程管理的所有工作（创建和撤销）由操作系统完成 操作系统内核提供应用程序API，供开发者使用KLT  用户级线程（user level threads，简称ULT）  用户空间运行线程库，任何应用程序都可以通过使用线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java线程池">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/10/26/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="概念前置知识： 线程是调度CPU的最小单位，也叫轻量级进程LWP（light weight process）。 内核级线程（kernel level threads，简称KLT）  线程管理的所有工作（创建和撤销）由操作系统完成 操作系统内核提供应用程序API，供开发者使用KLT  用户级线程（user level threads，简称ULT）  用户空间运行线程库，任何应用程序都可以通过使用线程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/thread_pool.png">
+<meta property="article:published_time" content="2020-10-26T09:36:11.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.059Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/thread_pool.png">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/10/26/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java线程池 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">2.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">3.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java中的实现"><span class="nav-number">4.</span> <span class="nav-text">Java中的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程池的五种状态"><span class="nav-number">4.0.1.</span> <span class="nav-text">线程池的五种状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本参数"><span class="nav-number">4.0.2.</span> <span class="nav-text">基本参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行与复用"><span class="nav-number">4.0.3.</span> <span class="nav-text">执行与复用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">4.0.3.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/26/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java线程池
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-26 17:36:11" itemprop="dateCreated datePublished" datetime="2020-10-26T17:36:11+08:00">2020-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>前置知识：</p>
+<p>线程是调度CPU的最小单位，也叫轻量级进程LWP（light weight process）。</p>
+<p>内核级线程（kernel level threads，简称KLT）</p>
+<ul>
+<li>线程管理的所有工作（创建和撤销）由操作系统完成</li>
+<li>操作系统内核提供应用程序API，供开发者使用KLT</li>
+</ul>
+<p>用户级线程（user level threads，简称ULT）</p>
+<ul>
+<li>用户空间运行线程库，任何应用程序都可以通过使用线程库被设计成多线程程序。线程库是用于用户级线程管理的一个例程包，提供多线程应用程序的开发和运行支撑环境。包含：用于创建和销毁线程的代码、在线程间传递数据和消息的代码、调度线程执行的代码以及保存和恢复线程上下文的代码。</li>
+<li>线程切换不需要内核模式</li>
+<li>允许自己实现调度线程的算法</li>
+<li>不需要内核支持，可以跨OS</li>
+<li>不能利用多核处理器，每个进程只有一个ULT能运行</li>
+<li>一个ULT阻塞会导致整个进程阻塞</li>
+</ul>
+<p>Java线程依赖于系统内核（KLT），通过JVM调用系统库创建内核线程。因为创建和销毁都会依赖内核，频繁创建和销毁的代价特别大，所以需要池化技术来达到复用线程的降低开销。线程池就是一个线程缓存，负责对线程进行统一分配、调优和监控。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>复用线程，减少线程创建和销毁的开销，提高性能</li>
+<li>提高响应速度，任务到来时不需要等到线程创建就能立刻执行</li>
+<li>提高线程可管理性，统一分配、调优与监控</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>单个任务处理时间短</li>
+<li>需要处理的任务数量大</li>
+</ul>
+<p>需要同时满足以上两个条件的大部分程序都可以用线程池。</p>
+<h2 id="Java中的实现"><a href="#Java中的实现" class="headerlink" title="Java中的实现"></a>Java中的实现</h2><h4 id="线程池的五种状态"><a href="#线程池的五种状态" class="headerlink" title="线程池的五种状态"></a>线程池的五种状态</h4><p>running（运行中）：能接受新任务和处理已添加的任务</p>
+<p>shutdown（关闭）：不接受新任务，能处理已添加的任务</p>
+<p>stop（停止）：不接受新任务，不处理已添加的任务，并中断正在执行的任务</p>
+<p>tidying（整理）：所有任务已终止，ctl记录的任务数量为0，ctl负责记录线程池的运行状态与活动线程数量</p>
+<p>terminated（终止）：线程池终止</p>
+<p>关于状态和数量的实现，以ThreadPoolExecutor中的代码为例，代码中使用了的位运算，代码增加了注释方便理解。线程池中只使用了ctl一个变量来表示状态和工作线程数量，更新的时候用cas即可。如果使用多个变量，在并发的情况下需要加锁等操作，这是个很取巧的优化。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;原子类，实现并发情况下的操作，初始化为running状态，且线程数为0</span><br><span class="line">private final AtomicInteger ctl &#x3D; new AtomicInteger(ctlOf(RUNNING, 0));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;32 - 3 &#x3D; 29，高3位存储状态，低29位存储线程数量</span><br><span class="line">private static final int COUNT_BITS &#x3D; Integer.SIZE - 3;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;线程数量计算的掩码，类似计算机网络的子网掩码的计算方法，得到0001 1111 1111 1111 1111 1111 1111 1111</span><br><span class="line">private static final int COUNT_MASK &#x3D; (1 &lt;&lt; COUNT_BITS) - 1;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; runState is stored in the high-order bits</span><br><span class="line">&#x2F;*</span><br><span class="line">* -1的补码是1111 1111 1111 1111 1111 1111 1111 1111</span><br><span class="line">* 左移29位得到1110 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">*&#x2F;</span><br><span class="line">private static final int RUNNING    &#x3D; -1 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int SHUTDOWN   &#x3D;  0 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0010 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int STOP       &#x3D;  1 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0100 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int TIDYING    &#x3D;  2 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0110 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int TERMINATED &#x3D;  3 &lt;&lt; COUNT_BITS;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Packing and unpacking ctl</span><br><span class="line">&#x2F;&#x2F;根据ctl的值计算出状态</span><br><span class="line">private static int runStateOf(int c)     &#123; return c &amp; ~COUNT_MASK; &#125;</span><br><span class="line">&#x2F;&#x2F;根据ctl的值计算出线程数量</span><br><span class="line">private static int workerCountOf(int c)  &#123; return c &amp; COUNT_MASK; &#125;</span><br><span class="line">&#x2F;&#x2F;根据run state和worker count计算出ctl需要更新的值</span><br><span class="line">private static int ctlOf(int rs, int wc) &#123; return rs | wc; &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="基本参数"><a href="#基本参数" class="headerlink" title="基本参数"></a>基本参数</h4><p>从ThreadPoolExecutor的构造方法看起</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ThreadPoolExecutor(int corePoolSize,</span><br><span class="line">                          int maximumPoolSize,</span><br><span class="line">                          long keepAliveTime,</span><br><span class="line">                          TimeUnit unit,</span><br><span class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</span><br><span class="line">                          ThreadFactory threadFactory,</span><br><span class="line">                          RejectedExecutionHandler handler) &#123;</span><br><span class="line">    if (corePoolSize &lt; 0 ||</span><br><span class="line">        maximumPoolSize &lt;&#x3D; 0 ||</span><br><span class="line">        maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">        keepAliveTime &lt; 0)</span><br><span class="line">        throw new IllegalArgumentException();</span><br><span class="line">    if (workQueue &#x3D;&#x3D; null || threadFactory &#x3D;&#x3D; null || handler &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">    this.corePoolSize &#x3D; corePoolSize;</span><br><span class="line">    this.maximumPoolSize &#x3D; maximumPoolSize;</span><br><span class="line">    this.workQueue &#x3D; workQueue;</span><br><span class="line">    this.keepAliveTime &#x3D; unit.toNanos(keepAliveTime);</span><br><span class="line">    this.threadFactory &#x3D; threadFactory;</span><br><span class="line">    this.handler &#x3D; handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>corePoolSize：核心线程数，正常情况下能够一直呆在线程池中的线程数（只要线程池是running状态，且线程不挂掉）。</p>
+<p>maximumPoolSize：最多存在的工作线程数，当workQueue满了，且工作线程数大于corePoolSize也小于maximumPoolSize，则开启临时线程，相当于聘用临时工。</p>
+<p>keepAliveTime &amp; unit：时间的大小和时间的单位，临时线程空闲时间超过这个时间就kill掉，相当于解聘临时工。</p>
+<p>workQueue：阻塞队列，在任意时刻，永远只有一个线程能够进行入队或者出队，是线程安全的队列。新请求来临，如果工作线程都在工作且队列未满，就将新的任务加入阻塞队列。</p>
+<p>threadFactory：创建线程的工厂类。</p>
+<p>handler：负责拒绝任务时的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/thread_pool.png" alt="线程池工作流程图"></p>
+<p>如图所示，按序号顺序执行。</p>
+<p>（1）如果工作线程数小于corePoolSize，创建新的线程</p>
+<p>（2）如果工作线程数大于等于corePoolSize，队列未满，加入等待队列，队列满了，如果工作线程大于等于maximumPoolSize，拒绝任务，否则创建临时线程处理任务</p>
+<p>（3）拒绝通常有3种情况：</p>
+<ul>
+<li><p>添加任务时处于running且队列满了且工作线程大于等于maximumPoolSize</p>
+</li>
+<li><p>添加任务时处于shutdown</p>
+</li>
+<li><p>处于stop状态，stop会中断当前的任务并拒绝，并拒绝后续的任务</p>
+</li>
+</ul>
+<p>（4）拒绝任务会执行拒绝策略，拒绝策略通常有4种：</p>
+<ul>
+<li><p>AbortPolicy，默认的拒绝策略，直接抛出异常。</p>
+</li>
+<li><p>CallerRunsPolicy，拒绝后将任务交由调用execute方法的线程执行（主线程，可能有阻塞的风险）。如果线程池处于shutdown或以上（stop，terminated），会直接丢弃任务。</p>
+</li>
+<li><p>DiscardOldestPolicy，抛弃最久未执行的任务然后重试（调用execute重试）,最久就是排队最久的，就是队头的任务。而且队列嘛，只能先进先出，那就只能抛弃队头的任务了。如果线程池处于shutdown或以上（stop，terminated），会直接丢弃任务。</p>
+</li>
+<li><p>DiscardPolicy，直接抛弃被拒绝的任务。</p>
+</li>
+</ul>
+<h4 id="执行与复用"><a href="#执行与复用" class="headerlink" title="执行与复用"></a>执行与复用</h4><p>先明确一个概念，线程是底层操作系统实现的，JAVA中是JVM通过调用操作系统提供的api去原生的执行。</p>
+<p>从ThreadPoolExecutor的execute看起</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void execute(Runnable command) &#123;</span><br><span class="line">    if (command &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">     &#x2F;*</span><br><span class="line">     * 执行分3步：</span><br><span class="line">     * 1.如果少于corePoolSize且线程池处于运行态则开启新的线程去执行传入的任务。</span><br><span class="line">     * </span><br><span class="line">     * 2.如果不是1情况，则尝试将任务塞入阻塞队列，如果能塞入，进行 double-check，double-check主要是为了看是不是有工作线程中是否有线程挂了，还有看一下运行状态，如果是shundown要把任务拒绝。</span><br><span class="line">     *</span><br><span class="line">     * 3.如果不能塞入阻塞队列，尝试添加一个临时的线程去执行，如果失败，说明线程已经超过maximumPoolSize，或者是shutdown状态，要拒绝任务。</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int c &#x3D; ctl.get();</span><br><span class="line">    if (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">        if (addWorker(command, true))</span><br><span class="line">            return;</span><br><span class="line">        c &#x3D; ctl.get();</span><br><span class="line">    &#125;</span><br><span class="line">    if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">        int recheck &#x3D; ctl.get();</span><br><span class="line">        if (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            reject(command);</span><br><span class="line">        else if (workerCountOf(recheck) &#x3D;&#x3D; 0)</span><br><span class="line">            addWorker(null, false);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!addWorker(command, false))</span><br><span class="line">        reject(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>execute方式主要是线程的工作方式。workQueue的实现较为简单，以ArrayBlockingQueue为例，使用ReentrantLock辅助同一时间只能入队或者是出队。重点关注一下addWorker方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private boolean addWorker(Runnable firstTask, boolean core) &#123;</span><br><span class="line">    &#x2F;&#x2F;这里主要是检查</span><br><span class="line">    retry:</span><br><span class="line">    for (int c &#x3D; ctl.get();;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 检查线程池状态，检查队列</span><br><span class="line">        if (runStateAtLeast(c, SHUTDOWN)</span><br><span class="line">            &amp;&amp; (runStateAtLeast(c, STOP)</span><br><span class="line">                || firstTask !&#x3D; null</span><br><span class="line">                || workQueue.isEmpty()))</span><br><span class="line">            return false;</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;检查工作线程数是否已经饱和</span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            if (workerCountOf(c)</span><br><span class="line">                &gt;&#x3D; ((core ? corePoolSize : maximumPoolSize) &amp; COUNT_MASK))</span><br><span class="line">                return false;</span><br><span class="line">            &#x2F;&#x2F;成功就break了，走下面的逻辑了</span><br><span class="line">            if (compareAndIncrementWorkerCount(c))</span><br><span class="line">                break retry;</span><br><span class="line">            c &#x3D; ctl.get();</span><br><span class="line">            &#x2F;&#x2F; 再次检查工作线程数，工作线程数变化导致CAS失败的情况下重试内层的循环</span><br><span class="line">            if (runStateAtLeast(c, SHUTDOWN))</span><br><span class="line">                continue retry;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;用变量记录是否开启和添加成功</span><br><span class="line">    boolean workerStarted &#x3D; false;</span><br><span class="line">    boolean workerAdded &#x3D; false;</span><br><span class="line">    Worker w &#x3D; null;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;Worker里调用了ThreadFactory的newThread，ThreadFactory封装了创建线程的参数</span><br><span class="line">        w &#x3D; new Worker(firstTask);</span><br><span class="line">        &#x2F;&#x2F;创建了线程</span><br><span class="line">        final Thread t &#x3D; w.thread;</span><br><span class="line">        if (t !&#x3D; null) &#123;</span><br><span class="line">            &#x2F;&#x2F;获取全局锁</span><br><span class="line">            final ReentrantLock mainLock &#x3D; this.mainLock;</span><br><span class="line">            mainLock.lock();</span><br><span class="line">            try &#123;</span><br><span class="line">                &#x2F;&#x2F;再次检查，看线程池状态和线程的状态</span><br><span class="line">                int c &#x3D; ctl.get();</span><br><span class="line"></span><br><span class="line">                if (isRunning(c) ||</span><br><span class="line">                    (runStateLessThan(c, STOP) &amp;&amp; firstTask &#x3D;&#x3D; null)) &#123;</span><br><span class="line">                    &#x2F;&#x2F;再次检查线程的状态</span><br><span class="line">                    if (t.isAlive()) </span><br><span class="line">                        throw new IllegalThreadStateException();</span><br><span class="line">                    &#x2F;&#x2F;添加的工作线程集合中，方便管理</span><br><span class="line">                    workers.add(w);</span><br><span class="line">                    int s &#x3D; workers.size();</span><br><span class="line">                    if (s &gt; largestPoolSize)</span><br><span class="line">                        largestPoolSize &#x3D; s;</span><br><span class="line">                    workerAdded &#x3D; true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                mainLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">            if (workerAdded) &#123;</span><br><span class="line">                &#x2F;&#x2F;这里很重要，start启动的是worker线程，就是会调用worker的run方法</span><br><span class="line">                t.start();</span><br><span class="line">                workerStarted &#x3D; true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        &#x2F;&#x2F;线程没有启动成功，从workers中移除线程</span><br><span class="line">        if (! workerStarted)</span><br><span class="line">            addWorkerFailed(w);</span><br><span class="line">    &#125;</span><br><span class="line">    return workerStarted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>addWorker方法，总结一下就是添加工作线程，如果是新开的工作线程，会调用worker的run方法，这个调用很重要，具体看一下worker的run方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;** Delegates main run loop to outer runWorker. *&#x2F;</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        runWorker(this);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>从注释可以知道，Worker类的run方法将操作委托给外部的ThreadPoolExecutor（Worker是ThreadPoolExecutor的内部类）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">final void runWorker(Worker w) &#123;</span><br><span class="line">    &#x2F;&#x2F;获取当前线程</span><br><span class="line">    Thread wt &#x3D; Thread.currentThread();</span><br><span class="line">    Runnable task &#x3D; w.firstTask;</span><br><span class="line">    w.firstTask &#x3D; null;</span><br><span class="line">    w.unlock(); &#x2F;&#x2F; allow interrupts</span><br><span class="line">    boolean completedAbruptly &#x3D; true;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;不断的去取任务</span><br><span class="line">        while (task !&#x3D; null || (task &#x3D; getTask()) !&#x3D; null) &#123;</span><br><span class="line">            w.lock();</span><br><span class="line">            &#x2F;&#x2F;池子状态stop了之后要中断线程</span><br><span class="line">            if ((runStateAtLeast(ctl.get(), STOP) ||</span><br><span class="line">                 (Thread.interrupted() &amp;&amp;</span><br><span class="line">                  runStateAtLeast(ctl.get(), STOP))) &amp;&amp;</span><br><span class="line">                !wt.isInterrupted())</span><br><span class="line">                wt.interrupt();</span><br><span class="line">            try &#123;</span><br><span class="line">                beforeExecute(wt, task);</span><br><span class="line">                try &#123;</span><br><span class="line">                    &#x2F;&#x2F;执行任务的run方法</span><br><span class="line">                    task.run();</span><br><span class="line">                    afterExecute(task, null);</span><br><span class="line">                &#125; catch (Throwable ex) &#123;</span><br><span class="line">                    afterExecute(task, ex);</span><br><span class="line">                    throw ex;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                task &#x3D; null;</span><br><span class="line">                w.completedTasks++;</span><br><span class="line">                w.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        completedAbruptly &#x3D; false;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        processWorkerExit(w, completedAbruptly);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里写了个while循环去不断的取任务执行，我们再看一下getTask方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private Runnable getTask() &#123;</span><br><span class="line">    boolean timedOut &#x3D; false; &#x2F;&#x2F; Did the last poll() time out?</span><br><span class="line"></span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        int c &#x3D; ctl.get();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;不是running状态下的处理，返回null，runWorker方法的循环也就结束了</span><br><span class="line">        if (runStateAtLeast(c, SHUTDOWN)</span><br><span class="line">            &amp;&amp; (runStateAtLeast(c, STOP) || workQueue.isEmpty())) &#123;</span><br><span class="line">            decrementWorkerCount();</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int wc &#x3D; workerCountOf(c);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 是否要根据超时时间停止线程，核心线程也可以停止，需要根据allowCoreThreadTimeOut变量确定，像MonitorTask这种就会使用</span><br><span class="line">        boolean timed &#x3D; allowCoreThreadTimeOut || wc &gt; corePoolSize;</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;处理停止线程</span><br><span class="line">        if ((wc &gt; maximumPoolSize || (timed &amp;&amp; timedOut))</span><br><span class="line">            &amp;&amp; (wc &gt; 1 || workQueue.isEmpty())) &#123;</span><br><span class="line">            if (compareAndDecrementWorkerCount(c))</span><br><span class="line">                return null;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;尝试从阻塞队列中获取任务</span><br><span class="line">        try &#123;</span><br><span class="line">            Runnable r &#x3D; timed ?</span><br><span class="line">                workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :</span><br><span class="line">                workQueue.take();</span><br><span class="line">            if (r !&#x3D; null)</span><br><span class="line">                return r;</span><br><span class="line">            timedOut &#x3D; true;</span><br><span class="line">        &#125; catch (InterruptedException retry) &#123;</span><br><span class="line">            timedOut &#x3D; false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只要是正常情况下，就会一直从队列里取任务出来执行。</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>到这里，就可以得出线程池是怎么工作的，本质上就是通过线程不断的从阻塞队列中取出任务去执行。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/21/leetcode-75/" rel="prev" title="leetcode-75">
+      <i class="fa fa-chevron-left"></i> leetcode-75
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/28/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86%E4%B9%8BRaft/" rel="next" title="分布式共识之Raft">
+      分布式共识之Raft <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

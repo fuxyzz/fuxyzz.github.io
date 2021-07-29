@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="一、题目描述原题链接 给定一个包含&amp;nbsp;n 个整数的数组&amp;nbsp;nums&amp;nbsp;和一个目标值&amp;nbsp;target，判断&amp;nbsp;nums&amp;nbsp;中是否存在四个元素 a，b，c&amp;nbsp;和 d&amp;nbsp;，使得&amp;nbsp;a + b + c + d&amp;nbsp;的值与&amp;nbsp;target&amp;nbsp;相等？找出所有满足条件且不重复的四元组。  注意：  答案中不可以包含重复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode-18">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/09/11/leetcode-18/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="一、题目描述原题链接 给定一个包含&amp;nbsp;n 个整数的数组&amp;nbsp;nums&amp;nbsp;和一个目标值&amp;nbsp;target，判断&amp;nbsp;nums&amp;nbsp;中是否存在四个元素 a，b，c&amp;nbsp;和 d&amp;nbsp;，使得&amp;nbsp;a + b + c + d&amp;nbsp;的值与&amp;nbsp;target&amp;nbsp;相等？找出所有满足条件且不重复的四元组。  注意：  答案中不可以包含重复">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-11T10:28:52.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.052Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="algorithm">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/09/11/leetcode-18/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>leetcode-18 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、题目描述"><span class="nav-number">1.</span> <span class="nav-text">一、题目描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、思路"><span class="nav-number">2.</span> <span class="nav-text">二、思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、code"><span class="nav-number">3.</span> <span class="nav-text">三、code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、复杂度分析"><span class="nav-number">4.</span> <span class="nav-text">四、复杂度分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/11/leetcode-18/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode-18
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-11 18:28:52" itemprop="dateCreated datePublished" datetime="2020-09-11T18:28:52+08:00">2020-09-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/4sum/" target="_blank" rel="noopener">原题链接</a></p>
+<p>给定一个包含&nbsp;<em>n</em> 个整数的数组&nbsp;<code>nums</code>&nbsp;和一个目标值&nbsp;<code>target</code>，判断&nbsp;<code>nums</code>&nbsp;中是否存在四个元素 <em>a，</em><em>b，c</em>&nbsp;和 <em>d</em>&nbsp;，使得&nbsp;<em>a</em> + <em>b</em> + <em>c</em> + <em>d</em>&nbsp;的值与&nbsp;<code>target</code>&nbsp;相等？找出所有满足条件且不重复的四元组。</p>
+
+<p><strong>注意：</strong></p>
+
+<p>答案中不可以包含重复的四元组。</p>
+
+<p><strong>示例：</strong></p>
+
+<pre>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+
+满足要求的四元组集合为：
+[
+  [-1,  0, 0, 1],
+  [-2, -1, 1, 2],
+  [-2,  0, 0, 2]
+]
+</pre>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>跟<a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">三数之和</a>一样的做法。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F; 没有4个数就bye bye</span><br><span class="line">    if (nums.length &lt; 4) &#123;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 排序一下</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int len &#x3D; nums.length;</span><br><span class="line">    int left &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; i为第一个数</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len - 3; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">        if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] &gt; target) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;重复的结果需要去重</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">        if (nums[i] + nums[len - 1] + nums[len - 2] + nums[len - 3] &lt; target) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int j &#x3D; i + 1; j &lt; len - 2; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] &gt; target) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;去重</span><br><span class="line">            if (j &gt; i + 1 &amp;&amp; nums[j] &#x3D;&#x3D; nums[j - 1]) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[len - 1] + nums[len - 2] &lt; target) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            int k &#x3D; j + 1;</span><br><span class="line">            int l &#x3D; len - 1;</span><br><span class="line">            while (k &lt; l) &#123;</span><br><span class="line">                int sum &#x3D; nums[i] + nums[j] + nums[k] + nums[l];</span><br><span class="line">                if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                    List&lt;Integer&gt; subAns &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">                    subAns.add(nums[i]);</span><br><span class="line">                    subAns.add(nums[j]);</span><br><span class="line">                    subAns.add(nums[k]);</span><br><span class="line">                    subAns.add(nums[l]);</span><br><span class="line">                    ans.add(subAns);</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125; else if (sum &lt; target) &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：最惨就是O（n<sup>3</sup>），两层循环加上一次区间枚举，但是有搜索剪枝优化，总体小于O（n<sup>3</sup>）。</p>
+<p>空间复杂度：O（1）。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/algorithm/" rel="tag"># algorithm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/10/leetcode-17/" rel="prev" title="leetcode-17">
+      <i class="fa fa-chevron-left"></i> leetcode-17
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/14/leetcode-94/" rel="next" title="leetcode-94">
+      leetcode-94 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="概念Java Memory Model，简称JMM，翻译为Java内存模型。具体是指Java中线程的工作方式。 前置知识：线程有自己的工作内存，各个线程之间是不共享自己工作内存数据的，线程之间也是不能直接进行通信。 并发情况下，多个线程可能同时读取了同个变量（拷贝了副本），当这些线程同时进行修改的时候，其他工作线程对变量不可见，这就会导致出现并发修改同个变量错误的问题。为了解决这个问题，提出了Ja">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存模型（JMM）">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="概念Java Memory Model，简称JMM，翻译为Java内存模型。具体是指Java中线程的工作方式。 前置知识：线程有自己的工作内存，各个线程之间是不共享自己工作内存数据的，线程之间也是不能直接进行通信。 并发情况下，多个线程可能同时读取了同个变量（拷贝了副本），当这些线程同时进行修改的时候，其他工作线程对变量不可见，这就会导致出现并发修改同个变量错误的问题。为了解决这个问题，提出了Ja">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/jmm.png">
+<meta property="article:published_time" content="2020-10-14T01:28:42.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.057Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/jmm.png">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java内存模型（JMM） | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作流程图"><span class="nav-number">2.</span> <span class="nav-text">工作流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JMM中的数据原子操作"><span class="nav-number">3.</span> <span class="nav-text">JMM中的数据原子操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高并发三大特性"><span class="nav-number">4.</span> <span class="nav-text">高并发三大特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#happends-before（先行发生）原则"><span class="nav-number">5.</span> <span class="nav-text">happends-before（先行发生）原则</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java内存模型（JMM）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-14 09:28:42" itemprop="dateCreated datePublished" datetime="2020-10-14T09:28:42+08:00">2020-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>Java Memory Model，简称JMM，翻译为Java内存模型。具体是指Java中线程的工作方式。</p>
+<p>前置知识：线程有自己的工作内存，各个线程之间是不共享自己工作内存数据的，线程之间也是不能直接进行通信。</p>
+<p>并发情况下，多个线程可能同时读取了同个变量（拷贝了副本），当这些线程同时进行修改的时候，其他工作线程对变量不可见，这就会导致出现并发修改同个变量错误的问题。为了解决这个问题，提出了Java内存模型。</p>
+<h3 id="工作流程图"><a href="#工作流程图" class="headerlink" title="工作流程图"></a>工作流程图</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/jmm.png" alt="avatar"></p>
+<p>如图所示，多线程并发共享变量的时候，用一系列的原子操作来进行。</p>
+<h3 id="JMM中的数据原子操作"><a href="#JMM中的数据原子操作" class="headerlink" title="JMM中的数据原子操作"></a>JMM中的数据原子操作</h3><p>read：从主内存中读取数据</p>
+<p>load：将read读取到的数据写入线程的工作内存中</p>
+<p>use：从工作内存中读取数据进行计算</p>
+<p>assign：将计算好的值重新写入工作内存中</p>
+<p>store：将工作内存中的数据写入主内存</p>
+<p>write：将store写入的值赋值给主内存中的变量</p>
+<p>lock：将主内存变量加锁，标志为独占状态</p>
+<p>unlock：将主内存变量解锁，标志为其他线程可以锁定该变量</p>
+<p>lock和unlock是早期解决不同线程之间变量同步的方案，通过加锁的方式将并发操作变为串行化操作来实现。在当今服务器CPU核心很多的情况下，这种操作会大大降低效率。后续的方案是MESI缓存一致性协议，CPU通过总线嗅探机制感知数据的变化从而将自己的缓存数据失效来实现，同时为了解决多个线程同时并发修改的问题，锁定变量操作改为在store的时候进行加锁，降低锁的力度，更高效。</p>
+<p>Java中是通过volatile关键字修饰变量来达到的。注意volatile不能保证原子性，假设有两个线程获取了变量i，都进行i++ 操作，线程1与线程2都执行到assign，然后线程1先执行store，此时由于总线嗅探机制，线程2会重新从主存中获取i的值，然后执行store和write，相当于没有进行i++ 操作，这也是因为i++并不是一个原子操作的原因。</p>
+<h3 id="高并发三大特性"><a href="#高并发三大特性" class="headerlink" title="高并发三大特性"></a>高并发三大特性</h3><p>高并发三大特性：原子性，有序性，一致性（可见性）。</p>
+<p>volatile保证了有序性和一致性，有序性是通过禁止指令重排序实现，一致性通过底层的MESI缓存一致性协议实现。</p>
+<p>Synchronized保证了原子性，有序性和一致性。原子性通过monitorenter和monitorexit实现，底层是调用了JMM中原子操作lock和unlock，可以理解是由于锁将代码串行化执行保证了原子性。一致性是通过在unlock之前必须先将变量同步回主存（即执行store和write）。有序性与原子性一样也是通过串行化执行来实现。</p>
+<h3 id="happends-before（先行发生）原则"><a href="#happends-before（先行发生）原则" class="headerlink" title="happends-before（先行发生）原则"></a>happends-before（先行发生）原则</h3><p>程序次序规则：一个线程内，按照代码顺序，书写在前面的操作先行发生于书写在后面的操作</p>
+<p>锁定规则：一个unLock操作先行发生于后面对同一个锁的lock操作</p>
+<p>volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作</p>
+<p>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C</p>
+<p>线程启动规则：Thread对象的start()方法先行发生于此线程的每个一个动作</p>
+<p>线程中断规则：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生</p>
+<p>线程终结规则：线程中所有的操作都先行发生于线程的终止检测，我们可以通过Thread.join()方法结束、Thread.isAlive()的返回值手段检测到线程已经终止执行</p>
+<p>对象终结规则：一个对象的初始化完成先行发生于他的finalize()方法的开始</p>
+<p>这8条规则适用单线程，jvm会将没有数据依赖的语句进行指令重排序，多线程可能会出现问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/09/Java%E4%B8%AD%E7%9A%84%E9%94%81/" rel="prev" title="Java中的锁">
+      <i class="fa fa-chevron-left"></i> Java中的锁
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/15/Java%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" rel="next" title="Java双亲委派模型">
+      Java双亲委派模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

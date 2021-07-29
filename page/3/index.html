@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="fuxyzz&#39;s blog">
+<meta property="og:url" content="https://fuxyzz.github.io/page/3/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="fuxyzz">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/page/3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content index posts-expand">
+          
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/shallow-copy-deep-copy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/22/shallow-copy-deep-copy/" class="post-title-link" itemprop="url">shallow copy&deep copy</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-22 09:24:23" itemprop="dateCreated datePublished" datetime="2020-09-22T09:24:23+08:00">2020-09-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="拷贝前提"><a href="#拷贝前提" class="headerlink" title="拷贝前提"></a>拷贝前提</h4><p>拷贝需要实现Cloneable接口，实现clone方法，基本是调用super.clone()方法（会调用Object的clone方法，这个方法是native，由jvm进行调用）。</p>
+<h4 id="shallow-copy（浅拷贝）"><a href="#shallow-copy（浅拷贝）" class="headerlink" title="shallow copy（浅拷贝）"></a>shallow copy（浅拷贝）</h4><p>直接进行拷贝对象的成员变量，对基本数据类型不影响，对对象类型有影响（直接拷贝了对象引用，拷贝后操作的成员变量是同一个对象引用，可能出现与期望不一致的情况，类似Context）。</p>
+<h4 id="deep-copy（深拷贝）"><a href="#deep-copy（深拷贝）" class="headerlink" title="deep copy（深拷贝）"></a>deep copy（深拷贝）</h4><p>对对象的每一层进行对象拷贝，拷贝后操作的成员变量不是同一个对象引用。</p>
+<p>（1）可以在实现clone方法的时候自行实现所有关联成员变量的拷贝，如果对象的层级很多需要实现大量的成员变量的clone方法。<br>（2）可以使用序列化和反序列化的方式进行，用到IO，可能会慢一点。需要注意的是被transient修饰的成员无法被拷贝。这种方式需要实现Serializable接口，不需要实现Cloneable接口和clone方法。</p>
+<p>实现Serializable的code</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    public static volatile boolean flag &#x3D; false;</span><br><span class="line">    static ReentrantLock lock &#x3D; new ReentrantLock();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws CloneNotSupportedException, IOException, ClassNotFoundException &#123;</span><br><span class="line">        Test a &#x3D; new Test();</span><br><span class="line">        Sub er &#x3D; new Sub();</span><br><span class="line">        er.setB(10);</span><br><span class="line">        a.setEr(er);</span><br><span class="line">&#x2F;&#x2F;        Per b &#x3D; (Per) a.clone();</span><br><span class="line">        ByteArrayOutputStream bos &#x3D; new ByteArrayOutputStream();</span><br><span class="line">        ObjectOutputStream oos &#x3D; new ObjectOutputStream(bos);</span><br><span class="line">        oos.writeObject(a);</span><br><span class="line">        oos.flush();</span><br><span class="line">        ObjectInputStream ois &#x3D; new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));</span><br><span class="line">        Test b &#x3D; (Test) ois.readObject();</span><br><span class="line">        System.out.println(a.getSub().getB());</span><br><span class="line">        System.out.println(b.getSub().getB());</span><br><span class="line">        er.setB(1);</span><br><span class="line">        System.out.println(a.getSub().getB());</span><br><span class="line">        System.out.println(b.getSub().getB());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Test implements Serializable &#123;</span><br><span class="line">    private Sub sub;</span><br><span class="line"></span><br><span class="line">    public Sub getSub() &#123;</span><br><span class="line">        return sub;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setEr(Sub sub) &#123;</span><br><span class="line">        this.sub. &#x3D; sub;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Sub implements Serializable &#123;</span><br><span class="line">    private int b;</span><br><span class="line"></span><br><span class="line">    public int getB() &#123;</span><br><span class="line">        return b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setB(int b) &#123;</span><br><span class="line">        this.b &#x3D; b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/18/leetcode-239/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/18/leetcode-239/" class="post-title-link" itemprop="url">leetcode-239</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-18 16:09:28" itemprop="dateCreated datePublished" datetime="2020-09-18T16:09:28+08:00">2020-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>使用单调队列。队列存的元素是单调递增的，队头保存的是当前窗口的最大值。每次走到i位置的时候，当i位置的元素减去队头元素的位置不小于k，删除队头的元素，如果进来的元素大于等于队尾的元素，删除队尾的元素，大于删掉是为了维护单调性，等于是因为重复了可以直接剔除，不剔除也行。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int[] maxSlidingWindow(int[] nums, int k) &#123;</span><br><span class="line">        int len &#x3D; nums.length;</span><br><span class="line">        &#x2F;&#x2F;最后返回的只有len - k + 1个</span><br><span class="line">        int[] ans &#x3D; new int[len - k + 1];</span><br><span class="line">        Deque&lt;Integer&gt; q &#x3D; new ArrayDeque&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        for (int i &#x3D; 0; i &lt; len; ++i) &#123;</span><br><span class="line">            &#x2F;&#x2F;清理到只剩k-1个</span><br><span class="line">            while (!q.isEmpty() &amp;&amp; i - q.peekFirst() &gt;&#x3D; k) &#123;</span><br><span class="line">                q.removeFirst();</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;此时进来的大于等于末尾的也要清末尾的，因为不是最大的，前面一步决定了区间</span><br><span class="line">            while (!q.isEmpty() &amp;&amp; nums[q.peekLast()] &lt;&#x3D; nums[i]) &#123;</span><br><span class="line">                q.removeLast();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;添加到队尾</span><br><span class="line">            q.addLast(i);</span><br><span class="line"></span><br><span class="line">            if (i &gt;&#x3D; k - 1) &#123;</span><br><span class="line">                ans[i - k + 1] &#x3D; nums[q.peekFirst()];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），只遍历一次。</p>
+<p>空间复杂度：O（k），辅助使用的队列最多使用空间是k。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/14/leetcode-94/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/14/leetcode-94/" class="post-title-link" itemprop="url">leetcode-94</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-14 12:29:18" itemprop="dateCreated datePublished" datetime="2020-09-14T12:29:18+08:00">2020-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>中序遍历是左中右，通过栈模拟即可。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;Integer&gt; inorderTraversal(TreeNode root) &#123;</span><br><span class="line">    List&lt;Integer&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    if (root &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Deque&lt;TreeNode&gt; stack &#x3D; new ArrayDeque&lt;&gt;();</span><br><span class="line">    while (root !&#x3D; null || !stack.isEmpty()) &#123;</span><br><span class="line">        while (root !&#x3D; null) &#123;</span><br><span class="line">            stack.push(root);</span><br><span class="line">            root &#x3D; root.left;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        root &#x3D; stack.pop();</span><br><span class="line">        list.add(root.val);</span><br><span class="line">        root &#x3D; root.right;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），每个结点只会被访问一次。</p>
+<p>空间复杂度：O（n），空间复杂度取决于栈最多压入的元素，最差是单链表的情况。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/11/leetcode-18/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/11/leetcode-18/" class="post-title-link" itemprop="url">leetcode-18</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-11 18:28:52" itemprop="dateCreated datePublished" datetime="2020-09-11T18:28:52+08:00">2020-09-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/4sum/" target="_blank" rel="noopener">原题链接</a></p>
+<p>给定一个包含&nbsp;<em>n</em> 个整数的数组&nbsp;<code>nums</code>&nbsp;和一个目标值&nbsp;<code>target</code>，判断&nbsp;<code>nums</code>&nbsp;中是否存在四个元素 <em>a，</em><em>b，c</em>&nbsp;和 <em>d</em>&nbsp;，使得&nbsp;<em>a</em> + <em>b</em> + <em>c</em> + <em>d</em>&nbsp;的值与&nbsp;<code>target</code>&nbsp;相等？找出所有满足条件且不重复的四元组。</p>
+
+<p><strong>注意：</strong></p>
+
+<p>答案中不可以包含重复的四元组。</p>
+
+<p><strong>示例：</strong></p>
+
+<pre>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+
+满足要求的四元组集合为：
+[
+  [-1,  0, 0, 1],
+  [-2, -1, 1, 2],
+  [-2,  0, 0, 2]
+]
+</pre>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>跟<a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener">三数之和</a>一样的做法。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; fourSum(int[] nums, int target) &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    &#x2F;&#x2F; 没有4个数就bye bye</span><br><span class="line">    if (nums.length &lt; 4) &#123;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 排序一下</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int len &#x3D; nums.length;</span><br><span class="line">    int left &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; i为第一个数</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len - 3; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">        if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] &gt; target) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;重复的结果需要去重</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">        if (nums[i] + nums[len - 1] + nums[len - 2] + nums[len - 3] &lt; target) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int j &#x3D; i + 1; j &lt; len - 2; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F;最小值大于target说明后面不会再可能枚举到4个值之和等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] &gt; target) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;去重</span><br><span class="line">            if (j &gt; i + 1 &amp;&amp; nums[j] &#x3D;&#x3D; nums[j - 1]) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;最大值小于target说明这个区间怎么枚举4个值之和都不可能等于target</span><br><span class="line">            if (nums[i] + nums[j] + nums[len - 1] + nums[len - 2] &lt; target) &#123;</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            int k &#x3D; j + 1;</span><br><span class="line">            int l &#x3D; len - 1;</span><br><span class="line">            while (k &lt; l) &#123;</span><br><span class="line">                int sum &#x3D; nums[i] + nums[j] + nums[k] + nums[l];</span><br><span class="line">                if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                    List&lt;Integer&gt; subAns &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">                    subAns.add(nums[i]);</span><br><span class="line">                    subAns.add(nums[j]);</span><br><span class="line">                    subAns.add(nums[k]);</span><br><span class="line">                    subAns.add(nums[l]);</span><br><span class="line">                    ans.add(subAns);</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125; else if (sum &lt; target) &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[k] &#x3D;&#x3D; nums[++k]) ;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    while (k &lt; l &amp;&amp; nums[l] &#x3D;&#x3D; nums[--l]) ;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：最惨就是O（n<sup>3</sup>），两层循环加上一次区间枚举，但是有搜索剪枝优化，总体小于O（n<sup>3</sup>）。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/10/leetcode-17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/10/leetcode-17/" class="post-title-link" itemprop="url">leetcode-17</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-10 17:42:22" itemprop="dateCreated datePublished" datetime="2020-09-10T17:42:22+08:00">2020-09-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/letter-combinations-of-a-phone-number/" target="_blank" rel="noopener">原题链接</a></p>
+<p>给定一个仅包含数字&nbsp;<code>2-9</code>&nbsp;的字符串，返回所有它能表示的字母组合。</p>
+
+<p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p>
+
+<p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/original_images/17_telephone_keypad.png" style="width: 200px;"></p>
+
+<p><strong>示例:</strong></p>
+
+<pre><strong>输入：</strong>&quot;23&quot;
+<strong>输出：</strong>[&quot;ad&quot;, &quot;ae&quot;, &quot;af&quot;, &quot;bd&quot;, &quot;be&quot;, &quot;bf&quot;, &quot;cd&quot;, &quot;ce&quot;, &quot;cf&quot;].
+</pre>
+
+<p><strong>说明:</strong><br>
+尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。</p>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>递归的拼接字符即可，注意coding技巧，空间能省则省。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List&lt;String&gt; ans;</span><br><span class="line"></span><br><span class="line">public List&lt;String&gt; letterCombinations(String digits) &#123;</span><br><span class="line">    ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    if (digits.length() &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;不用哈希表，用数组更省空间</span><br><span class="line">    String[] strArr &#x3D; new String[]&#123;&quot;abc&quot;, &quot;def&quot;, &quot;ghi&quot;, &quot;jkl&quot;, &quot;mno&quot;, &quot;pqrs&quot;, &quot;tuv&quot;, &quot;wxyz&quot;&#125;;</span><br><span class="line">    char[] digitsArr &#x3D; digits.toCharArray();</span><br><span class="line">    char[] subAns &#x3D; new char[digitsArr.length];</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;递归拼接</span><br><span class="line">    recursive(strArr, digitsArr, 0, subAns);</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void recursive(String[] strArr, char[] digitsArr, int idx, char[] subAns) &#123;</span><br><span class="line">    if (idx &#x3D;&#x3D; digitsArr.length) &#123;</span><br><span class="line">        &#x2F;&#x2F;保存答案</span><br><span class="line">        ans.add(String.valueOf(subAns));</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;因为手机键盘的字母是从2开始，减掉即可</span><br><span class="line">    String s &#x3D; strArr[digitsArr[idx] - &#39;0&#39; - 2];</span><br><span class="line">    for (int i &#x3D; 0, len &#x3D; s.length(); i &lt; len; ++i) &#123;</span><br><span class="line">        subAns[idx] &#x3D; s.charAt(i);</span><br><span class="line">        recursive(strArr, digitsArr, idx + 1, subAns);</span><br><span class="line">        &#x2F;&#x2F;一般递归在回溯的时候是要做回退操作的，对应本题这里是删除字符操作，但是因为答案已经保存，后续直接覆盖当前位置即可</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（4<sup>n</sup>），偷个懒，按每个按键都是4个算吧，n为输入字符的长度。</p>
+<p>空间复杂度：O（n）,辅助数组固定26开销，常数级可忽略，主要的空间开销是递归时的栈帧开销，最多为输入字符串的长度n。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/10/leetcode-28/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/10/leetcode-28/" class="post-title-link" itemprop="url">leetcode-28</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-10 13:37:10" itemprop="dateCreated datePublished" datetime="2020-09-10T13:37:10+08:00">2020-09-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/implement-strstr/" target="_blank" rel="noopener">https://leetcode.com/problems/implement-strstr/</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>rabin karp，一种滑动窗口的做法，一直复用之前的计算，使得时间复杂度降低。考虑一下字符的ASCII码，先计算haystack字符串起始位置起needle长度的哈希值，哈希算法使用质数相乘，反复循环needle长度最后得到哈希值。此后，再次移动的时候只要减去第一位字符ASCII码的“偏移计算值”再加上新字符的字符的ASCII码即可。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int strStr(String haystack, String needle) &#123;</span><br><span class="line">        if (needle.length() &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (haystack.length() &lt; needle.length()) &#123;</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        char[] haystackArr &#x3D; haystack.toCharArray();</span><br><span class="line">        char[] needleArr &#x3D; needle.toCharArray();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;使用质数，减少哈希冲突</span><br><span class="line">        long primeNumber &#x3D; 31;</span><br><span class="line">        long haystackHash &#x3D; 0;</span><br><span class="line">        long needleHash &#x3D; 0;</span><br><span class="line">        long pow &#x3D; 1;</span><br><span class="line">        long mod &#x3D; Long.MAX_VALUE &gt;&gt; 1;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; needleArr.length; ++i) &#123;</span><br><span class="line">            haystackHash &#x3D; haystackHash * primeNumber + (haystackArr[i] - &#39;\0&#39;);</span><br><span class="line">            haystackHash %&#x3D; mod;</span><br><span class="line">            needleHash &#x3D; needleHash * primeNumber + (needleArr[i] - &#39;\0&#39;);</span><br><span class="line">            needleHash %&#x3D; mod;</span><br><span class="line">            pow *&#x3D; primeNumber % mod;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (haystackHash &#x3D;&#x3D; needleHash &amp;&amp; haystack.substring(0, needle.length()).equals(needle)) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int i &#x3D; 1; i &lt; haystackArr.length - needleArr.length + 1; ++i) &#123;</span><br><span class="line">            haystackHash &#x3D; (haystackHash * primeNumber - (haystackArr[i - 1] - &#39;\0&#39;) * pow) + (haystackArr[i + needle.length() - 1] - &#39;\0&#39;);</span><br><span class="line">            haystackHash %&#x3D; mod;</span><br><span class="line">            &#x2F;&#x2F;以防万一，处理哈希冲突</span><br><span class="line">            if (haystackHash &#x3D;&#x3D; needleHash &amp;&amp; haystack.substring(i, i + needle.length()).equals(needle)) &#123;</span><br><span class="line">                return i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历一次，每个字符只参与一次计算。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/08/leetcode-26/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/08/leetcode-26/" class="post-title-link" itemprop="url">leetcode-26</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-08 17:35:47" itemprop="dateCreated datePublished" datetime="2020-09-08T17:35:47+08:00">2020-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/" target="_blank" rel="noopener">https://leetcode.com/problems/remove-duplicates-from-sorted-array/</a></p>
+<p>给定一个排序数组，你需要在<strong><a href="http://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95" target="_blank"> 原地</a></strong> 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。</p>
+
+<p>不要使用额外的数组空间，你必须在 <strong><a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95" target="_blank">原地 </a>修改输入数组 </strong>并在使用 O(1) 额外空间的条件下完成。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例&nbsp;1:</strong></p>
+
+<pre>给定数组 <em>nums</em> = <strong>[1,1,2]</strong>, 
+
+函数应该返回新的长度 <strong>2</strong>, 并且原数组 <em>nums </em>的前两个元素被修改为 <strong><code>1</code></strong>, <strong><code>2</code></strong>。 
+
+你不需要考虑数组中超出新长度后面的元素。</pre>
+
+<p><strong>示例&nbsp;2:</strong></p>
+
+<pre>给定<em> nums </em>= <strong>[0,0,1,1,1,2,2,3,3,4]</strong>,
+
+函数应该返回新的长度 <strong>5</strong>, 并且原数组 <em>nums </em>的前五个元素被修改为 <strong><code>0</code></strong>, <strong><code>1</code></strong>, <strong><code>2</code></strong>, <strong><code>3</code></strong>, <strong><code>4</code></strong>。
+
+你不需要考虑数组中超出新长度后面的元素。
+</pre>
+
+<p>&nbsp;</p>
+
+<p><strong>说明:</strong></p>
+
+<p>为什么返回数值是整数，但输出的答案是数组呢?</p>
+
+<p>请注意，输入数组是以<strong>「引用」</strong>方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。</p>
+
+<p>你可以想象内部操作如下:</p>
+
+<pre>// <strong>nums</strong> 是以&ldquo;引用&rdquo;方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中<strong>该长度范围内</strong>的所有元素。
+for (int i = 0; i &lt; len; i++) {
+&nbsp; &nbsp; print(nums[i]);
+}
+</pre>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>返回的答案也就是要修改值的下标，注意coding技巧即可。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int removeDuplicates(int[] nums) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    int len &#x3D; nums.length;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; len; ++i) &#123;</span><br><span class="line">        if (i &#x3D;&#x3D; 0 || nums[i] !&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            nums[ans++] &#x3D; nums[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历数组的复杂度。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/08/leetcode-25/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/08/leetcode-25/" class="post-title-link" itemprop="url">leetcode-25</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-08 17:18:10" itemprop="dateCreated datePublished" datetime="2020-09-08T17:18:10+08:00">2020-09-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/reverse-nodes-in-k-group/" target="_blank" rel="noopener">https://leetcode.com/problems/reverse-nodes-in-k-group/</a></p>
+<p>给你一个链表，每&nbsp;<em>k&nbsp;</em>个节点一组进行翻转，请你返回翻转后的链表。</p>
+
+<p><em>k&nbsp;</em>是一个正整数，它的值小于或等于链表的长度。</p>
+
+<p>如果节点总数不是&nbsp;<em>k&nbsp;</em>的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例：</strong></p>
+
+<p>给你这个链表：<code>1-&gt;2-&gt;3-&gt;4-&gt;5</code></p>
+
+<p>当&nbsp;<em>k&nbsp;</em>= 2 时，应当返回: <code>2-&gt;1-&gt;4-&gt;3-&gt;5</code></p>
+
+<p>当&nbsp;<em>k&nbsp;</em>= 3 时，应当返回: <code>3-&gt;2-&gt;1-&gt;4-&gt;5</code></p>
+
+<p>&nbsp;</p>
+
+<p><strong>说明：</strong></p>
+
+<ul>
+    <li>你的算法只能使用常数的额外空间。</li>
+    <li><strong>你不能只是单纯的改变节点内部的值</strong>，而是需要实际进行节点交换。</li>
+</ul>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>反转k个结点，尾结点指向下k个结点的头结点，递归或者迭代处理都可以，递归会有函数压栈的空间消耗，不太满足题意。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><p>递归</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode reverseKGroup(ListNode head, int k) &#123;</span><br><span class="line">    if (head &#x3D;&#x3D; null || head.next &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return head;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 循环后得到的tail是下一轮循环的开始结点，k个数，k-1次next指向到末尾，k次next指向到末尾的下一个结点</span><br><span class="line">     * 所以reverse函数需要处理的是左闭右开的情况</span><br><span class="line">     *&#x2F;</span><br><span class="line">    ListNode tail &#x3D; head;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; k; i++) &#123;</span><br><span class="line">        if (tail &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        tail &#x3D; tail.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;反转k个结点得到最前的结点</span><br><span class="line">    ListNode pre &#x3D; reverse(head, tail);</span><br><span class="line">    &#x2F;&#x2F;head经过反转是最后一个结点，下一个结点拼接后面返回后续链表的最前结点</span><br><span class="line">    head.next &#x3D; reverseKGroup(tail, k);</span><br><span class="line"></span><br><span class="line">    return pre;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public ListNode reverse(ListNode head, ListNode tail) &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * pre是head的前一个结点，初始化为null是为了处理最后一个结点的下一个结点应该为null的情况</span><br><span class="line">     * 写成tail也行，但是写成tail的意义不一样，这样会连接下一段链表，但是意义不大，后续链表还会交换，还要重新连接</span><br><span class="line">     *&#x2F;</span><br><span class="line">    ListNode pre &#x3D; null;</span><br><span class="line">    ListNode next &#x3D; null;</span><br><span class="line">    &#x2F;&#x2F;判断条件是左闭右开</span><br><span class="line">    while (head !&#x3D; tail) &#123;</span><br><span class="line">        next &#x3D; head.next;</span><br><span class="line">        head.next &#x3D; pre;</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        head &#x3D; next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return pre;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ListNode reverseKGroup(ListNode head, int k) &#123;</span><br><span class="line">    ListNode newHead &#x3D; new ListNode(-1);</span><br><span class="line">    newHead.next &#x3D; head;</span><br><span class="line">    &#x2F;&#x2F;pre的作用是作为每一组头结点的前驱结点，为了反转后把上一组的尾结点指向下一组新的头结点</span><br><span class="line">    ListNode pre &#x3D; newHead;</span><br><span class="line"></span><br><span class="line">    while (head !&#x3D; null) &#123;</span><br><span class="line">        ListNode tail &#x3D; pre;</span><br><span class="line">        for (int i &#x3D; 0; i &lt; k; ++i) &#123;</span><br><span class="line">            tail &#x3D; tail.next;</span><br><span class="line">            if (tail &#x3D;&#x3D; null) &#123;</span><br><span class="line">                return newHead.next;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;**</span><br><span class="line">         * 反转k个结点</span><br><span class="line">         * 注意虽然是传引用，但是里面不是改变对象的属性，而是直接改变了句柄，不会改变head和tail的指向</span><br><span class="line">         * 反转后head是尾结点，tail是头结点</span><br><span class="line">         *&#x2F;</span><br><span class="line">        reverse(head, tail);</span><br><span class="line">        &#x2F;&#x2F;pre后驱要从指向head改为tail，因为反转后tail是头</span><br><span class="line">        pre.next &#x3D; tail;</span><br><span class="line">        &#x2F;&#x2F;pre更新为下一组头的前驱结点</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        &#x2F;&#x2F;head指向下一组的头结点</span><br><span class="line">        head &#x3D; head.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return newHead.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void reverse(ListNode head, ListNode tail) &#123;</span><br><span class="line">    &#x2F;&#x2F;初始化为下一组的头结点，为了先接上后面的链表</span><br><span class="line">    ListNode pre &#x3D; tail.next;</span><br><span class="line">    ListNode next &#x3D; null;</span><br><span class="line">    while (pre !&#x3D; tail) &#123;</span><br><span class="line">        next &#x3D; head.next;</span><br><span class="line">        head.next &#x3D; pre;</span><br><span class="line">        pre &#x3D; head;</span><br><span class="line">        head &#x3D; next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><h4 id="递归："><a href="#递归：" class="headerlink" title="递归："></a>递归：</h4><p>时间复杂度：O（n），遍历一次，加上处理反转时的遍历，也是2n，量级依旧是n。</p>
+<p>空间复杂度：O（n/k），函数压栈的空间消耗。</p>
+<h4 id="迭代："><a href="#迭代：" class="headerlink" title="迭代："></a>迭代：</h4><p>时间复杂度：O（n），遍历一次，加上处理反转时的遍历，也是2n，量级依旧是n。</p>
+<p>空间复杂度：O（1）。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/24/leetcode-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/24/leetcode-10/" class="post-title-link" itemprop="url">leetcode-10</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-24 10:55:35" itemprop="dateCreated datePublished" datetime="2020-08-24T10:55:35+08:00">2020-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h4><p><a href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="noopener">https://leetcode.com/problems/regular-expression-matching/</a></p>
+<p>给你一个字符串&nbsp;<code>s</code>&nbsp;和一个字符规律&nbsp;<code>p</code>，请你来实现一个支持 <code>&#39;.&#39;</code>&nbsp;和&nbsp;<code>&#39;*&#39;</code>&nbsp;的正则表达式匹配。</p>
+
+<pre>&#39;.&#39; 匹配任意单个字符
+&#39;*&#39; 匹配零个或多个前面的那一个元素
+</pre>
+
+<p>所谓匹配，是要涵盖&nbsp;<strong>整个&nbsp;</strong>字符串&nbsp;<code>s</code>的，而不是部分字符串。</p>
+
+<p><strong>说明:</strong></p>
+
+<ul>
+    <li><code>s</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母。</li>
+    <li><code>p</code>&nbsp;可能为空，且只包含从&nbsp;<code>a-z</code>&nbsp;的小写字母，以及字符&nbsp;<code>.</code>&nbsp;和&nbsp;<code>*</code>。</li>
+</ul>
+
+<p><strong>示例 1:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a&quot;
+<strong>输出:</strong> false
+<strong>解释:</strong> &quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。
+</pre>
+
+<p><strong>示例 2:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aa&quot;
+p = &quot;a*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#39;a&#39;。因此，字符串 &quot;aa&quot; 可被视为 &#39;a&#39; 重复了一次。
+</pre>
+
+<p><strong>示例&nbsp;3:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;ab&quot;
+p = &quot;.*&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;&quot;.*&quot; 表示可匹配零个或多个（&#39;*&#39;）任意字符（&#39;.&#39;）。
+</pre>
+
+<p><strong>示例 4:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;aab&quot;
+p = &quot;c*a*b&quot;
+<strong>输出:</strong> true
+<strong>解释:</strong>&nbsp;因为 &#39;*&#39; 表示零个或多个，这里 &#39;c&#39; 为 0 个, &#39;a&#39; 被重复一次。因此可以匹配字符串 &quot;aab&quot;。
+</pre>
+
+<p><strong>示例 5:</strong></p>
+
+<pre><strong>输入:</strong>
+s = &quot;mississippi&quot;
+p = &quot;mis*is*p*.&quot;
+<strong>输出:</strong> false</pre>
+
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>采用动态规划。假设以f[i][j]表示s字符串前i个字符能否与p字符串前j个字符相匹配。</p>
+<p>（1）如果j位置是字母，则直接匹配是否相等，如果相等，f[i][j]更新为f[i - 1][j - 1]，因为之前也要全都匹配上嘛。</p>
+<p>（2）如果j位置的值是 “.” ，直接放过，f[i][j]更新为f[i - 1][j - 1]，理由同（1）。</p>
+<p>（3）如果j位置的值是 “*“，考虑一下匹配规则，”*“ 是匹配零个或多个前面的那一个元素，如果我们暴力的去枚举这个结果，有点麻烦。我们换个思路，字符 + * 匹配的过程中只会出现两种情况（注意与上面不同，此时比较的字符串位置是i与j - 1，j - 1是因为需要取 “*“ 前面那个字符）：</p>
+<p>（i）匹配字符成功，将最后一个字符舍弃，f[i][j]更新为f[i - 1][j] or f[i][j - 2]。</p>
+<p>f[i - 1][j]是舍弃s[i]字符，举个例子，如下所示，因为s[i] 与 p[j - 1]匹配上了，此时如果舍弃s[i]需要满足 s 字符串前 i - 1 个字符与 p 字符串前 j 个字符都匹配上。这里的 j 可能不太好理解，带入下面的例子，cdcc与cdc<em>能够匹配上，所以 i 位置的c字母可以被舍弃。舍弃的角度是从p字符串出发的，因为c\</em>能匹配0个或者任意多个，所以s字符串有多个相同的字母的时候就可以看成舍弃了。</p>
+<p>其实当做是扩充匹配也行，cdccc的 i - 1位置的c字母与p字符串 j - 1位置的c字母能匹配，而且 i 位置的c字母与p字符串 j - 1位置的c字母能匹配，说明 i - 1 位置的字母与 i 位置的字母一样。如果cdcc与cdc*能匹配，那么cdccc与cdc*也能匹配上。这里理解成舍弃是因为下面还有一个舍弃的例子，为了理解一致。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line">cdc*a</span><br><span class="line">   j</span><br></pre></td></tr></table></figure>
+
+
+<p>f[i][j - 2]是舍弃p[j - 1]和p[j]两个字符，因为是字母 + 星号，要整体舍弃，举个例子，如下所示，因为s[i]与p[j-1]匹配上了，此时如果舍弃p[j - 1]和p[j]，需要满足 s 字符串前 i 个字符和 p 字符串前 j - 2 个字符都匹配上。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cdccca</span><br><span class="line">    i</span><br><span class="line"></span><br><span class="line">cdcccc*a</span><br><span class="line">      j</span><br></pre></td></tr></table></figure>
+
+
+<p>（ii）匹配字符失败就是说这个字符不能要，字母 + 星号一起舍弃，f[i][j]更新为f[i][j - 2]</p>
+<h4 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public boolean isMatch(String s, String p) &#123;</span><br><span class="line">    int m &#x3D; s.length() + 1;</span><br><span class="line">    int n &#x3D; p.length() + 1;</span><br><span class="line">    boolean[][] find &#x3D; new boolean[m][n];</span><br><span class="line">    &#x2F;&#x2F;根据对f的定义，f[0][0]是最初空字符的位置</span><br><span class="line">    find[0][0] &#x3D; true;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; m; i++) &#123;</span><br><span class="line">        for (int j &#x3D; 1; j &lt; n; j++) &#123;</span><br><span class="line">            &#x2F;&#x2F; &quot;*&quot; 的逻辑处理</span><br><span class="line">            if (p.charAt(j - 1) &#x3D;&#x3D; &#39;*&#39;) &#123;</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j - 1) ? find[i - 1][j] || find[i][j - 2] : find[i][j - 2];</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F; &quot;.&quot; 与 字母 的逻辑处理</span><br><span class="line">                find[i][j] &#x3D; match(s, p, i, j) &amp;&amp; find[i - 1][j - 1];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return find[m - 1][n - 1];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public boolean match(String s, String p, int i, int j) &#123;</span><br><span class="line">    &#x2F;&#x2F; i &#x3D; 0 不用处理，是空字符串的位置，是 &quot;.&quot; 或者相同的字母就是匹配上了</span><br><span class="line">    return i !&#x3D; 0 &amp;&amp; (p.charAt(j - 1) &#x3D;&#x3D; &#39;.&#39; || s.charAt(i - 1) &#x3D;&#x3D; p.charAt(j - 1));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h4><p>时间复杂度：O（m * n），m、n为字符串s、p的长度。</p>
+<p>空间复杂度：O（m * n），因为要存储所有的状态。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/08/06/leetcode-16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/06/leetcode-16/" class="post-title-link" itemprop="url">leetcode-16</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-06 20:31:05" itemprop="dateCreated datePublished" datetime="2020-08-06T20:31:05+08:00">2020-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、题目"><a href="#一、题目" class="headerlink" title="一、题目"></a>一、题目</h4><p><a href="https://leetcode.com/problems/3sum-closest/" target="_blank" rel="noopener">https://leetcode.com/problems/3sum-closest/</a></p>
+<p>给定一个包括&nbsp;<em>n</em> 个整数的数组&nbsp;<code>nums</code><em>&nbsp;</em>和 一个目标值&nbsp;<code>target</code>。找出&nbsp;<code>nums</code><em>&nbsp;</em>中的三个整数，使得它们的和与&nbsp;<code>target</code>&nbsp;最接近。返回这三个数的和。假定每组输入只存在唯一答案。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例：</strong></p>
+
+<pre><strong>输入：</strong>nums = [-1,2,1,-4], target = 1
+<strong>输出：</strong>2
+<strong>解释：</strong>与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+</pre>
+
+<p>&nbsp;</p>
+
+<p><strong>提示：</strong></p>
+
+<ul>
+    <li><code>3 &lt;= nums.length &lt;= 10^3</code></li>
+    <li><code>-10^3&nbsp;&lt;= nums[i]&nbsp;&lt;= 10^3</code></li>
+    <li><code>-10^4&nbsp;&lt;= target&nbsp;&lt;= 10^4</code></li>
+</ul>
+
+<h4 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h4><p>暴力的话，时间复杂度O（n<sup>3</sup>），与leetcode15类似，使用双指针。设答案为ans，枚举到的三数和为sum，比较abs(ans - target)与abs(sum - target)，更新答案。枚举的过程如下：</p>
+<p>设第一个数为i，第二个数为j，初始值为j +  1，第三个数为k，初始值为nums.length - 1，遍历i，j与k是指针，当sum &lt;= target时更新j，当sum &gt; target时更新k。能如此更新j和k是因为，对于单调递增的数组，如果sum &lt;= target，sum只能尝试变得更大去接近target，同理，sum &gt; target，sum只能尝试变得更小去接近target。</p>
+<p>优化点：j更新前，如果与后面的元素相等可以跳过，因为j + 1位置的值肯定是已经参与更新过最佳答案，同理k更新前，如果与前面的元素相等也可以跳过。</p>
+<p>时间复杂度O（n<sup>2</sup>），空间复杂度O（log（n）），主要是排序时造成的空间复杂度。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int threeSumClosest(int[] nums, int target) &#123;</span><br><span class="line">    int n &#x3D; nums.length;</span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    int ans &#x3D; Integer.MAX_VALUE &#x2F; 2;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; n; ++i) &#123;</span><br><span class="line">        &#x2F;&#x2F;重复的要剔除</span><br><span class="line">        if (i &gt; 0 &amp;&amp; nums[i] &#x3D;&#x3D; nums[i - 1]) &#123;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int j &#x3D; i + 1;</span><br><span class="line">        int k &#x3D; n - 1;</span><br><span class="line">        while (j &lt; k) &#123;</span><br><span class="line">            int sum &#x3D; nums[i] + nums[j] + nums[k];</span><br><span class="line">            if (sum &#x3D;&#x3D; target) &#123;</span><br><span class="line">                return sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            &#x2F;&#x2F;比较距离更新最大值</span><br><span class="line">            if (Math.abs(sum - target) &lt; Math.abs(ans - target)) &#123;</span><br><span class="line">                ans &#x3D; sum;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (sum &gt; target) &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[k] &#x3D;&#x3D; nums[k - 1]) &#123;</span><br><span class="line">                    k--;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                k--;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F;相等的先跳过</span><br><span class="line">                while (j &lt; k &amp;&amp; nums[j] &#x3D;&#x3D; nums[j + 1]) &#123;</span><br><span class="line">                    j++;</span><br><span class="line">                &#125;</span><br><span class="line">                &#x2F;&#x2F;更新到第一个不相等的值</span><br><span class="line">                j++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

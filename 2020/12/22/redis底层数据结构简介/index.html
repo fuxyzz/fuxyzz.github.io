@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="概述redis顶层的数据结构是hash，string，set，sorted set，list，底层是用dict，sds，ziplist，quicklist，skiplist等数据结构组合而成。 dictdict是dictionary的简称，字典的意思，与Java中的HashMap类似，实现上有些许的区别。 dict中存在ht（hash table简称）数组，数组大小为2，索引0位为当前hash t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis底层数据结构简介">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="概述redis顶层的数据结构是hash，string，set，sorted set，list，底层是用dict，sds，ziplist，quicklist，skiplist等数据结构组合而成。 dictdict是dictionary的简称，字典的意思，与Java中的HashMap类似，实现上有些许的区别。 dict中存在ht（hash table简称）数组，数组大小为2，索引0位为当前hash t">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/skiplist.png">
+<meta property="article:published_time" content="2020-12-22T07:54:19.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.062Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/skiplist.png">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>redis底层数据结构简介 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dict"><span class="nav-number">1.1.</span> <span class="nav-text">dict</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sds"><span class="nav-number">1.2.</span> <span class="nav-text">sds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ziplist"><span class="nav-number">1.3.</span> <span class="nav-text">ziplist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quicklist"><span class="nav-number">1.4.</span> <span class="nav-text">quicklist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skiplist"><span class="nav-number">1.5.</span> <span class="nav-text">skiplist</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          redis底层数据结构简介
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-22 15:54:19" itemprop="dateCreated datePublished" datetime="2020-12-22T15:54:19+08:00">2020-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>redis顶层的数据结构是hash，string，set，sorted set，list，底层是用dict，sds，ziplist，quicklist，skiplist等数据结构组合而成。</p>
+<h3 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h3><p>dict是dictionary的简称，字典的意思，与Java中的HashMap类似，实现上有些许的区别。</p>
+<p>dict中存在ht（hash table简称）数组，数组大小为2，索引0位为当前hash table，索引1位为正在进行重哈希的hash table（如果有正在进行的话），标识正在进行重哈希的变量是rehashidx，默认值为-1，没有进行重哈希，不为-1则是标识当前正在进行重哈希的位置。</p>
+<p>redis将重哈希的操作分散到各个CRUD的操作中，每次CRUD的时候都将进行一部分的重哈希工作，具体是按空bucket来算工作量。例如每次重哈希的时候设定如果查找过程中遇到超过10个空bucket则本次工作结束。相对于Java中的HashMap，redis的重哈希似乎并没有将链表上的值进行再离散化。Java中HashMap的重哈希离散化如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;高位参与运算，使重哈希时有可能让链表分成两份</span><br><span class="line">hash &#x3D; (h &#x3D; key.hash) ^ (h &gt;&gt;&gt; 16)</span><br><span class="line">bucket &#x3D; hash &amp; (table - 1)</span><br></pre></td></tr></table></figure>
+
+<p>dict处理哈希冲突的方式是链地址法，没有像Java的HashMap进行红黑树的优化。</p>
+<p>dict使用MurmurHash2算法来计算bucket的key，算法的优点是输入的值是有规律的，算法仍然能给出一个较好的随机分布性（离散）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;整数hash</span><br><span class="line">unsigned int dictIntHashFunction(unsigned int key)</span><br><span class="line">&#123;</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 15);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 10);</span><br><span class="line">    key +&#x3D;  (key &lt;&lt; 3);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 6);</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 11);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 16);</span><br><span class="line">    return key;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;字符串hash</span><br><span class="line">unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) &#123;</span><br><span class="line">    unsigned int hash &#x3D; (unsigned int)dict_hash_function_seed;</span><br><span class="line">    while (len--)</span><br><span class="line">        hash &#x3D; ((hash &lt;&lt; 5) + hash) + (tolower(*buf++)); &#x2F;* hash * 33 + c *&#x2F;</span><br><span class="line">    return hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>dict重哈希的依据是 结点数 / 哈希表大小 &gt; 5。</p>
+<h3 id="sds"><a href="#sds" class="headerlink" title="sds"></a>sds</h3><p>sds全称simple dynamic string，redis实现的sds是可动态拓展的，而且二进制安全。</p>
+<p>redis的实现中，分为两种字符串，一种是静态不变的sdshr5（可存动态的，只是容量小，而且会引发内存重新分配），一种是可变的（有多个，sdshr8，sdshr16，sdshr32，sdshr64，区别是最大长度不一样）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct __attribute__ ((__packed__)) sdshdr5 &#123;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, and 5 msb of string length *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr8 &#123;</span><br><span class="line">    uint8_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint8_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr16 &#123;</span><br><span class="line">    uint16_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint16_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr32 &#123;</span><br><span class="line">    uint32_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint32_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr64 &#123;</span><br><span class="line">    uint64_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint64_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>不变的sds使用flags的低三位标识类型，高5位标识长度。</p>
+<p>可变的sds使用len标识长度，alloc标识最大可分配长度，flags使用低3位标识类型。当字符串变化时，如果长度超过buff一开始分配的空间大小则会重新分配内存，如果长度超过alloc可表示的最大值则会更换类型（例如sdshr32 -&gt; sdshr64）。当已有字符串的时候，buff数组在申请的时候会申请更多的空间，方便后续追加。</p>
+<h3 id="ziplist"><a href="#ziplist" class="headerlink" title="ziplist"></a>ziplist</h3><p>ziplist直译是压缩表，说到表很容易想到的是哈希表，redis中的hash是ziplist和dict两种方案结合实现，在数据较小的情况下位ziplist，在数据量达到一定条件的情况下会转成dict。</p>
+<p>ziplist的结构大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;zlbytes&gt;&lt;zltail&gt;&lt;zllen&gt;&lt;entry&gt;...&lt;entry&gt;&lt;zlend&gt;</span><br></pre></td></tr></table></figure>
+
+<p>zlibytes：32bit，表示ziplist占用的总字节数（包括zlibytes本身）</p>
+<p>zltail：32bit，表示最后一个entry相对偏移字节数。方便在队尾push和pop。</p>
+<p>zllen：16bit，表示entry的数量。只有16bit，最大表示 2<sup>16</sup> - 1。当zllen值在小于等于 2<sup>16</sup> - 2时，zllen表示entry的数量；当zllen值等于2<sup>16</sup> - 1时，标识zllen已无法表示entry的数量，ziplist会使用遍历ziplist的方式统计entry的数量。</p>
+<p>entry：数据项。</p>
+<p>zlend：ziplist的最后1个字节，标识结束，值为255。</p>
+<p>从ziplist使用相对偏移的方式寻址说明redis希望使用内存紧凑的方式来尽可能的消除内存碎片（使用连续分配的内存）。但是这种方式带来的代价就是在增删改的时候可能会造成如果需要内存增加的时候后面的内存已经被占用，为了还是用内存紧凑的方式，需要重新分配内存，而且要大规模的迁移数据，所以ziplist在相对数据较少的情况下使用（数据少时进行迁移数据也少，但这并不意味着redis在较少数据下使用ziplist是因为效率比dict高，更多的是空间上的考虑，空间换时间减少内存碎片）。</p>
+<p>满足以下任一条件，hash底层从ziplist转为dict：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;file-value超过512，或者说ziplist的entry超过1024</span><br><span class="line">hash-max-ziplist-entries &#x3D; 512</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;插入的value长度超过64</span><br><span class="line">hash-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+
+<p>再说hash-max-ziplist-entries，因为ziplist实现hash的时候采用field-value相连的方式，存储两个entry，第一个为field，第二个为value。因为前面有zlibytes，zltail，zllen，第一个entry是第4位，存filed，第5个entry存value，以此类推，偶数项存field，奇数项存value。</p>
+<h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><p>quicklist是redis提供的list的底层实现。quicklist可以理解为Java中的LinkedList，使用链表的方式进行实现，中间的结点用ziplist辅助实现。</p>
+<p>使用ziplist作为结点辅助的理由：</p>
+<p>（1）quicklist为了支持在两端进行快速的push和pop，需要在每个结点上增加两个额外的指针保存头和尾</p>
+<p>（2）结点过多容易造成内存碎片</p>
+<p>（3）ziplist不造成内存碎片，但是有重新分配内存的情况</p>
+<p>因此quicklist结合双向链表和ziplist的优点，并提供进阶配置对ziplist进行定制。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">* 值为正表示按entry数限制ziplist长度</span><br><span class="line">* 值为负时：</span><br><span class="line">* -5，每个ziplist不能超过64Kb</span><br><span class="line">* -4，每个ziplist不能超过32Kb</span><br><span class="line">* -3，每个ziplist不能超过16Kb</span><br><span class="line">* -2，每个ziplist不能超过8Kb（默认值）</span><br><span class="line">* -1，每个ziplist不能超过4Kb</span><br><span class="line">*&#x2F;</span><br><span class="line">list-max-ziplist-size &#x3D; -2</span><br></pre></td></tr></table></figure>
+
+<p>quicklist大概长这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;...&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以认为一个 <prePoint><ziplist><nextPoint> 是一个quicklistNode。</p>
+<p>quicklist有两个指针head和tail分别指向头部的quicklistNode和尾部的quicklistNode。</p>
+<h3 id="skiplist"><a href="#skiplist" class="headerlink" title="skiplist"></a>skiplist</h3><p>skiplist的结构如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/skiplist.png" alt="skiplist"></p>
+<p>skiplist是空间和时间上的折中做法。相比哈希表，哈希表能够O（1）时间内查询，但是会浪费空间。相比平衡树，两者的查找时间都是O（log n），但是skiplist的平均指针数会更少，这取决于生成单个结点的层数。</p>
+<p>单个结点生成的层数的计算依赖两个变量</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">p &#x3D; 1&#x2F;4</span><br><span class="line">maxLevel &#x3D; 32</span><br></pre></td></tr></table></figure>
+<p>计算函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int getLevel()&#123;</span><br><span class="line">    int level &#x3D; 1;</span><br><span class="line">    while Math.random() &lt; p &amp;&amp; level &lt; maxLevel &#123;</span><br><span class="line">        level++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return level;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从skiplist的结构上可以看出，skiplist无法满足zset中的一些操作，例如根据data获取score，所以还用了dict辅助。在数据量较少的情况下，zset是用ziplist实现的，数据量达到一定时，用skiplist和dict实现。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;score 和 member的存储对数量超过这个值就转成skiplist 和 dict</span><br><span class="line">zset_max_ziplist_entries &#x3D; 128</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;任意一个插入的member存储占用超过这个值就转成skiplist 和 dict</span><br><span class="line">zset-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/redis/" rel="tag"># redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/16/leetcode-662/" rel="prev" title="leetcode-662">
+      <i class="fa fa-chevron-left"></i> leetcode-662
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/04/Reactor%E6%A8%A1%E5%9E%8B/" rel="next" title="Reactor模型">
+      Reactor模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

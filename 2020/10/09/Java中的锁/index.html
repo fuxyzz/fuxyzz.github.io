@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="乐观锁和悲观锁在了解java中的锁之前，我们需要先了解乐观锁和悲观锁。 悲观锁是指数据并发的时候，认为在使用数据的时候会有其他线程来修改数据，因此在获取数据的时候会进行加锁。 乐观锁是指数据并发的时候，乐观锁认为在使用数据的时候不会有其他线程来修改数据，因此只在更新数据的时候判断有没有其他线程更新了数据（ABA问题可以用时间戳或者版本号解决）。 应用场景：乐观锁适合读多写少，不加锁的特点使得性能能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的锁">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/10/09/Java%E4%B8%AD%E7%9A%84%E9%94%81/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="乐观锁和悲观锁在了解java中的锁之前，我们需要先了解乐观锁和悲观锁。 悲观锁是指数据并发的时候，认为在使用数据的时候会有其他线程来修改数据，因此在获取数据的时候会进行加锁。 乐观锁是指数据并发的时候，乐观锁认为在使用数据的时候不会有其他线程来修改数据，因此只在更新数据的时候判断有没有其他线程更新了数据（ABA问题可以用时间戳或者版本号解决）。 应用场景：乐观锁适合读多写少，不加锁的特点使得性能能">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-09T07:02:18.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.057Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="lock">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/10/09/Java%E4%B8%AD%E7%9A%84%E9%94%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Java中的锁 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#乐观锁和悲观锁"><span class="nav-number">1.</span> <span class="nav-text">乐观锁和悲观锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#java中的锁实现"><span class="nav-number">2.</span> <span class="nav-text">java中的锁实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁"><span class="nav-number">2.0.1.</span> <span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#悲观锁"><span class="nav-number">2.0.2.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Synchronized"><span class="nav-number">2.0.3.</span> <span class="nav-text">Synchronized</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">2.0.4.</span> <span class="nav-text">ReentrantLock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重入锁"><span class="nav-number">2.0.5.</span> <span class="nav-text">可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享锁和排他锁"><span class="nav-number">2.0.6.</span> <span class="nav-text">共享锁和排他锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.0.7.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/09/Java%E4%B8%AD%E7%9A%84%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java中的锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-09 15:02:18" itemprop="dateCreated datePublished" datetime="2020-10-09T15:02:18+08:00">2020-10-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/lock/" itemprop="url" rel="index"><span itemprop="name">lock</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="乐观锁和悲观锁"><a href="#乐观锁和悲观锁" class="headerlink" title="乐观锁和悲观锁"></a>乐观锁和悲观锁</h1><p>在了解java中的锁之前，我们需要先了解乐观锁和悲观锁。</p>
+<p>悲观锁是指数据并发的时候，认为在使用数据的时候会有其他线程来修改数据，因此在获取数据的时候会进行加锁。</p>
+<p>乐观锁是指数据并发的时候，乐观锁认为在使用数据的时候不会有其他线程来修改数据，因此只在更新数据的时候判断有没有其他线程更新了数据（ABA问题可以用时间戳或者版本号解决）。</p>
+<p>应用场景：乐观锁适合读多写少，不加锁的特点使得性能能够大幅提升。悲观锁适合写多读少，先加锁可以保证写操作数据正确。</p>
+<h1 id="java中的锁实现"><a href="#java中的锁实现" class="headerlink" title="java中的锁实现"></a>java中的锁实现</h1><h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>通过无锁编程，常用的是CAS算法实现，例如并发包下的Atomic包下的类，例如AtomicInteger，通过CAS自旋实现。</p>
+<p>CAS全称Campare And Swap，在不使用锁的情况下实现多线程的变量同步。CAS涉及三个操作：</p>
+<p>（1）读取需要读写的内存值</p>
+<p>（2）比较值</p>
+<p>（3）写入新值</p>
+<p>底层操作系统通过类似原语的原子操作保证比较和写入是一个原子操作，一般情况下写入是不断重试的操作。</p>
+<p>举个例子：AtomicInteger的getAndIncrement方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final int getAndAddInt(Object var1, long var2, int var4) &#123;</span><br><span class="line">    int var5;</span><br><span class="line">    do &#123;</span><br><span class="line">        var5 &#x3D; this.getIntVolatile(var1, var2);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;自旋直至成功</span><br><span class="line">    while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">    return var5;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CAS存在的问题：</p>
+<p>（1）CAS会引起ABA问题，JDK从1.5开始提供了AtomicStampedReference类来解决ABA问题。</p>
+<p>（2）自旋开销问题，如果长时间CAS操作不成功，会一直自旋，浪费CPU资源。</p>
+<p>（3）保证一个共享变量的原子性，不能保证多个变量操作时的原子性。Java从1.5开始JDK提供了AtomicReference类来保证引用对象之间的原子性，可以把多个变量放在一个对象里来进行CAS操作。</p>
+<p>关于自旋：唤醒或阻塞一个线程需要操作系统切换CPU，这种状态转换需要耗费处理器的时间，如果同步代码块中的内容非常简单，状态转换时间有可能比用户代码执行时间还要长。很多场景下，同步资源等待锁的情况很少，为了一小段时间去切换线程，非常的得不偿失。如果有多个CPU，能够让两个或以上的线程同时并行的执行，就可以让后请求的线程不阻塞不放弃CPU的执行时间，等待前面的线程是否很快就会释放锁。自旋锁有限制次数，默认是10次，可以用-XX:PreBlockSpin更改，如果达到限制次数没有成功获得锁，就需要阻塞线程（或者说挂起吧）。</p>
+<p>自旋锁在JDK1.4.2中引入，使用-XX:+UseSpinning来开启。JDK 6中为默认开启，并且引入了适应性自旋锁。</p>
+<p>自适应的意思是自旋的次数不再固定，由上一次在同一个锁上自旋次数及拥有者的状态来决定。如果在同一个锁对象上自旋等待成功获得过锁，并且拥有锁的线程在运行中，那么JVM认为很可能再次成功获取锁，允许将这次的自旋次数提高。如果对于某个锁，自旋很少成功，后面尝试获取这个锁的时候获取失败直接阻塞，不进行自旋操作。</p>
+<p>自旋锁常见的锁形式：TicketLock、CLHlock和MCSlock。</p>
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><h3 id="Synchronized"><a href="#Synchronized" class="headerlink" title="Synchronized"></a>Synchronized</h3><p>Synchronized在JDK1.6以前是悲观锁的实现，1.6引入了无锁，偏向锁，轻量级锁，重量级锁。由于无锁是CAS实现的乐观锁，1.6不能单纯的将Synchronized认为是悲观锁。</p>
+<p>先探究一下Synchronized实现线程同步的原理。主要依赖两个东西，JAVA对象头和Monitor。</p>
+<p>JAVA对象头在Hotspot虚拟机里包含两部分数据，Mark Word（标记字段），Klass Pointer（类型指针）。</p>
+<p>Mark Word：默认存储对象的HashCode，分代年龄，锁标志位信息。存储的都是与对象自身无关的信息，运行期间Mark Word的信息会根据锁状态的不同发生改变。</p>
+<p>Klass Pointer：对象指向它类元数据的指针，JVM通过它确定对象是哪个类的实例。</p>
+<p>Monitor：一种同步机制，依赖底层操作系统的Mutex Lock（互斥锁）实现线程同步。每个JAVA对象都有一把Monitor锁。Monitor是线程私有的数据结构，每个线程都有Monitor Record列表，同时有全局共享的可用列表。每一个被锁的对象都会和一个Monitor关联，同时Monitor有一个Owner字段存放拥有该锁的线程的唯一标志，表示锁被该线程占用。</p>
+<p>锁状态及Mark Word对于标志位</p>
+<table>
+<thead>
+<tr>
+<th align="center">锁状态</th>
+<th align="center">存储内容</th>
+<th align="center">标志位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">无锁</td>
+<td align="center">对象HashCode，分代年龄，偏向锁标志位（0）</td>
+<td align="center">01</td>
+</tr>
+<tr>
+<td align="center">偏向锁</td>
+<td align="center">偏向线程，偏向时间戳，分代年龄，偏向锁标志位（1）</td>
+<td align="center">01</td>
+</tr>
+<tr>
+<td align="center">轻量级锁</td>
+<td align="center">执行栈中锁记录的指针</td>
+<td align="center">00</td>
+</tr>
+<tr>
+<td align="center">重量级锁</td>
+<td align="center">指向重量级锁的指针</td>
+<td align="center">10</td>
+</tr>
+<tr>
+<td align="center">GC标志</td>
+<td align="center">空，没有记录信息</td>
+<td align="center">11</td>
+</tr>
+</tbody></table>
+<p>无锁：</p>
+<p>多个线程都能访问和修改同一个资源，只有一个成功，底层依赖CAS实现。</p>
+<p>偏向锁：</p>
+<p>一段同步代码块一直被一个线程访问，那么该线程就会自动获取锁，降低获取的代价。应用的场景是在无多线程竞争的场景下尽量减少不必要的轻量级锁执行，因为执行的过程设计多次的获取和释放CAS原子指令，偏向锁通过更新偏向线程ID的时候执行一次CAS指令即可。</p>
+<p>偏向锁只有在其他线程尝试竞争偏向锁的时候释放锁，线程不会主动释放偏向锁。偏向锁释放时机在全局安全点，先暂停拥有偏向锁的线程，判断对象是否处于锁定状态。释放偏向锁后升级为轻量级锁状态。</p>
+<p>1.6以后默认开启，可以用-XX:-UseBiasedLocking=false关闭。</p>
+<p>轻量级锁：</p>
+<p>当锁是偏向锁的时候，被另外的线程访问，偏向锁就会升级为轻量级锁。其他线程会使用自旋锁获取锁资源，提高性能。</p>
+<p>代码进入同步块的时候，如果对象的锁状态为无锁状态，JVM在当前线程的栈帧中建立一个Lock Record列表，存储对象目前Mark Word的副本。</p>
+<p>存储对象Mark Word副本成功后，使用CAS指针将对象的Mark Word更新为指向Lock Record的指针，将Lock Record的Owner指针指向对象的Mark Word。</p>
+<p>如果更新成功，线程就拥有了锁资源。</p>
+<p>如果更新失败，JVM先检查对象的Mark Word是否指向当前线程的栈帧，如果是说明当前线程已经拥有了锁资源，继续执行，否则说明处于多线程竞争中。</p>
+<p>如果只有一个等待线程，线程通过自旋等待锁资源。如果自旋次数超过限制次数，或者一个线程在持有锁，一个在自旋，此时又有更多线程尝试获取锁资源，则升级为重量级锁。</p>
+<p>重量级锁：</p>
+<p>Mark Word中存储指向重量级锁的指针，等待的线程都会进入阻塞状态。</p>
+<p>结论及注意事项：</p>
+<p>（1）锁只能升级不能降级</p>
+<p>（2）从上述的描述很容易看出锁是对象级别的，不是所有对象都是同一锁级别的</p>
+<p>（3）偏向锁通过对比Mark Word解决锁问题，减少CAS操作</p>
+<p>（4）轻量级锁通过CAS操作和自旋解决锁问题，避免线程阻塞和唤醒影响性能</p>
+<p>（5）重量级锁将拥有锁以外的线程全部阻塞</p>
+<h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><p>ReentrantLock底层实现了公平锁和非公平锁，默认使用非公平锁。</p>
+<p>公平锁是按申请锁的时间顺序获取锁，进入队列等待获取，公平锁的优点是不会造成饿死现象。缺点是吞吐效率相对非公平锁要低，等待队列中除了第一个线程外其他线程全部阻塞，CPU唤醒阻塞线程的开销比非公平锁要大。</p>
+<p>非公平锁是多个线程加锁时直接获取锁，获取不到才会到等待队列中进行排队，如果此时锁刚好可用就无需阻塞直接获取到锁，所以非公平锁可能会出现后申请锁资源却先获取到锁资源的情况。非公平锁的优点是减少唤起线程的开销，整体的吞吐率更高，因为线程有几率不阻塞直接获取锁，CPU不必唤醒所有线程。缺点是处于等待队列中的线程可能会饿死，或者等待很久才会获得锁。</p>
+<p>在源码中，公平锁比非公平锁在获取锁的时候多了一个判断，通过hasQueuedPredecessors判断当前线程是否处于队列的头部。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final boolean hasQueuedPredecessors() &#123;</span><br><span class="line">    &#x2F;&#x2F; The correctness of this depends on head being initialized</span><br><span class="line">    &#x2F;&#x2F; before tail and on head.next being accurate if the current</span><br><span class="line">    &#x2F;&#x2F; thread is first in queue.</span><br><span class="line">    Node t &#x3D; tail; &#x2F;&#x2F; Read fields in reverse initialization order</span><br><span class="line">    Node h &#x3D; head;</span><br><span class="line">    Node s;</span><br><span class="line">    return h !&#x3D; t &amp;&amp;</span><br><span class="line">        ((s &#x3D; h.next) &#x3D;&#x3D; null || s.thread !&#x3D; Thread.currentThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结一下：公平锁是排队，非公平锁是插队。</p>
+<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>可重入锁又名递归锁，指同一个线程在外层方法获取锁的时候，再进入该线程的内层方法会自动获取锁（前提是同一个对象或者class），不会因为之前获取过还没释放而阻塞。Synchronized和ReentrantLock都是可冲入锁，可重入锁可以一定程度上避免死锁。</p>
+<h3 id="共享锁和排他锁"><a href="#共享锁和排他锁" class="headerlink" title="共享锁和排他锁"></a>共享锁和排他锁</h3><p>共享锁是指锁可以被多个线程持有，如果线程A对数据Data加了共享锁后，其他线程也只能对Data加共享锁，不能加排他锁。获取共享锁的线程只能读，不能修改Data。</p>
+<p>排他锁是指锁只能被一个线程持有，如果给一个数据加上排他锁，其他线程不能对数据再加上任何类型的锁。获得排他锁的线程既可以读也可以写。Synchronized和ReentrantLock都是排他锁。</p>
+<p>ReentrantReadWriteLock实现了共享锁和排他锁，内部有两把锁，ReadLock和WriteLock。ReadLock就是读锁，是共享锁的实现，WriteLock是写锁，是排他锁的实现。</p>
+<p>在AQS中有个int变量state，表示多少线程获取了锁。在排他锁的情况下，这个变量是0或者1（如果是可重入锁state表示重入的次数），共享锁中就是持有锁的数量。在ReentrantReadWriteLock的实现中，直接将state变量对半切分了，高16位用于统计读锁个数，低16位用于统计写锁个数。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>所有的锁最终都是用到了CAS进行数据保证，甚至利用CAS避免线程阻塞使得从用户态切换到内核态，但是为了尽可能的减少CAS操作（因为涉及到缓存失效，其他线程需要从主存中重新获取，开销挺大），做了其他的一些优化。Synchronized和ReentrantLock效率上在JDK1.6版本以后几乎没有性能的差距，在并发量不高的情况下Synchronized也许效率会更高。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/lock/" rel="tag"># lock</a>
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/28/leetcode-371/" rel="prev" title="leetcode-371">
+      <i class="fa fa-chevron-left"></i> leetcode-371
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%EF%BC%88JMM%EF%BC%89/" rel="next" title="Java内存模型（JMM）">
+      Java内存模型（JMM） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

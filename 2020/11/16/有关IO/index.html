@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Java中的NIO与操作系统的NIOJava是New IO，操作系统是Non blocking Io。 Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBloc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有关IO">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="Java中的NIO与操作系统的NIOJava是New IO，操作系统是Non blocking Io。 Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBloc">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-16T05:03:47.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.061Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="IO">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>有关IO | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中的NIO与操作系统的NIO"><span class="nav-number">1.</span> <span class="nav-text">Java中的NIO与操作系统的NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO多路复用"><span class="nav-number">2.</span> <span class="nav-text">IO多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#同步IO多路复用："><span class="nav-number">2.0.1.</span> <span class="nav-text">同步IO多路复用：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#异步IO多路复用："><span class="nav-number">2.0.2.</span> <span class="nav-text">异步IO多路复用：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty的选型"><span class="nav-number">3.</span> <span class="nav-text">netty的选型</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          有关IO
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-16 13:03:47" itemprop="dateCreated datePublished" datetime="2020-11-16T13:03:47+08:00">2020-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IO/" itemprop="url" rel="index"><span itemprop="name">IO</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Java中的NIO与操作系统的NIO"><a href="#Java中的NIO与操作系统的NIO" class="headerlink" title="Java中的NIO与操作系统的NIO"></a>Java中的NIO与操作系统的NIO</h3><p>Java是New IO，操作系统是Non blocking Io。</p>
+<p>Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBlocking()方法是一个native方法，调用底层操作系统设置为非阻塞的IO。对应JDK中的ServerSocketChannel.accept()方法直接返回，如果没有返回null，有就返回socket（实际上是对应底层的fd）。以及SocketChannel.read()也是直接返回，如果没有返回-1，有就返回客户端目前传输的信息长度。</p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>IO多路复用是用来解决大量客户端连接，C10K这样的问题。C10K是假设有一万个客户端进行连接，那么在普通的Java NIO程序中，使用for循环进行系统调用遍历，那么每进行一次for循环就要进行一万次的系统调用，系统调用时间开销太大。解决思路就是想办法将一万次的系统调用合并为一次系统调用，这种解决的方法就是IO多路复用。</p>
+<h5 id="同步IO多路复用："><a href="#同步IO多路复用：" class="headerlink" title="同步IO多路复用："></a>同步IO多路复用：</h5><p>select：传入fd数组，函数会遍历fd，返回数量（读fd的数量，写fd的数量），不会返回具体的fd。一般我们根据返回的数量判断是否要进行IO操作。fd数量限制在1024。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/select.2.html" target="_blank" rel="noopener">select参考手册</a></p>
+<p>poll：与select基本无差，去除了1024的限制，是基于链表的实现。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/poll.2.html" target="_blank" rel="noopener">poll参考手册</a></p>
+<p>epoll：基于事件订阅回调的实现，相比select和poll，时间复杂度降低为O(1)。而且epoll会在内核开辟空间保留fd。epoll会使用mmap加快内存与内核之间的数据搬运，具体是将fd集合存放在映射出来的内存，用户态每次直接从这块内存的中取fd进行读取即可。</p>
+<p><a href="https://man7.org/linux/man-pages/man7/epoll.7.html" target="_blank" rel="noopener">epoll参考手册</a></p>
+<p>本质上select，poll与epoll都是同步IO多路复用，同步是指函数都是返回了是否有IO准备就绪，当返回就绪了，依旧要自行遍历所有的fd将数据取出，遍历取数据过程仍然是同步阻塞的。</p>
+<h5 id="异步IO多路复用："><a href="#异步IO多路复用：" class="headerlink" title="异步IO多路复用："></a>异步IO多路复用：</h5><p>Java 1.7版本引入了异步IO模型（AIO），底层通过线程池管理线程进行数据搬运，基于一种回调的机制进行操作。即等到数据搬运完成后回调通知处理，将搬运数据的操作委托给线程池。中间还使用了ReentrantReadWriteLock优化了读写。</p>
+<h3 id="netty的选型"><a href="#netty的选型" class="headerlink" title="netty的选型"></a>netty的选型</h3><p>netty使用NIO模型，原因如下：</p>
+<p>（1）linux没有很好的实现AIO，windows上的AIO实现很好，但是netty的开发人员并没有将windows认为是主流的服务器</p>
+<p>（2）AIO需要预先分配内存空间，如果NIO是需要时才分配空间，这会造成AIO在流量很大但数据量很小的情况下出现内存浪费的问题</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IO/" rel="tag"># IO</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/" rel="prev" title="DMA与零拷贝">
+      <i class="fa fa-chevron-left"></i> DMA与零拷贝
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/16/leetcode-662/" rel="next" title="leetcode-662">
+      leetcode-662 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="目标理解mysql在不同隔离级别下的锁情况，用到mysql8.0是因为8.0可以直接看锁的情况，8.0之前不可以。 准备测试数据desc看表情况： mysql&gt; desc student;+-------+-------------+------+-----+---------+-------+| Field | Type        | Null | Key | Default | Ex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测试mysql8在innodb下不同隔离级别的锁情况">
+<meta property="og:url" content="https://fuxyzz.github.io/2020/09/22/%E6%B5%8B%E8%AF%95mysql8%E5%9C%A8innodb%E4%B8%8B%E4%B8%8D%E5%90%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E9%94%81%E6%83%85%E5%86%B5/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:description" content="目标理解mysql在不同隔离级别下的锁情况，用到mysql8.0是因为8.0可以直接看锁的情况，8.0之前不可以。 准备测试数据desc看表情况： mysql&gt; desc student;+-------+-------------+------+-----+---------+-------+| Field | Type        | Null | Key | Default | Ex">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-22T02:26:55.000Z">
+<meta property="article:modified_time" content="2021-07-29T03:01:12.056Z">
+<meta property="article:author" content="fuxyzz">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="lock">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/2020/09/22/%E6%B5%8B%E8%AF%95mysql8%E5%9C%A8innodb%E4%B8%8B%E4%B8%8D%E5%90%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E9%94%81%E6%83%85%E5%86%B5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>测试mysql8在innodb下不同隔离级别的锁情况 | fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目标"><span class="nav-number">1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#准备测试数据"><span class="nav-number">2.</span> <span class="nav-text">准备测试数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RR隔离级别"><span class="nav-number">3.</span> <span class="nav-text">RR隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无索引情况下："><span class="nav-number">3.0.1.</span> <span class="nav-text">无索引情况下：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端1"><span class="nav-number">3.0.1.0.1.</span> <span class="nav-text">mysql客户端1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端2"><span class="nav-number">3.0.1.0.2.</span> <span class="nav-text">mysql客户端2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端3"><span class="nav-number">3.0.1.0.3.</span> <span class="nav-text">mysql客户端3</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加索引（非唯一索引）"><span class="nav-number">3.0.2.</span> <span class="nav-text">加索引（非唯一索引）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端1-1"><span class="nav-number">3.0.2.0.1.</span> <span class="nav-text">mysql客户端1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端3-1"><span class="nav-number">3.0.2.0.2.</span> <span class="nav-text">mysql客户端3</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端2-1"><span class="nav-number">3.0.2.0.3.</span> <span class="nav-text">mysql客户端2</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RC隔离级别"><span class="nav-number">4.</span> <span class="nav-text">RC隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端1-2"><span class="nav-number">4.0.0.0.1.</span> <span class="nav-text">mysql客户端1</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#mysql客户端3-2"><span class="nav-number">4.0.0.0.1.1.</span> <span class="nav-text">mysql客户端3</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mysql客户端2-2"><span class="nav-number">4.0.0.0.2.</span> <span class="nav-text">mysql客户端2</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content post posts-expand">
+          
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/09/22/%E6%B5%8B%E8%AF%95mysql8%E5%9C%A8innodb%E4%B8%8B%E4%B8%8D%E5%90%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E7%9A%84%E9%94%81%E6%83%85%E5%86%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          测试mysql8在innodb下不同隔离级别的锁情况
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-22 10:26:55" itemprop="dateCreated datePublished" datetime="2020-09-22T10:26:55+08:00">2020-09-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/lock/" itemprop="url" rel="index"><span itemprop="name">lock</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>理解mysql在不同隔离级别下的锁情况，用到mysql8.0是因为8.0可以直接看锁的情况，8.0之前不可以。</p>
+<h1 id="准备测试数据"><a href="#准备测试数据" class="headerlink" title="准备测试数据"></a>准备测试数据</h1><p>desc看表情况：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; desc student;</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field | Type        | Null | Key | Default | Extra |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| sno   | int(32)     | NO   | PRI | NULL    |       |</span><br><span class="line">| name  | varchar(32) | NO   |     | NULL    |       |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>看表中的值：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from student;</span><br><span class="line">+-----+------+</span><br><span class="line">| sno | name |</span><br><span class="line">+-----+------+</span><br><span class="line">|   1 | 1    |</span><br><span class="line">|   2 | 2    |</span><br><span class="line">|   3 | 3    |</span><br><span class="line">+-----+------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h1 id="RR隔离级别"><a href="#RR隔离级别" class="headerlink" title="RR隔离级别"></a>RR隔离级别</h1><p>在RR隔离级别下，据说mysql解决了幻读：</p>
+<p>mysql客户端1</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; insert into student values(4,&#39;4&#39;);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from student;</span><br><span class="line">+-----+------+</span><br><span class="line">| sno | name |</span><br><span class="line">+-----+------+</span><br><span class="line">|   1 | 1    |</span><br><span class="line">|   2 | 2    |</span><br><span class="line">|   3 | 3    |</span><br><span class="line">|   4 | 4    |</span><br><span class="line">+-----+------+</span><br><span class="line">4 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>mysql客户端2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from student;</span><br><span class="line">+-----+------+</span><br><span class="line">| sno | name |</span><br><span class="line">+-----+------+</span><br><span class="line">|   1 | 1    |</span><br><span class="line">|   2 | 2    |</span><br><span class="line">|   3 | 3    |</span><br><span class="line">+-----+------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>mysql官方8.0的文档有说明这个问题：<a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html</a></p>
+<ul>
+<li>REPEATABLE READ</li>
+</ul>
+<p>This is the default isolation level for InnoDB. Consistent reads within the same transaction read the snapshot established by the first read. This means that if you issue several plain (nonlocking) SELECT statements within the same transaction, these SELECT statements are consistent also with respect to each other. See Section 15.7.2.3, “Consistent Nonlocking Reads”.</p>
+<p>For locking reads (SELECT with FOR UPDATE or FOR SHARE), UPDATE, and DELETE statements, locking depends on whether the statement uses a unique index with a unique search condition, or a range-type search condition.</p>
+<ul>
+<li><p>For a unique index with a unique search condition, InnoDB locks only the index record found, not the gap before it.</p>
+</li>
+<li><p>For other search conditions, InnoDB locks the index range scanned, using gap locks or next-key locks to block insertions by other sessions into the gaps covered by the range. For information about gap locks and next-key locks, see Section 15.7.1, “InnoDB Locking”.</p>
+</li>
+</ul>
+<p>渣翻译：</p>
+<p>这是InnoDB默认的隔离级别。<font color='red'>同一事务中的一致性阅读将读取第一次建立的快照</font>，这意味着如果同时请求多个普通（非锁定）语句，则这些select语句彼此之间是保持一致的。（两个客户端开启了事务，如何事务1先读取了一次建立快照，然后客户端2修改了某些行并提交释放了事务，客户端1在事务中重新再读取将还是得到一开始的快照数据，RC级别则不是这样，后面会提到）</p>
+<p>对于锁定读取（select中带有for update 或者 for share），update，delete语句，加锁取决于使用的是带有唯一搜索条件且是唯一索引还是范围类型的搜索条件。</p>
+<p>提出问题：如果是带唯一条件的，可是没有索引，或者非唯一索引的话会怎样？测试一下。</p>
+<h3 id="无索引情况下："><a href="#无索引情况下：" class="headerlink" title="无索引情况下："></a>无索引情况下：</h3><h5 id="mysql客户端1"><a href="#mysql客户端1" class="headerlink" title="mysql客户端1"></a>mysql客户端1</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from student where name&#x3D;2 lock in share mode;</span><br><span class="line">+-----+------+</span><br><span class="line">| sno | name |</span><br><span class="line">+-----+------+</span><br><span class="line">|   2 | 2    |</span><br><span class="line">+-----+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT TRX_ID FROM INFORMATION_SCHEMA.INNODB_TRX  WHERE TRX_MYSQL_THREAD_ID &#x3D; CONNECTION_ID();</span><br><span class="line">+-----------------+</span><br><span class="line">| TRX_ID          |</span><br><span class="line">+-----------------+</span><br><span class="line">| 281479840930344 |</span><br><span class="line">+-----------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h5 id="mysql客户端2"><a href="#mysql客户端2" class="headerlink" title="mysql客户端2"></a>mysql客户端2</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;1&#39; where sno&#x3D;1;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;1&#39; where sno&#x3D;2;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;1&#39; where sno&#x3D;3;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student values(0,&#39;0&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student values(4,&#39;4&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student values(11,&#39;11&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br></pre></td></tr></table></figure>
+
+<h5 id="mysql客户端3"><a href="#mysql客户端3" class="headerlink" title="mysql客户端3"></a>mysql客户端3</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM performance_schema.data_locks\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:1060:140371482961224</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 103</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: NULL</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371482961224</span><br><span class="line">            LOCK_TYPE: TABLE</span><br><span class="line">            LOCK_MODE: IS</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: NULL</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:4:1:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 103</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: PRIMARY</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: supremum pseudo-record</span><br><span class="line">*************************** 3. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:4:2:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 103</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: PRIMARY</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: 1</span><br><span class="line">*************************** 4. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:4:3:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 103</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: PRIMARY</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: 2</span><br><span class="line">*************************** 5. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:4:4:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 103</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: PRIMARY</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: 3</span><br><span class="line">5 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>从8.0起支持看锁的具体信息，8.0以前不支持，甚至都不存在data_locks这个表。</p>
+<p>分析一下，第一个锁的是IS锁，表级锁定，LOCK_DATA是指锁定行的主键值，如果是表锁则为null。后面锁的分别是supremum pseudo-record，1，2，3。关于supremum pseudo-record，参考 <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html#innodb-next-key-locks。" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html#innodb-next-key-locks。</a> 意思大概是间隙锁定义supremum pseudo-record为最大的上界。这样就大概清楚了原因，使用gap lock和net key lock将所有的行都锁住了，看起来好像是锁表，但是跟锁表不是一回事（真正的锁表是lock tables table_name read或者lock tables table_name write，table_name可以有多个，同时锁定多个表)。这里show的数据是mysql客户端1加锁后就查的，如果在mysql客户端2进行更新操作和插入操作后查会有很多的记录，在commit或者rollback后（事务操作结束）这些多出来的记录会消失。</p>
+<h3 id="加索引（非唯一索引）"><a href="#加索引（非唯一索引）" class="headerlink" title="加索引（非唯一索引）"></a>加索引（非唯一索引）</h3><h5 id="mysql客户端1-1"><a href="#mysql客户端1-1" class="headerlink" title="mysql客户端1"></a>mysql客户端1</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; create index name on student(name);</span><br><span class="line">Query OK, 0 rows affected (0.04 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; desc student;</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field | Type        | Null | Key | Default | Extra |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| sno   | int(32)     | NO   | PRI | NULL    |       |</span><br><span class="line">| name  | varchar(32) | NO   | MUL | NULL    |       |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from student where name&#x3D;2 lock in share mode;</span><br><span class="line">+-----+------+</span><br><span class="line">| sno | name |</span><br><span class="line">+-----+------+</span><br><span class="line">|   2 | 2    |</span><br><span class="line">+-----+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<h5 id="mysql客户端3-1"><a href="#mysql客户端3-1" class="headerlink" title="mysql客户端3"></a>mysql客户端3</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM performance_schema.data_locks\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:1060:140371482961224</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 139</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: NULL</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371482961224</span><br><span class="line">            LOCK_TYPE: TABLE</span><br><span class="line">            LOCK_MODE: IS</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: NULL</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:5:1:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 139</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: name</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: supremum pseudo-record</span><br><span class="line">*************************** 3. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:5:2:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 139</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: name</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: &#39;1&#39;, 1</span><br><span class="line">*************************** 4. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:5:3:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 139</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: name</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: &#39;2&#39;, 2</span><br><span class="line">*************************** 5. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864219688:3:5:4:140371501798424</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840930344</span><br><span class="line">            THREAD_ID: 48</span><br><span class="line">             EVENT_ID: 139</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: name</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501798424</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: &#39;3&#39;, 3</span><br><span class="line">5 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>发现和无索引的时候差不多。</p>
+<h5 id="mysql客户端2-1"><a href="#mysql客户端2-1" class="headerlink" title="mysql客户端2"></a>mysql客户端2</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;4&#39; where sno&#x3D;1;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;4&#39; where sno&#x3D;2;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;4&#39; where sno&#x3D;3;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student value(0,&#39;0&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student value(5,&#39;5&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; insert into student value(11,&#39;11&#39;);</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br></pre></td></tr></table></figure>
+<p>确实修改和插入失败，类似无索引一样。</p>
+<p>到此，我们需要关心的是锁的策略，本次需要关注<strong>record lock</strong>，<strong>gap lock</strong>和<strong>next key lock</strong>。</p>
+<p>record lock：记录锁，锁住索引记录本身，如果没有索引就锁聚集索引，如果没有聚集索引，mysql会自动隐示的创建聚集索引。</p>
+<p>gap lock：间隙锁，锁住记录之间或者第一个记录之前或者最后一个记录之后，间隙可能跨越单个索引值，多个索引值，甚至空（null）。如果是使用唯一索引来锁定唯一行来锁定的语句，不需要间隙锁定（这不包括搜索条件仅包含多列唯一索引的某些列的情况；在这种情况下，会发生间隙锁定。因为不能确定是唯一的，已测试，确实如此）。个人理解是区间的左开右开。</p>
+<p>next key lock：是record lock和gap lock的组合。即左开右闭，除了最后的supremum pseudo-record是左开右开。</p>
+<h1 id="RC隔离级别"><a href="#RC隔离级别" class="headerlink" title="RC隔离级别"></a>RC隔离级别</h1><p>RC隔离级别禁用了间隙锁，可能会产生幻读的问题。</p>
+<h5 id="mysql客户端1-2"><a href="#mysql客户端1-2" class="headerlink" title="mysql客户端1"></a>mysql客户端1</h5><p>无索引，加共享锁。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; desc student;</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| Field | Type        | Null | Key | Default | Extra |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">| sno   | int(32)     | NO   | PRI | NULL    |       |</span><br><span class="line">| name  | varchar(32) | NO   |     | NULL    |       |</span><br><span class="line">| t     | varchar(32) | NO   |     | NULL    |       |</span><br><span class="line">+-------+-------------+------+-----+---------+-------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from student where name&#x3D;&#39;2&#39; for share;</span><br><span class="line">+-----+------+---+</span><br><span class="line">| sno | name | t |</span><br><span class="line">+-----+------+---+</span><br><span class="line">|   2 | 2    |   |</span><br><span class="line">+-----+------+---+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+
+<h6 id="mysql客户端3-2"><a href="#mysql客户端3-2" class="headerlink" title="mysql客户端3"></a>mysql客户端3</h6><p>没有对间隙进行加锁。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM performance_schema.data_locks\G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864220544:1060:140371482963192</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840931200</span><br><span class="line">            THREAD_ID: 116</span><br><span class="line">             EVENT_ID: 38</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: NULL</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371482963192</span><br><span class="line">            LOCK_TYPE: TABLE</span><br><span class="line">            LOCK_MODE: IS</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: NULL</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">               ENGINE: INNODB</span><br><span class="line">       ENGINE_LOCK_ID: 4864220544:3:4:19:140371501803032</span><br><span class="line">ENGINE_TRANSACTION_ID: 281479840931200</span><br><span class="line">            THREAD_ID: 116</span><br><span class="line">             EVENT_ID: 38</span><br><span class="line">        OBJECT_SCHEMA: test</span><br><span class="line">          OBJECT_NAME: student</span><br><span class="line">       PARTITION_NAME: NULL</span><br><span class="line">    SUBPARTITION_NAME: NULL</span><br><span class="line">           INDEX_NAME: PRIMARY</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140371501803032</span><br><span class="line">            LOCK_TYPE: RECORD</span><br><span class="line">            LOCK_MODE: S,REC_NOT_GAP</span><br><span class="line">          LOCK_STATUS: GRANTED</span><br><span class="line">            LOCK_DATA: 2</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>从锁的状态看是只锁了一行的记录，尝试修改和插入操作验证一下</p>
+<h5 id="mysql客户端2-2"><a href="#mysql客户端2-2" class="headerlink" title="mysql客户端2"></a>mysql客户端2</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;10&#39; where sno&#x3D;2;</span><br><span class="line">^C^C -- query aborted</span><br><span class="line">ERROR 1317 (70100): Query execution was interrupted</span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;10&#39; where sno&#x3D;1;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; update student set name&#x3D;&#39;10&#39; where sno&#x3D;3;</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into student values(4,&#39;4&#39;,&#39;&#39;);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+<p>摘自官方文档</p>
+<ul>
+<li>READ COMMITTED</li>
+</ul>
+<p>Each consistent read, even within the same transaction, sets and reads its own fresh snapshot. For information about consistent reads, see Section 15.7.2.3, “Consistent Nonlocking Reads”.</p>
+<p>For locking reads (SELECT with FOR UPDATE or FOR SHARE), UPDATE statements, and DELETE statements, InnoDB locks only index records, not the gaps before them, and thus permits the free insertion of new records next to locked records. Gap locking is only used for foreign-key constraint checking and duplicate-key checking.</p>
+<p>Because gap locking is disabled, phantom problems may occur, as other sessions can insert new rows into the gaps. For information about phantoms, see Section 15.7.4, “Phantom Rows”.</p>
+<p>Only row-based binary logging is supported with the READ COMMITTED isolation level. If you use READ COMMITTED with binlog_format=MIXED, the server automatically uses row-based logging.</p>
+<p>Using READ COMMITTED has additional effects:</p>
+<ul>
+<li><p>For UPDATE or DELETE statements, InnoDB holds locks only for rows that it updates or deletes. Record locks for nonmatching rows are released after MySQL has evaluated the WHERE condition. This greatly reduces the probability of deadlocks, but they can still happen.</p>
+</li>
+<li><p>For UPDATE statements, if a row is already locked, InnoDB performs a “semi-consistent” read, returning the latest committed version to MySQL so that MySQL can determine whether the row matches the WHERE condition of the UPDATE. If the row matches (must be updated), MySQL reads the row again and this time InnoDB either locks it or waits for a lock on it.</p>
+</li>
+</ul>
+<p>渣翻译：</p>
+<p><font color='red'>即使在同一个事务中，每个一致性读取都将读取最新的快照。</font>（区别于RR级别下的读取，两个客户端进行事务操作，客户端1读取了快照，客户端2修改某些行并提交释放了锁，客户端重新读取快照会获得最新的快照数据，这里的区别似乎也正是幻读上的问题）</p>
+<p>对于加锁的读（select带上for update或者for share），update和delete语句，InnoDB只会锁住索引记录，并不会在前面加上间隙锁，因此允许在锁定的记录周围插入记录。间隙锁定只用在外键约束检查和重复键检查。</p>
+<p>由于禁用了间隙锁定，可能幻读的问题，因为其他会话可以插入新的记录到间隙中。</p>
+<p>RC级别仅支持基于行的二进制日志。如果你使用RC级别并设置binlog_format=MIXED，服务器将会自动使用基于行的日志记录。</p>
+<p>使用RC将会带来额外的影响：</p>
+<ul>
+<li><p>对于update或者delete语句，InnoDB只会锁住更新或者删除的行。在MySQL评估where条件后，会释放不匹配的行的record lock（这也是上面结果的原因，另外实际测试中似乎不是先锁，然后根据where条件释放不匹配的行，而是根据where条件锁住匹配的行，也可能是遍历每一条的行记录都是先加锁然后根据where条件选择是否释放锁。个人比较倾向后面的结果，在无索引的情况下，使用mysql客户端1对一行记录不通过索引列查找加X锁，mysql客户端2不通过索引进行另一行的查找加锁（X or S都行），发现客户端2在等待客户端1开启的事务的锁。）。这大大降低了死锁的可能性，但依然可以发生。</p>
+</li>
+<li><p>对于update语句，如果一行早已被锁住，InnoDB会执行“半一致”读取，将最新的提交版本返回给MySQL，以便MySQL能确认是否行符合where条件的update语句。如果行匹配（必须更新），MySQL会再次读取该行同时InnoDB对行进行锁定或者等待对行的锁定（应该是等待对行的锁定释放后就上锁啦）。</p>
+</li>
+</ul>
+<p>对第一个结论，个人持不同的观点，或者说这样的写法容易让人误解，会以为是把所有记录都锁住了，然后根据where条件进行释放锁操作。个人猜测可能是遍历每一条的行记录，然后先加锁，再根据where条件选择是否释放锁（怀疑是where条件后才加锁，根本就没有释放锁的操作，test2验证）。以下测试都是在百万级的数据进行。</p>
+<p>test1：在无索引的情况下，session1对一行记录不通过索引列查找加X锁，session2不通过索引进行另一行的查找加锁（X or S都行），发现session2在等待session1开启的事务的锁。而且过程中出现了一个神奇的情况，因为是根据无索引的列进行查找，则会通过cluster index（如果有主键，则cluster index是主键索引）的顺序进行查找，那么如果session1锁的行记录是比较小的记录，session2锁住的行是比较大的记录，那么session2在遍历的过程中就在等待session1锁中的记录，如果在这个过程中如果有session3通过cluster index索引到小于等于session2要锁的行的记录并加锁，这个操作会成功（在session2之后执行），session1释放锁后，session2会等待session3的锁。</p>
+<p>test2：在无索引的情况下，对一条行记录进行非索引记录加锁查找，由于是百万级的数据，无索引查找非常的慢，过程中进行打印锁的信息，发现确实是进行了加锁操作，验证了是加锁然后释放锁。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+              <a href="/tags/lock/" rel="tag"># lock</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/22/java%E7%9A%84volatile%E5%85%B3%E9%94%AE%E5%AD%97/" rel="prev" title="java的volatile关键字">
+      <i class="fa fa-chevron-left"></i> java的volatile关键字
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/28/leetcode-371/" rel="next" title="leetcode-371">
+      leetcode-371 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

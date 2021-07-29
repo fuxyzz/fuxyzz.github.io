@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="fuxyzz&#39;s blog">
+<meta property="og:url" content="https://fuxyzz.github.io/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="fuxyzz">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content index posts-expand">
+          
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2021/01/04/Reactor%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/04/Reactor%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Reactor模型</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-04 17:58:05" itemprop="dateCreated datePublished" datetime="2021-01-04T17:58:05+08:00">2021-01-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nio/" itemprop="url" rel="index"><span itemprop="name">nio</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/nio/Reactor/" itemprop="url" rel="index"><span itemprop="name">Reactor</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/bio-handler.png" alt=""></p>
+<p>传统BIO方式的网络连接处理：客户端发起请求，服务器accept一个请求，经过读取，解码，计算，编码，发送等过程，完成一次请求的处理。这个过程中，accept如果阻塞了，会导致后面的请求也被阻塞。</p>
+<p>为了解决BIO引起的IO阻塞问题，提出了NIO。NIO的主要工作方式是无论IO有没有准备就绪，都会直接返回结果，不阻塞，具体由操作系统底层实现的select、poll、epoll完成。基于NIO，我们可以实现高性能的网络处理，一种有效的模型就是Reactor。</p>
+<p>Reactor应用于网络高性能框架中，Redis，Netty中都有它的身影。</p>
+<h3 id="Reactor模型中的相关组件"><a href="#Reactor模型中的相关组件" class="headerlink" title="Reactor模型中的相关组件"></a>Reactor模型中的相关组件</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/event-in-awt.png" alt=""></p>
+<p>了解AWT，写过桌面端或者客户端（Java的GUI，Android等）的同学会很熟悉这张图，基于事件响应的模型。用户发生click动作，产生相应的事件，事件会传播给对应注册了监听事件的组件进行处理，运用了观察者模式。Reactor与这种模式是很类似的。</p>
+<p>Reactor：负责响应IO事件，转发事件到相应的handler。类似AWT线程。</p>
+<p>handler：类似图中的button调用addActionListener方法进行监听注册，将handler与事件绑定，等待事件就绪后进行处理。我们可以当他是一个Worker。</p>
+<h3 id="单Reactor单Handler下的Reactor模型"><a href="#单Reactor单Handler下的Reactor模型" class="headerlink" title="单Reactor单Handler下的Reactor模型"></a>单Reactor单Handler下的Reactor模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/single-thread-reactor.png" alt=""></p>
+<p>如图所示，其中的acceptor是Reactor中注册了accept的IO事件，用于处理建立连接的。相当于一个Reactor线程处理连接，一个Hanlder线程处理读，解码，计算，解码，发送。</p>
+<h3 id="单Reactor多Handler模型"><a href="#单Reactor多Handler模型" class="headerlink" title="单Reactor多Handler模型"></a>单Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-worker.png" alt=""></p>
+<p>如图所示，是一个多Handler的模型，用线程池管理Handler线程。同时，Hanlder也不再负责有关读写的操作，即不负责处理IO读写，只做解码，计算，编码的操作。read和send交给Reactor做。</p>
+<h3 id="多Reactor多Handler模型"><a href="#多Reactor多Handler模型" class="headerlink" title="多Reactor多Handler模型"></a>多Reactor多Handler模型</h3><p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/multi-thread-reactor.png" alt=""></p>
+<p>如图所示，有一个主Reactor，接受请求后将读写的处理交由子Reactor操作，这样就提高了对CPU的利用率。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf" target="_blank" rel="noopener">Doug Lea的有关nio的文章</a></p>
+<p><a href="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/files/nio.pdf" target="_blank" rel="noopener">备用</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/22/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">redis底层数据结构简介</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-22 15:54:19" itemprop="dateCreated datePublished" datetime="2020-12-22T15:54:19+08:00">2020-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>redis顶层的数据结构是hash，string，set，sorted set，list，底层是用dict，sds，ziplist，quicklist，skiplist等数据结构组合而成。</p>
+<h3 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h3><p>dict是dictionary的简称，字典的意思，与Java中的HashMap类似，实现上有些许的区别。</p>
+<p>dict中存在ht（hash table简称）数组，数组大小为2，索引0位为当前hash table，索引1位为正在进行重哈希的hash table（如果有正在进行的话），标识正在进行重哈希的变量是rehashidx，默认值为-1，没有进行重哈希，不为-1则是标识当前正在进行重哈希的位置。</p>
+<p>redis将重哈希的操作分散到各个CRUD的操作中，每次CRUD的时候都将进行一部分的重哈希工作，具体是按空bucket来算工作量。例如每次重哈希的时候设定如果查找过程中遇到超过10个空bucket则本次工作结束。相对于Java中的HashMap，redis的重哈希似乎并没有将链表上的值进行再离散化。Java中HashMap的重哈希离散化如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;高位参与运算，使重哈希时有可能让链表分成两份</span><br><span class="line">hash &#x3D; (h &#x3D; key.hash) ^ (h &gt;&gt;&gt; 16)</span><br><span class="line">bucket &#x3D; hash &amp; (table - 1)</span><br></pre></td></tr></table></figure>
+
+<p>dict处理哈希冲突的方式是链地址法，没有像Java的HashMap进行红黑树的优化。</p>
+<p>dict使用MurmurHash2算法来计算bucket的key，算法的优点是输入的值是有规律的，算法仍然能给出一个较好的随机分布性（离散）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;整数hash</span><br><span class="line">unsigned int dictIntHashFunction(unsigned int key)</span><br><span class="line">&#123;</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 15);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 10);</span><br><span class="line">    key +&#x3D;  (key &lt;&lt; 3);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 6);</span><br><span class="line">    key +&#x3D; ~(key &lt;&lt; 11);</span><br><span class="line">    key ^&#x3D;  (key &gt;&gt; 16);</span><br><span class="line">    return key;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;字符串hash</span><br><span class="line">unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) &#123;</span><br><span class="line">    unsigned int hash &#x3D; (unsigned int)dict_hash_function_seed;</span><br><span class="line">    while (len--)</span><br><span class="line">        hash &#x3D; ((hash &lt;&lt; 5) + hash) + (tolower(*buf++)); &#x2F;* hash * 33 + c *&#x2F;</span><br><span class="line">    return hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>dict重哈希的依据是 结点数 / 哈希表大小 &gt; 5。</p>
+<h3 id="sds"><a href="#sds" class="headerlink" title="sds"></a>sds</h3><p>sds全称simple dynamic string，redis实现的sds是可动态拓展的，而且二进制安全。</p>
+<p>redis的实现中，分为两种字符串，一种是静态不变的sdshr5（可存动态的，只是容量小，而且会引发内存重新分配），一种是可变的（有多个，sdshr8，sdshr16，sdshr32，sdshr64，区别是最大长度不一样）。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct __attribute__ ((__packed__)) sdshdr5 &#123;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, and 5 msb of string length *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr8 &#123;</span><br><span class="line">    uint8_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint8_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr16 &#123;</span><br><span class="line">    uint16_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint16_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr32 &#123;</span><br><span class="line">    uint32_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint32_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br><span class="line">struct __attribute__ ((__packed__)) sdshdr64 &#123;</span><br><span class="line">    uint64_t len; &#x2F;* used *&#x2F;</span><br><span class="line">    uint64_t alloc; &#x2F;* excluding the header and null terminator *&#x2F;</span><br><span class="line">    unsigned char flags; &#x2F;* 3 lsb of type, 5 unused bits *&#x2F;</span><br><span class="line">    char buf[];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>不变的sds使用flags的低三位标识类型，高5位标识长度。</p>
+<p>可变的sds使用len标识长度，alloc标识最大可分配长度，flags使用低3位标识类型。当字符串变化时，如果长度超过buff一开始分配的空间大小则会重新分配内存，如果长度超过alloc可表示的最大值则会更换类型（例如sdshr32 -&gt; sdshr64）。当已有字符串的时候，buff数组在申请的时候会申请更多的空间，方便后续追加。</p>
+<h3 id="ziplist"><a href="#ziplist" class="headerlink" title="ziplist"></a>ziplist</h3><p>ziplist直译是压缩表，说到表很容易想到的是哈希表，redis中的hash是ziplist和dict两种方案结合实现，在数据较小的情况下位ziplist，在数据量达到一定条件的情况下会转成dict。</p>
+<p>ziplist的结构大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;zlbytes&gt;&lt;zltail&gt;&lt;zllen&gt;&lt;entry&gt;...&lt;entry&gt;&lt;zlend&gt;</span><br></pre></td></tr></table></figure>
+
+<p>zlibytes：32bit，表示ziplist占用的总字节数（包括zlibytes本身）</p>
+<p>zltail：32bit，表示最后一个entry相对偏移字节数。方便在队尾push和pop。</p>
+<p>zllen：16bit，表示entry的数量。只有16bit，最大表示 2<sup>16</sup> - 1。当zllen值在小于等于 2<sup>16</sup> - 2时，zllen表示entry的数量；当zllen值等于2<sup>16</sup> - 1时，标识zllen已无法表示entry的数量，ziplist会使用遍历ziplist的方式统计entry的数量。</p>
+<p>entry：数据项。</p>
+<p>zlend：ziplist的最后1个字节，标识结束，值为255。</p>
+<p>从ziplist使用相对偏移的方式寻址说明redis希望使用内存紧凑的方式来尽可能的消除内存碎片（使用连续分配的内存）。但是这种方式带来的代价就是在增删改的时候可能会造成如果需要内存增加的时候后面的内存已经被占用，为了还是用内存紧凑的方式，需要重新分配内存，而且要大规模的迁移数据，所以ziplist在相对数据较少的情况下使用（数据少时进行迁移数据也少，但这并不意味着redis在较少数据下使用ziplist是因为效率比dict高，更多的是空间上的考虑，空间换时间减少内存碎片）。</p>
+<p>满足以下任一条件，hash底层从ziplist转为dict：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;file-value超过512，或者说ziplist的entry超过1024</span><br><span class="line">hash-max-ziplist-entries &#x3D; 512</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;插入的value长度超过64</span><br><span class="line">hash-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+
+<p>再说hash-max-ziplist-entries，因为ziplist实现hash的时候采用field-value相连的方式，存储两个entry，第一个为field，第二个为value。因为前面有zlibytes，zltail，zllen，第一个entry是第4位，存filed，第5个entry存value，以此类推，偶数项存field，奇数项存value。</p>
+<h3 id="quicklist"><a href="#quicklist" class="headerlink" title="quicklist"></a>quicklist</h3><p>quicklist是redis提供的list的底层实现。quicklist可以理解为Java中的LinkedList，使用链表的方式进行实现，中间的结点用ziplist辅助实现。</p>
+<p>使用ziplist作为结点辅助的理由：</p>
+<p>（1）quicklist为了支持在两端进行快速的push和pop，需要在每个结点上增加两个额外的指针保存头和尾</p>
+<p>（2）结点过多容易造成内存碎片</p>
+<p>（3）ziplist不造成内存碎片，但是有重新分配内存的情况</p>
+<p>因此quicklist结合双向链表和ziplist的优点，并提供进阶配置对ziplist进行定制。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">* 值为正表示按entry数限制ziplist长度</span><br><span class="line">* 值为负时：</span><br><span class="line">* -5，每个ziplist不能超过64Kb</span><br><span class="line">* -4，每个ziplist不能超过32Kb</span><br><span class="line">* -3，每个ziplist不能超过16Kb</span><br><span class="line">* -2，每个ziplist不能超过8Kb（默认值）</span><br><span class="line">* -1，每个ziplist不能超过4Kb</span><br><span class="line">*&#x2F;</span><br><span class="line">list-max-ziplist-size &#x3D; -2</span><br></pre></td></tr></table></figure>
+
+<p>quicklist大概长这样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;...&lt;prePoint&gt;&lt;ziplist&gt;&lt;nextPoint&gt;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以认为一个 <prePoint><ziplist><nextPoint> 是一个quicklistNode。</p>
+<p>quicklist有两个指针head和tail分别指向头部的quicklistNode和尾部的quicklistNode。</p>
+<h3 id="skiplist"><a href="#skiplist" class="headerlink" title="skiplist"></a>skiplist</h3><p>skiplist的结构如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/skiplist.png" alt="skiplist"></p>
+<p>skiplist是空间和时间上的折中做法。相比哈希表，哈希表能够O（1）时间内查询，但是会浪费空间。相比平衡树，两者的查找时间都是O（log n），但是skiplist的平均指针数会更少，这取决于生成单个结点的层数。</p>
+<p>单个结点生成的层数的计算依赖两个变量</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">p &#x3D; 1&#x2F;4</span><br><span class="line">maxLevel &#x3D; 32</span><br></pre></td></tr></table></figure>
+<p>计算函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int getLevel()&#123;</span><br><span class="line">    int level &#x3D; 1;</span><br><span class="line">    while Math.random() &lt; p &amp;&amp; level &lt; maxLevel &#123;</span><br><span class="line">        level++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return level;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从skiplist的结构上可以看出，skiplist无法满足zset中的一些操作，例如根据data获取score，所以还用了dict辅助。在数据量较少的情况下，zset是用ziplist实现的，数据量达到一定时，用skiplist和dict实现。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;score 和 member的存储对数量超过这个值就转成skiplist 和 dict</span><br><span class="line">zset_max_ziplist_entries &#x3D; 128</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;任意一个插入的member存储占用超过这个值就转成skiplist 和 dict</span><br><span class="line">zset-max-ziplist-value &#x3D; 64</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/12/16/leetcode-662/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/16/leetcode-662/" class="post-title-link" itemprop="url">leetcode-662</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-16 13:48:27" itemprop="dateCreated datePublished" datetime="2020-12-16T13:48:27+08:00">2020-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/maximum-width-of-binary-tree/" target="_blank" rel="noopener">原题链接</a></p>
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>深度优先搜索，搜索过程带上深度和结点位置的信息，用哈希表记下深度以及最左侧结点的位置。每当遍历到任意的结点，将结点的位置减去结点所在层最左侧结点的位置，更新这个最大值。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line"></span><br><span class="line">    int ans;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map;</span><br><span class="line"></span><br><span class="line">    public int widthOfBinaryTree(TreeNode root) &#123;</span><br><span class="line">        ans &#x3D; 0;</span><br><span class="line">        map &#x3D; new HashMap&lt;&gt;();</span><br><span class="line">        dfs(root, 0, 1);</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void dfs(TreeNode node, int pos, int depth) &#123;</span><br><span class="line">        if (node &#x3D;&#x3D; null) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        map.putIfAbsent(depth, pos);</span><br><span class="line">        ans &#x3D; Math.max(ans, pos - map.get(depth) + 1);</span><br><span class="line">        dfs(node.left, pos * 2, depth + 1);</span><br><span class="line">        dfs(node.right, pos * 2 + 1, depth + 1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历所有结点的消耗。</p>
+<p>空间复杂度：O（log(n)），HashMap的存储的消耗，存储的数量为树的高度。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/11/16/%E6%9C%89%E5%85%B3IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/16/%E6%9C%89%E5%85%B3IO/" class="post-title-link" itemprop="url">有关IO</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-16 13:03:47" itemprop="dateCreated datePublished" datetime="2020-11-16T13:03:47+08:00">2020-11-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/IO/" itemprop="url" rel="index"><span itemprop="name">IO</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Java中的NIO与操作系统的NIO"><a href="#Java中的NIO与操作系统的NIO" class="headerlink" title="Java中的NIO与操作系统的NIO"></a>Java中的NIO与操作系统的NIO</h3><p>Java是New IO，操作系统是Non blocking Io。</p>
+<p>Java中的NIO实际上是区分旧的IO，这里的N是指New，即NIO是New IO。NIO包下使用的IO是区分旧的BIO（Blocking IO），Non Blocking IO，调用的是操作系统提供的IO。看Java的源码可知，ServerSocketChannel.configureBlocking()方法是一个native方法，调用底层操作系统设置为非阻塞的IO。对应JDK中的ServerSocketChannel.accept()方法直接返回，如果没有返回null，有就返回socket（实际上是对应底层的fd）。以及SocketChannel.read()也是直接返回，如果没有返回-1，有就返回客户端目前传输的信息长度。</p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>IO多路复用是用来解决大量客户端连接，C10K这样的问题。C10K是假设有一万个客户端进行连接，那么在普通的Java NIO程序中，使用for循环进行系统调用遍历，那么每进行一次for循环就要进行一万次的系统调用，系统调用时间开销太大。解决思路就是想办法将一万次的系统调用合并为一次系统调用，这种解决的方法就是IO多路复用。</p>
+<h5 id="同步IO多路复用："><a href="#同步IO多路复用：" class="headerlink" title="同步IO多路复用："></a>同步IO多路复用：</h5><p>select：传入fd数组，函数会遍历fd，返回数量（读fd的数量，写fd的数量），不会返回具体的fd。一般我们根据返回的数量判断是否要进行IO操作。fd数量限制在1024。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/select.2.html" target="_blank" rel="noopener">select参考手册</a></p>
+<p>poll：与select基本无差，去除了1024的限制，是基于链表的实现。</p>
+<p><a href="https://man7.org/linux/man-pages/man2/poll.2.html" target="_blank" rel="noopener">poll参考手册</a></p>
+<p>epoll：基于事件订阅回调的实现，相比select和poll，时间复杂度降低为O(1)。而且epoll会在内核开辟空间保留fd。epoll会使用mmap加快内存与内核之间的数据搬运，具体是将fd集合存放在映射出来的内存，用户态每次直接从这块内存的中取fd进行读取即可。</p>
+<p><a href="https://man7.org/linux/man-pages/man7/epoll.7.html" target="_blank" rel="noopener">epoll参考手册</a></p>
+<p>本质上select，poll与epoll都是同步IO多路复用，同步是指函数都是返回了是否有IO准备就绪，当返回就绪了，依旧要自行遍历所有的fd将数据取出，遍历取数据过程仍然是同步阻塞的。</p>
+<h5 id="异步IO多路复用："><a href="#异步IO多路复用：" class="headerlink" title="异步IO多路复用："></a>异步IO多路复用：</h5><p>Java 1.7版本引入了异步IO模型（AIO），底层通过线程池管理线程进行数据搬运，基于一种回调的机制进行操作。即等到数据搬运完成后回调通知处理，将搬运数据的操作委托给线程池。中间还使用了ReentrantReadWriteLock优化了读写。</p>
+<h3 id="netty的选型"><a href="#netty的选型" class="headerlink" title="netty的选型"></a>netty的选型</h3><p>netty使用NIO模型，原因如下：</p>
+<p>（1）linux没有很好的实现AIO，windows上的AIO实现很好，但是netty的开发人员并没有将windows认为是主流的服务器</p>
+<p>（2）AIO需要预先分配内存空间，如果NIO是需要时才分配空间，这会造成AIO在流量很大但数据量很小的情况下出现内存浪费的问题</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/29/DMA%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D/" class="post-title-link" itemprop="url">DMA与零拷贝</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-29 14:27:48" itemprop="dateCreated datePublished" datetime="2020-10-29T14:27:48+08:00">2020-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/io/" itemprop="url" rel="index"><span itemprop="name">io</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h1><h3 id="为什么要有DMA？"><a href="#为什么要有DMA？" class="headerlink" title="为什么要有DMA？"></a>为什么要有DMA？</h3><p>传统IO工作方式：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，接着CPU发送指令给磁盘控制器</p>
+<p>（2）磁盘控制器收到指令，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（3）CPU收到中断信号响应中断，将磁盘控制器缓冲区的数据拷贝到自己的寄存器，然后拷贝到内存中，数据在拷贝期间CPU无法执行其他任务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/simple_io.png" alt="传统IO工作方式"></p>
+<p>CPU在IO期间无法执行任务，降低了系统工作的整体性能，于是引入了DMA</p>
+<h3 id="DMA概念及工作方式"><a href="#DMA概念及工作方式" class="headerlink" title="DMA概念及工作方式"></a>DMA概念及工作方式</h3><p>DMA全称Direct Memory Access，直译直接内存访问，作用是将CPU搬运数据的工作委托给DMA，解放CPU在数据搬运过程中的阻塞时间。具体工作方式如下：</p>
+<p>（1）用户调用read，向操作系统发起IO系统调用，CPU将IO请求发送给DMA</p>
+<p>（2）DMA收到指令后，将IO请求发送给磁盘</p>
+<p>（3）磁盘收到IO请求后，将数据放入磁盘控制器缓冲区，缓冲区满后产生中断信号</p>
+<p>（4）DMA响应中断信号，将磁盘缓冲区数据拷贝到内核缓冲区，缓冲区满后产生中断信号</p>
+<p>（5）CPU响应中断信号，将内核缓冲区的数据拷贝到用户态缓冲区，系统调用返回</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/DMA_IO.png" alt="DMA工作方式"></p>
+<h1 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h1><h3 id="常规的文件传输时的IO消耗"><a href="#常规的文件传输时的IO消耗" class="headerlink" title="常规的文件传输时的IO消耗"></a>常规的文件传输时的IO消耗</h3><p>基于DMA改进的IO方式在文件传输上发送4次内核态与用户态的切换，4次数据拷贝。</p>
+<h5 id="4次内核态与用户态切换"><a href="#4次内核态与用户态切换" class="headerlink" title="4次内核态与用户态切换"></a>4次内核态与用户态切换</h5><p>（1）系统调用read，从用户态切换到内核态</p>
+<p>（2）内核完成任务返回，从内核态切换到用户态</p>
+<p>（3）系统调用write，从用户态切换到内核态</p>
+<p>（4）内核完成任务返回，从内核态切换到用户态</p>
+<h5 id="4次数据拷贝"><a href="#4次数据拷贝" class="headerlink" title="4次数据拷贝"></a>4次数据拷贝</h5><p>（1）DMA将磁盘数据拷贝到操作系统内核缓冲区</p>
+<p>（2）CPU将内核缓冲区的数据拷贝到用户缓冲区</p>
+<p>（3）CPU将用户缓冲区的数据拷贝到socket缓冲区</p>
+<p>（4）DMA将socket缓冲区数据拷贝到物理网卡缓冲区</p>
+<p>拷贝一份数据经过4次内核态与用户态的切换和4次的数据拷贝，在并发场景下这个IO消耗会被无限方法，考虑如何优化它。</p>
+<h3 id="零拷贝对文件传输的优化思路"><a href="#零拷贝对文件传输的优化思路" class="headerlink" title="零拷贝对文件传输的优化思路"></a>零拷贝对文件传输的优化思路</h3><h4 id="mmap-write"><a href="#mmap-write" class="headerlink" title="mmap + write"></a>mmap + write</h4><p>mmap全称memory map，直译内存映射，作用是将内核缓冲区的数据映射到用户缓冲区，这样就不需要read，省去了一次数据拷贝，过程从read + write变为mmap + write。通过这种方式仍然需要4次上下文切换。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/mmap_write.png" alt="mmap + write"></p>
+<h4 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h4><p>sendfile是linux 2.1版本中提供的函数，用于代替 read 和 write 2个系统调用，这样就减少了1次系统调用，2次上下文切换。sendfile提供的系统调用可以将内核缓冲区的数据之间拷贝到socket缓冲区。通过这种方式只有2次上下文切换和3次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_1.png" alt="sendfile1"></p>
+<p>linux 2.4版本，如果网卡还支持SG—DMA（The Scatter-Gather Direct Memory Access），可以直接将内核缓冲区的数据直接拷贝到网卡的缓冲区。这样又减少了1次数据拷贝。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/sendfile_2.png" alt="sendfile2"></p>
+<h4 id="零拷贝总结"><a href="#零拷贝总结" class="headerlink" title="零拷贝总结"></a>零拷贝总结</h4><p>零拷贝只有2次上下文切换和2次数据拷贝，数据拷贝是由DMA进行的，不需要经过CPU。</p>
+<h2 id="零拷贝的缺点及解决方案"><a href="#零拷贝的缺点及解决方案" class="headerlink" title="零拷贝的缺点及解决方案"></a>零拷贝的缺点及解决方案</h2><p>零拷贝是基于PageCache，PageCache是磁盘高速缓存，也是我们上面说的内核缓冲区。PageCache是内存中的一部分，对应磁盘上的block，如果读取文件时在PageCache中命中则直接从内存读取，否则从磁盘中读取。PageCache内部使用LRU进行内存淘汰。由于PageCache本身不能太大，拷贝大文件的时候很容易出现PageCache的缓存命中率降低，甚至影响其他小文件的传输。在这种情况下，我们可以不使用基于PageCache的内核缓冲区，而是直接将磁盘的数据加载到用户缓冲区，这种方式称为直接IO，相对的使用PageCache的方式称为缓冲IO。</p>
+<p>对于大文件，可以用异步IO + 直接IO（对于磁盘，异步IO只支持直接IO）的方式来解决：</p>
+<p>（1）内核发起读请求，不等待数据拷贝完成就直接返回</p>
+<p>（2）内核将数据拷贝到用户缓冲区后，通知进程处理数据</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/aio.png" alt="aio"></p>
+<h2 id="工程选型"><a href="#工程选型" class="headerlink" title="工程选型"></a>工程选型</h2><h5 id="小文件传输：零拷贝"><a href="#小文件传输：零拷贝" class="headerlink" title="小文件传输：零拷贝"></a>小文件传输：零拷贝</h5><h5 id="大文件传输：异步IO-直接IO"><a href="#大文件传输：异步IO-直接IO" class="headerlink" title="大文件传输：异步IO + 直接IO"></a>大文件传输：异步IO + 直接IO</h5><p>零拷贝在java nio，nginx和kafka都有使用。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/28/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/28/%E5%9F%BA%E4%BA%8Eredis%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="post-title-link" itemprop="url">基于redis的分布式锁</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-28 10:04:27" itemprop="dateCreated datePublished" datetime="2020-10-28T10:04:27+08:00">2020-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/lock/" itemprop="url" rel="index"><span itemprop="name">lock</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/lock/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="单机下的分布式锁"><a href="#单机下的分布式锁" class="headerlink" title="单机下的分布式锁"></a>单机下的分布式锁</h3><p>setnx命令表示在set的时候判断值是否设置过，如果没有就设置并返回1，否则返回0。利用这个命令可以实现简单的分布式锁。业务开始执行获取锁，业务结束释放锁。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;分布式的key，例如商品的话取业务+商品id组成key</span><br><span class="line">key &#x3D; lock_key</span><br><span class="line">try&#123;</span><br><span class="line">    &#x2F;&#x2F;获取锁</span><br><span class="line">    setnx key value</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;do something</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;finally&#123;</span><br><span class="line">    &#x2F;&#x2F;释放锁</span><br><span class="line">    del key</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式，可能存在业务执行过程中宕机了，导致del key没有执行，锁没有释放。可以加上超时时间。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;分布式的key，例如商品的话取业务+商品id组成key</span><br><span class="line">key &#x3D; lock_key</span><br><span class="line">try&#123;</span><br><span class="line">    &#x2F;&#x2F;获取锁</span><br><span class="line">    setnx key value</span><br><span class="line">    &#x2F;&#x2F;设置过期时间</span><br><span class="line">    expire key 30</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;do something</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">&#125;finally&#123;</span><br><span class="line">    &#x2F;&#x2F;释放锁</span><br><span class="line">    del key</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种设置过期的方式不是原子的，可能在setnx后宕机导致没有设置过期时间。redis的set可以同时设置ex和nx。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;分布式的key，例如商品的话取业务+商品id组成key</span><br><span class="line">key &#x3D; lock_key</span><br><span class="line">try&#123;</span><br><span class="line">    &#x2F;&#x2F;获取锁</span><br><span class="line">    set key value ex 30 nx</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;do something</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;finally&#123;</span><br><span class="line">    &#x2F;&#x2F;释放锁</span><br><span class="line">    del key</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式，可能由于任务超时，导致释放其他人的锁。例如jvm1机器获取到锁，超时时间设置为30s，但是由于任务执行过久超过30s锁自己释放了，此时jvm2机器获取到锁执行任务，但是jvm1机器的程序执行完开始释放锁，此时jvm3就可以获取锁，同一时刻有两个jvm在执行分布式的任务。可以设置key的value为独一无二的，例如UUID+ThreadId，在del的时候判断值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;分布式的key，例如商品的话取业务+商品id组成key</span><br><span class="line">key &#x3D; lock_key</span><br><span class="line">value &#x3D; uuid + threadId;</span><br><span class="line">try&#123;</span><br><span class="line">    &#x2F;&#x2F;获取锁</span><br><span class="line">    set key value ex 30 nx</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;do something</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line">&#125;finally&#123;</span><br><span class="line">    &#x2F;&#x2F;释放锁</span><br><span class="line">    if(get(key) &#x3D;&#x3D; value)&#123;</span><br><span class="line">        del key</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式会存在任务超时，锁就释放了，但是我的业务还没做完，并发下可能导致数据不一致，应该要等任务做完或者失败回滚后才能释放锁。可以采用守护线程定时续期的方式，假设jvm1设置的过期时间为30s，守护线程开启定时任务，假设是定时10s执行续期，如果宕机了，过期时间到也会执行自动释放锁。可以使用redisson，redisson底层也是用这种方式去实现的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;分布式的key，例如商品的话取业务+商品id组成key</span><br><span class="line">key &#x3D; lock_key</span><br><span class="line"></span><br><span class="line">redission &#x3D; Redission.getLock(key)</span><br><span class="line">&#x2F;&#x2F;获取锁</span><br><span class="line">redission.lock()</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;do something</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;释放锁</span><br><span class="line">redission.unlock()</span><br></pre></td></tr></table></figure>
+
+<p>redisson封装了适用于分布式锁的redis方法，原子操作基于lua脚本，redis会对lua脚本的命令执行类似数据库的事务，要么全部成功，要么全部失败，有失败回滚的操作（redis提供的multi等命令的事务操作是不会有失败回滚的）。redisson默认的锁过期时间为30s，开启守护线程每隔10s（10s是30除以3得到，其他时间以此类推）进行锁续期。</p>
+<h3 id="集群下的分布式锁"><a href="#集群下的分布式锁" class="headerlink" title="集群下的分布式锁"></a>集群下的分布式锁</h3><p>假设集群模式下是一主多备，jvm1从主结点获取到锁，此时主结点未来得及同步到其他结点就挂了，挂了之后从备份结点选出新的主结点，此时jvm2从新的主结点就能够获取到锁。</p>
+<p>为了解决上述的问题，redis引入了RedLock，采用多主的方式，工作方式如下：</p>
+<p>（1）客户端以毫秒为单位获取当前时间</p>
+<p>（2）尝试在所有N个实例中顺序获取锁，设置锁超时时间小于总释放时间，假设释放时间时间为10s，超时时间可能在5~50ms之间。如果获取失败，直接与下一个结点通信获取锁</p>
+<p>（3）客户端通过当前时间减去（1）中获取的时间得到获取锁花费的时间。当且仅当大多数客户端（至少3个，且满足至少N/2+1个）获取锁，并且总的获取锁的时间小于锁有效时间，则认为获取了锁</p>
+<p>（4）如果获取了锁，则将有效时间（3）中计算的时间</p>
+<p>（5）如果不能够获取锁（无法锁定N/2+1个实例或者有效时间为负数），尝试解锁所有的实例。</p>
+<p>RedLock参考自 <a href="https://redis.io/topics/distlock" target="_blank" rel="noopener">redis官方</a>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/28/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86%E4%B9%8BRaft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/28/%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86%E4%B9%8BRaft/" class="post-title-link" itemprop="url">分布式共识之Raft</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-28 09:52:39" itemprop="dateCreated datePublished" datetime="2020-10-28T09:52:39+08:00">2020-10-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Raft是一个分布式共识协议。通过实现election（选举）和log replication（日志复制）实现共识。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>（1）每个结点只能有三种状态：follower，candidate，leader，且所有的结点初始化为follower。如果follower都不能接收到leader的心跳，他们就可以成为candidate。然后candidate向其他结点请求向自己投票。所有的结点都会响应投票，最终获得大多数投票的candidate会成为leader,这个过程叫做leader election（选举leader）。</p>
+<p>（2）所有对系统的改变都会经过leader，每个改变都会当做一个entry写入leader结点的log中，要提交entry到log中必须满足结点先将entry复制到follower结点中。然后leader等待直到大多数的结点已经将entry写入log，然后entry就能够在leader结点上提交，然后leader通知所有的follower结点开始提交它们的entry到log中。如此这样的操作过程，整个集群就能够保持一致性，这个过程被称作log relipcation（日志复制）。</p>
+<h2 id="选举的细节"><a href="#选举的细节" class="headerlink" title="选举的细节"></a>选举的细节</h2><p>（1）在Raft中，有两项超时设置来控制选举。第一项是选举超时，指的是一名follower等待成为candidate的时间，随机设置在150到300ms之间的值。选举超时后，follower成为candidate并开始新一轮的选举并给自己投上一票，然后给其他结点发送投票的信息，如果接收消息的结点在当前这一轮选举周期内没有投过票（注意新一轮选举周期的投票要重新算，即每个结点在每个周期都可以有一次投票机会），则投票给候选者。接着结点重置选举超时。一旦有一个candidate获得了大多数的投票，那么它将成为leader。</p>
+<p>（2）follower成为leader后，就会开始发送追加entry消息到它的各个follower结点。这个消息会按照心跳超时的间隔进行发送，各个follower会响应每个消息，这就是第二项超时时间，心跳超时。leader的选举任期将会持续到有一个follower停止收到心跳（停止收到就是leader挂了，但是这里不是停止收到一次的意思，毕竟网络可能会有丢包，一般会设置心跳包次数，超过多少次才当做leader挂了）并成为candidate。</p>
+<p>再讲一下超时时间的细节：这里是所有结点都设置选举时间，由于随机超时时间值不同，最后只有超时时间先到的结点成为candidate。极端条件下，有两个结点的随机超时时间值相同，那么可以通过拆分投票的方式，就是都成为candidate，看各个follower结点给两位candidate投票的情况。如果再次处于极端条件下，两个结点的投票相等，那么就会重新发起一次选举，重新走选举超时那一套逻辑。这种情况可以拓展为多个结点的情况。</p>
+<h2 id="日志复制的细节"><a href="#日志复制的细节" class="headerlink" title="日志复制的细节"></a>日志复制的细节</h2><p>（1）日志复制通过使用与心跳消息类似的entry消息。</p>
+<p>（2）当有新的改变尝试时会先经过leader，leader将改变追加到log中，然后将改变在下一次的心跳中发送给各个follower，当大多数的follower确认后就可以进行提交操作。</p>
+<p>（3）在分区的情况下也能够达到共识。</p>
+<p>假设有5个结点，leader为a，由于机房连通性问题，ab归为一个分区（leader为a，不用重新选），cde归为一个分区（leader为c，假设是重新选出来的，重新选，election term + 1），那么如果有客户端尝试对a和b分区的leader发起更新，由于结点数量只有2，没有达到大多数复制结点，则在ab的日志中是存在未提交状态的entry。如果有客户端尝试对cde的leader（c）发起更新，由于结点数量为3，达到大多数复制结点，则提交成功。后续，由于机房连通性问题解决后，结点通过对比term，term较低者下台（a下台），然后a与b回滚未提交的数据，并拉取leader（此时leader为c）的数据。</p>
+<p>可能会有疑问：如果上面的例子，起始的leader为c，那么ab的分区就会重新选举，ecection term+1，而cde的leader不变。如果此时有客户端请求c进行了新的更改，在网络连通之后，因为a的term值较高，会将cde的数据抹去，这样岂不是将正常请求更新的数据删除了？</p>
+<p>不会出现这种情况，因为ab分区的结点只有2个，不满足大多数，不能够选举成功。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://raft.github.io/raft.pdf" target="_blank" rel="noopener">paper</a></p>
+<p><a href="https://raft.github.io/" target="_blank" rel="noopener">web site</a></p>
+<p><a href="http://thesecretlivesofdata.com/raft/" target="_blank" rel="noopener">animate</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/26/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/26/Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="post-title-link" itemprop="url">Java线程池</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-26 17:36:11" itemprop="dateCreated datePublished" datetime="2020-10-26T17:36:11+08:00">2020-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>前置知识：</p>
+<p>线程是调度CPU的最小单位，也叫轻量级进程LWP（light weight process）。</p>
+<p>内核级线程（kernel level threads，简称KLT）</p>
+<ul>
+<li>线程管理的所有工作（创建和撤销）由操作系统完成</li>
+<li>操作系统内核提供应用程序API，供开发者使用KLT</li>
+</ul>
+<p>用户级线程（user level threads，简称ULT）</p>
+<ul>
+<li>用户空间运行线程库，任何应用程序都可以通过使用线程库被设计成多线程程序。线程库是用于用户级线程管理的一个例程包，提供多线程应用程序的开发和运行支撑环境。包含：用于创建和销毁线程的代码、在线程间传递数据和消息的代码、调度线程执行的代码以及保存和恢复线程上下文的代码。</li>
+<li>线程切换不需要内核模式</li>
+<li>允许自己实现调度线程的算法</li>
+<li>不需要内核支持，可以跨OS</li>
+<li>不能利用多核处理器，每个进程只有一个ULT能运行</li>
+<li>一个ULT阻塞会导致整个进程阻塞</li>
+</ul>
+<p>Java线程依赖于系统内核（KLT），通过JVM调用系统库创建内核线程。因为创建和销毁都会依赖内核，频繁创建和销毁的代价特别大，所以需要池化技术来达到复用线程的降低开销。线程池就是一个线程缓存，负责对线程进行统一分配、调优和监控。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>复用线程，减少线程创建和销毁的开销，提高性能</li>
+<li>提高响应速度，任务到来时不需要等到线程创建就能立刻执行</li>
+<li>提高线程可管理性，统一分配、调优与监控</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li>单个任务处理时间短</li>
+<li>需要处理的任务数量大</li>
+</ul>
+<p>需要同时满足以上两个条件的大部分程序都可以用线程池。</p>
+<h2 id="Java中的实现"><a href="#Java中的实现" class="headerlink" title="Java中的实现"></a>Java中的实现</h2><h4 id="线程池的五种状态"><a href="#线程池的五种状态" class="headerlink" title="线程池的五种状态"></a>线程池的五种状态</h4><p>running（运行中）：能接受新任务和处理已添加的任务</p>
+<p>shutdown（关闭）：不接受新任务，能处理已添加的任务</p>
+<p>stop（停止）：不接受新任务，不处理已添加的任务，并中断正在执行的任务</p>
+<p>tidying（整理）：所有任务已终止，ctl记录的任务数量为0，ctl负责记录线程池的运行状态与活动线程数量</p>
+<p>terminated（终止）：线程池终止</p>
+<p>关于状态和数量的实现，以ThreadPoolExecutor中的代码为例，代码中使用了的位运算，代码增加了注释方便理解。线程池中只使用了ctl一个变量来表示状态和工作线程数量，更新的时候用cas即可。如果使用多个变量，在并发的情况下需要加锁等操作，这是个很取巧的优化。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;原子类，实现并发情况下的操作，初始化为running状态，且线程数为0</span><br><span class="line">private final AtomicInteger ctl &#x3D; new AtomicInteger(ctlOf(RUNNING, 0));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;32 - 3 &#x3D; 29，高3位存储状态，低29位存储线程数量</span><br><span class="line">private static final int COUNT_BITS &#x3D; Integer.SIZE - 3;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;线程数量计算的掩码，类似计算机网络的子网掩码的计算方法，得到0001 1111 1111 1111 1111 1111 1111 1111</span><br><span class="line">private static final int COUNT_MASK &#x3D; (1 &lt;&lt; COUNT_BITS) - 1;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; runState is stored in the high-order bits</span><br><span class="line">&#x2F;*</span><br><span class="line">* -1的补码是1111 1111 1111 1111 1111 1111 1111 1111</span><br><span class="line">* 左移29位得到1110 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">*&#x2F;</span><br><span class="line">private static final int RUNNING    &#x3D; -1 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int SHUTDOWN   &#x3D;  0 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0010 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int STOP       &#x3D;  1 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0100 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int TIDYING    &#x3D;  2 &lt;&lt; COUNT_BITS;</span><br><span class="line">&#x2F;&#x2F;同上，得到0110 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">private static final int TERMINATED &#x3D;  3 &lt;&lt; COUNT_BITS;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Packing and unpacking ctl</span><br><span class="line">&#x2F;&#x2F;根据ctl的值计算出状态</span><br><span class="line">private static int runStateOf(int c)     &#123; return c &amp; ~COUNT_MASK; &#125;</span><br><span class="line">&#x2F;&#x2F;根据ctl的值计算出线程数量</span><br><span class="line">private static int workerCountOf(int c)  &#123; return c &amp; COUNT_MASK; &#125;</span><br><span class="line">&#x2F;&#x2F;根据run state和worker count计算出ctl需要更新的值</span><br><span class="line">private static int ctlOf(int rs, int wc) &#123; return rs | wc; &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="基本参数"><a href="#基本参数" class="headerlink" title="基本参数"></a>基本参数</h4><p>从ThreadPoolExecutor的构造方法看起</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public ThreadPoolExecutor(int corePoolSize,</span><br><span class="line">                          int maximumPoolSize,</span><br><span class="line">                          long keepAliveTime,</span><br><span class="line">                          TimeUnit unit,</span><br><span class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</span><br><span class="line">                          ThreadFactory threadFactory,</span><br><span class="line">                          RejectedExecutionHandler handler) &#123;</span><br><span class="line">    if (corePoolSize &lt; 0 ||</span><br><span class="line">        maximumPoolSize &lt;&#x3D; 0 ||</span><br><span class="line">        maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">        keepAliveTime &lt; 0)</span><br><span class="line">        throw new IllegalArgumentException();</span><br><span class="line">    if (workQueue &#x3D;&#x3D; null || threadFactory &#x3D;&#x3D; null || handler &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">    this.corePoolSize &#x3D; corePoolSize;</span><br><span class="line">    this.maximumPoolSize &#x3D; maximumPoolSize;</span><br><span class="line">    this.workQueue &#x3D; workQueue;</span><br><span class="line">    this.keepAliveTime &#x3D; unit.toNanos(keepAliveTime);</span><br><span class="line">    this.threadFactory &#x3D; threadFactory;</span><br><span class="line">    this.handler &#x3D; handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>corePoolSize：核心线程数，正常情况下能够一直呆在线程池中的线程数（只要线程池是running状态，且线程不挂掉）。</p>
+<p>maximumPoolSize：最多存在的工作线程数，当workQueue满了，且工作线程数大于corePoolSize也小于maximumPoolSize，则开启临时线程，相当于聘用临时工。</p>
+<p>keepAliveTime &amp; unit：时间的大小和时间的单位，临时线程空闲时间超过这个时间就kill掉，相当于解聘临时工。</p>
+<p>workQueue：阻塞队列，在任意时刻，永远只有一个线程能够进行入队或者出队，是线程安全的队列。新请求来临，如果工作线程都在工作且队列未满，就将新的任务加入阻塞队列。</p>
+<p>threadFactory：创建线程的工厂类。</p>
+<p>handler：负责拒绝任务时的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/fuxyzz/cdn/images/thread_pool.png" alt="线程池工作流程图"></p>
+<p>如图所示，按序号顺序执行。</p>
+<p>（1）如果工作线程数小于corePoolSize，创建新的线程</p>
+<p>（2）如果工作线程数大于等于corePoolSize，队列未满，加入等待队列，队列满了，如果工作线程大于等于maximumPoolSize，拒绝任务，否则创建临时线程处理任务</p>
+<p>（3）拒绝通常有3种情况：</p>
+<ul>
+<li><p>添加任务时处于running且队列满了且工作线程大于等于maximumPoolSize</p>
+</li>
+<li><p>添加任务时处于shutdown</p>
+</li>
+<li><p>处于stop状态，stop会中断当前的任务并拒绝，并拒绝后续的任务</p>
+</li>
+</ul>
+<p>（4）拒绝任务会执行拒绝策略，拒绝策略通常有4种：</p>
+<ul>
+<li><p>AbortPolicy，默认的拒绝策略，直接抛出异常。</p>
+</li>
+<li><p>CallerRunsPolicy，拒绝后将任务交由调用execute方法的线程执行（主线程，可能有阻塞的风险）。如果线程池处于shutdown或以上（stop，terminated），会直接丢弃任务。</p>
+</li>
+<li><p>DiscardOldestPolicy，抛弃最久未执行的任务然后重试（调用execute重试）,最久就是排队最久的，就是队头的任务。而且队列嘛，只能先进先出，那就只能抛弃队头的任务了。如果线程池处于shutdown或以上（stop，terminated），会直接丢弃任务。</p>
+</li>
+<li><p>DiscardPolicy，直接抛弃被拒绝的任务。</p>
+</li>
+</ul>
+<h4 id="执行与复用"><a href="#执行与复用" class="headerlink" title="执行与复用"></a>执行与复用</h4><p>先明确一个概念，线程是底层操作系统实现的，JAVA中是JVM通过调用操作系统提供的api去原生的执行。</p>
+<p>从ThreadPoolExecutor的execute看起</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void execute(Runnable command) &#123;</span><br><span class="line">    if (command &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">     &#x2F;*</span><br><span class="line">     * 执行分3步：</span><br><span class="line">     * 1.如果少于corePoolSize且线程池处于运行态则开启新的线程去执行传入的任务。</span><br><span class="line">     * </span><br><span class="line">     * 2.如果不是1情况，则尝试将任务塞入阻塞队列，如果能塞入，进行 double-check，double-check主要是为了看是不是有工作线程中是否有线程挂了，还有看一下运行状态，如果是shundown要把任务拒绝。</span><br><span class="line">     *</span><br><span class="line">     * 3.如果不能塞入阻塞队列，尝试添加一个临时的线程去执行，如果失败，说明线程已经超过maximumPoolSize，或者是shutdown状态，要拒绝任务。</span><br><span class="line">     *&#x2F;</span><br><span class="line">    int c &#x3D; ctl.get();</span><br><span class="line">    if (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">        if (addWorker(command, true))</span><br><span class="line">            return;</span><br><span class="line">        c &#x3D; ctl.get();</span><br><span class="line">    &#125;</span><br><span class="line">    if (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">        int recheck &#x3D; ctl.get();</span><br><span class="line">        if (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            reject(command);</span><br><span class="line">        else if (workerCountOf(recheck) &#x3D;&#x3D; 0)</span><br><span class="line">            addWorker(null, false);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!addWorker(command, false))</span><br><span class="line">        reject(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>execute方式主要是线程的工作方式。workQueue的实现较为简单，以ArrayBlockingQueue为例，使用ReentrantLock辅助同一时间只能入队或者是出队。重点关注一下addWorker方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private boolean addWorker(Runnable firstTask, boolean core) &#123;</span><br><span class="line">    &#x2F;&#x2F;这里主要是检查</span><br><span class="line">    retry:</span><br><span class="line">    for (int c &#x3D; ctl.get();;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 检查线程池状态，检查队列</span><br><span class="line">        if (runStateAtLeast(c, SHUTDOWN)</span><br><span class="line">            &amp;&amp; (runStateAtLeast(c, STOP)</span><br><span class="line">                || firstTask !&#x3D; null</span><br><span class="line">                || workQueue.isEmpty()))</span><br><span class="line">            return false;</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;检查工作线程数是否已经饱和</span><br><span class="line">        for (;;) &#123;</span><br><span class="line">            if (workerCountOf(c)</span><br><span class="line">                &gt;&#x3D; ((core ? corePoolSize : maximumPoolSize) &amp; COUNT_MASK))</span><br><span class="line">                return false;</span><br><span class="line">            &#x2F;&#x2F;成功就break了，走下面的逻辑了</span><br><span class="line">            if (compareAndIncrementWorkerCount(c))</span><br><span class="line">                break retry;</span><br><span class="line">            c &#x3D; ctl.get();</span><br><span class="line">            &#x2F;&#x2F; 再次检查工作线程数，工作线程数变化导致CAS失败的情况下重试内层的循环</span><br><span class="line">            if (runStateAtLeast(c, SHUTDOWN))</span><br><span class="line">                continue retry;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F;用变量记录是否开启和添加成功</span><br><span class="line">    boolean workerStarted &#x3D; false;</span><br><span class="line">    boolean workerAdded &#x3D; false;</span><br><span class="line">    Worker w &#x3D; null;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;Worker里调用了ThreadFactory的newThread，ThreadFactory封装了创建线程的参数</span><br><span class="line">        w &#x3D; new Worker(firstTask);</span><br><span class="line">        &#x2F;&#x2F;创建了线程</span><br><span class="line">        final Thread t &#x3D; w.thread;</span><br><span class="line">        if (t !&#x3D; null) &#123;</span><br><span class="line">            &#x2F;&#x2F;获取全局锁</span><br><span class="line">            final ReentrantLock mainLock &#x3D; this.mainLock;</span><br><span class="line">            mainLock.lock();</span><br><span class="line">            try &#123;</span><br><span class="line">                &#x2F;&#x2F;再次检查，看线程池状态和线程的状态</span><br><span class="line">                int c &#x3D; ctl.get();</span><br><span class="line"></span><br><span class="line">                if (isRunning(c) ||</span><br><span class="line">                    (runStateLessThan(c, STOP) &amp;&amp; firstTask &#x3D;&#x3D; null)) &#123;</span><br><span class="line">                    &#x2F;&#x2F;再次检查线程的状态</span><br><span class="line">                    if (t.isAlive()) </span><br><span class="line">                        throw new IllegalThreadStateException();</span><br><span class="line">                    &#x2F;&#x2F;添加的工作线程集合中，方便管理</span><br><span class="line">                    workers.add(w);</span><br><span class="line">                    int s &#x3D; workers.size();</span><br><span class="line">                    if (s &gt; largestPoolSize)</span><br><span class="line">                        largestPoolSize &#x3D; s;</span><br><span class="line">                    workerAdded &#x3D; true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                mainLock.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">            if (workerAdded) &#123;</span><br><span class="line">                &#x2F;&#x2F;这里很重要，start启动的是worker线程，就是会调用worker的run方法</span><br><span class="line">                t.start();</span><br><span class="line">                workerStarted &#x3D; true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        &#x2F;&#x2F;线程没有启动成功，从workers中移除线程</span><br><span class="line">        if (! workerStarted)</span><br><span class="line">            addWorkerFailed(w);</span><br><span class="line">    &#125;</span><br><span class="line">    return workerStarted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>addWorker方法，总结一下就是添加工作线程，如果是新开的工作线程，会调用worker的run方法，这个调用很重要，具体看一下worker的run方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;** Delegates main run loop to outer runWorker. *&#x2F;</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        runWorker(this);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>从注释可以知道，Worker类的run方法将操作委托给外部的ThreadPoolExecutor（Worker是ThreadPoolExecutor的内部类）</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">final void runWorker(Worker w) &#123;</span><br><span class="line">    &#x2F;&#x2F;获取当前线程</span><br><span class="line">    Thread wt &#x3D; Thread.currentThread();</span><br><span class="line">    Runnable task &#x3D; w.firstTask;</span><br><span class="line">    w.firstTask &#x3D; null;</span><br><span class="line">    w.unlock(); &#x2F;&#x2F; allow interrupts</span><br><span class="line">    boolean completedAbruptly &#x3D; true;</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;不断的去取任务</span><br><span class="line">        while (task !&#x3D; null || (task &#x3D; getTask()) !&#x3D; null) &#123;</span><br><span class="line">            w.lock();</span><br><span class="line">            &#x2F;&#x2F;池子状态stop了之后要中断线程</span><br><span class="line">            if ((runStateAtLeast(ctl.get(), STOP) ||</span><br><span class="line">                 (Thread.interrupted() &amp;&amp;</span><br><span class="line">                  runStateAtLeast(ctl.get(), STOP))) &amp;&amp;</span><br><span class="line">                !wt.isInterrupted())</span><br><span class="line">                wt.interrupt();</span><br><span class="line">            try &#123;</span><br><span class="line">                beforeExecute(wt, task);</span><br><span class="line">                try &#123;</span><br><span class="line">                    &#x2F;&#x2F;执行任务的run方法</span><br><span class="line">                    task.run();</span><br><span class="line">                    afterExecute(task, null);</span><br><span class="line">                &#125; catch (Throwable ex) &#123;</span><br><span class="line">                    afterExecute(task, ex);</span><br><span class="line">                    throw ex;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                task &#x3D; null;</span><br><span class="line">                w.completedTasks++;</span><br><span class="line">                w.unlock();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        completedAbruptly &#x3D; false;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        processWorkerExit(w, completedAbruptly);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里写了个while循环去不断的取任务执行，我们再看一下getTask方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private Runnable getTask() &#123;</span><br><span class="line">    boolean timedOut &#x3D; false; &#x2F;&#x2F; Did the last poll() time out?</span><br><span class="line"></span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        int c &#x3D; ctl.get();</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;不是running状态下的处理，返回null，runWorker方法的循环也就结束了</span><br><span class="line">        if (runStateAtLeast(c, SHUTDOWN)</span><br><span class="line">            &amp;&amp; (runStateAtLeast(c, STOP) || workQueue.isEmpty())) &#123;</span><br><span class="line">            decrementWorkerCount();</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        int wc &#x3D; workerCountOf(c);</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; 是否要根据超时时间停止线程，核心线程也可以停止，需要根据allowCoreThreadTimeOut变量确定，像MonitorTask这种就会使用</span><br><span class="line">        boolean timed &#x3D; allowCoreThreadTimeOut || wc &gt; corePoolSize;</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;处理停止线程</span><br><span class="line">        if ((wc &gt; maximumPoolSize || (timed &amp;&amp; timedOut))</span><br><span class="line">            &amp;&amp; (wc &gt; 1 || workQueue.isEmpty())) &#123;</span><br><span class="line">            if (compareAndDecrementWorkerCount(c))</span><br><span class="line">                return null;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F;尝试从阻塞队列中获取任务</span><br><span class="line">        try &#123;</span><br><span class="line">            Runnable r &#x3D; timed ?</span><br><span class="line">                workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :</span><br><span class="line">                workQueue.take();</span><br><span class="line">            if (r !&#x3D; null)</span><br><span class="line">                return r;</span><br><span class="line">            timedOut &#x3D; true;</span><br><span class="line">        &#125; catch (InterruptedException retry) &#123;</span><br><span class="line">            timedOut &#x3D; false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只要是正常情况下，就会一直从队列里取任务出来执行。</p>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>到这里，就可以得出线程池是怎么工作的，本质上就是通过线程不断的从阻塞队列中取出任务去执行。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/21/leetcode-75/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/21/leetcode-75/" class="post-title-link" itemprop="url">leetcode-75</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-21 15:01:28" itemprop="dateCreated datePublished" datetime="2020-10-21T15:01:28+08:00">2020-10-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/sort-colors/" target="_blank" rel="noopener">原题链接</a></p>
+<p>给定一个包含红色、白色和蓝色，一共&nbsp;<em>n </em>个元素的数组，<strong><a href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95" target="_blank">原地</a></strong>对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。</p>
+
+<p>此题中，我们使用整数 0、&nbsp;1 和 2 分别表示红色、白色和蓝色。</p>
+
+<p><strong>注意:</strong><br>
+不能使用代码库中的排序函数来解决这道题。</p>
+
+<p><strong>示例:</strong></p>
+
+<pre><strong>输入:</strong> [2,0,2,1,1,0]
+<strong>输出:</strong> [0,0,1,1,2,2]</pre>
+
+<p><strong>进阶：</strong></p>
+
+<ul>
+    <li>一个直观的解决方案是使用计数排序的两趟扫描算法。<br>
+    首先，迭代计算出0、1 和 2 元素的个数，然后按照0、1、2的排序，重写当前数组。</li>
+    <li>你能想出一个仅使用常数空间的一趟扫描算法吗？</li>
+</ul>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>双指针，指针1指向头，负责交换0，指针2指向尾，负责交换2。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void sortColors(int[] nums) &#123;</span><br><span class="line">    int p1 &#x3D; 0, p2 &#x3D; nums.length - 1;</span><br><span class="line">    for (int i &#x3D; 0; i &lt;&#x3D; p2; i++) &#123;</span><br><span class="line">        &#x2F;&#x2F;可能换了个2回来</span><br><span class="line">        while (i &lt; p2 &amp;&amp; nums[i] &#x3D;&#x3D; 2) &#123;</span><br><span class="line">            swap(nums, i, p2--);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        &#x2F;&#x2F;换了个0回来继续再换，下次再做就漏了</span><br><span class="line">        if (nums[i] &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            swap(nums, i, p1++);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void swap(int[] arr, int a, int b) &#123;</span><br><span class="line">    int temp &#x3D; arr[a];</span><br><span class="line">    arr[a] &#x3D; arr[b];</span><br><span class="line">    arr[b] &#x3D; temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），遍历一次。</p>
+<p>空间复杂度：O（1），原地交换，没有额外开销。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/10/21/leetcode-102/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/21/leetcode-102/" class="post-title-link" itemprop="url">leetcode-102</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-21 14:34:53" itemprop="dateCreated datePublished" datetime="2020-10-21T14:34:53+08:00">2020-10-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p><a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener">原题链接</a></p>
+<p>给你一个二叉树，请你返回其按 <strong>层序遍历</strong> 得到的节点值。 （即逐层地，从左到右访问所有节点）。</p>
+
+<p>&nbsp;</p>
+
+<p><strong>示例：</strong><br>
+二叉树：<code>[3,9,20,null,null,15,7]</code>,</p>
+
+<pre>    3
+   / \
+  9  20
+    /  \
+   15   7
+</pre>
+
+<p>返回其层次遍历结果：</p>
+
+<pre>[
+  [3],
+  [9,20],
+  [15,7]
+]
+</pre>
+
+<h3 id="二、思路"><a href="#二、思路" class="headerlink" title="二、思路"></a>二、思路</h3><p>利用队列进行广搜即可。先压入根节点，当队列不为空一直循环，循环中嵌套一个子循环，先获取队列的长度，然后子循环执行队列长度的次数，每次执行取出队头元素，将队头的左右结点压入队尾（如果有的话）。执行完子循环就是遍历完当前层数的结点，可以加入结果。</p>
+<h3 id="三、code"><a href="#三、code" class="headerlink" title="三、code"></a>三、code</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) &#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; ans &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    if (root &#x3D;&#x3D; null) &#123;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">    Deque&lt;TreeNode&gt; q &#x3D; new ArrayDeque&lt;&gt;();</span><br><span class="line">    q.addLast(root);</span><br><span class="line">    while (!q.isEmpty()) &#123;</span><br><span class="line">        List&lt;Integer&gt; subAns &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i &#x3D; 0, len &#x3D; q.size(); i &lt; len; i++) &#123;</span><br><span class="line">            TreeNode node &#x3D; q.removeFirst();</span><br><span class="line">            subAns.add(node.val);</span><br><span class="line">            if (node.left !&#x3D; null) &#123;</span><br><span class="line">                q.addLast(node.left);</span><br><span class="line">            &#125;</span><br><span class="line">            if (node.right !&#x3D; null) &#123;</span><br><span class="line">                q.addLast(node.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ans.add(subAns);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="四、复杂度分析"><a href="#四、复杂度分析" class="headerlink" title="四、复杂度分析"></a>四、复杂度分析</h3><p>时间复杂度：O（n），入队n个结点，出队n个结点。</p>
+<p>空间复杂度：O（1），除去返回的答案，没有额外的开销。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

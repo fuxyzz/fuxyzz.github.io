@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"fuxyzz.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.3","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="fuxyzz&#39;s blog">
+<meta property="og:url" content="https://fuxyzz.github.io/page/5/index.html">
+<meta property="og:site_name" content="fuxyzz&#39;s blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="fuxyzz">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://fuxyzz.github.io/page/5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>fuxyzz's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before, .use-motion .logo-line-after {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+  <div id="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <main class="main">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+        <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line-before"></i>
+      <h1 class="site-title">fuxyzz's blog</h1>
+      <i class="logo-line-after"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">fuxyzz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </header>
+
+      
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+      <div class="main-inner">
+        
+
+        <div class="content index posts-expand">
+          
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-309/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-309/" class="post-title-link" itemprop="url">leetcode 309</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-20 16:02:12" itemprop="dateCreated datePublished" datetime="2020-07-20T16:02:12+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/</a></p>
+<p>思路：考虑3个状态位，0表示当天手上有股票，1表示当天刚卖掉，2表示当天手上没股票观望中，隔天可以进行交易。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    if(prices.length &#x3D;&#x3D; 0)&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F; 0 手上有   1 刚卖   2 观望中|手上没有|冷静中</span><br><span class="line">    int[][] dp &#x3D; new int[3][prices.length];</span><br><span class="line">    dp[0][0] &#x3D; -prices[0];</span><br><span class="line">    for(int i &#x3D; 1; i &lt; prices.length; ++i)&#123;</span><br><span class="line">        &#x2F;&#x2F;今天手上有，要么昨天就有，要么昨天观望今天买入</span><br><span class="line">        dp[0][i] &#x3D; Math.max( dp[0][i-1] , dp[2][i-1] - prices[i] );</span><br><span class="line">        &#x2F;&#x2F;今天刚卖一定是昨天有今天卖</span><br><span class="line">        dp[1][i] &#x3D; dp[0][i-1] + prices[i];</span><br><span class="line">        &#x2F;&#x2F;今天观望，要么昨天就在观望，要么昨天刚卖</span><br><span class="line">        dp[2][i] &#x3D; Math.max( dp[2][i-1] , dp[1][i-1] );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return Math.max(dp[1][prices.length - 1] , dp[2][prices.length - 1]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>或者我们可以直接考虑两个状态位，0持有，1未持有。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    if(prices.length &lt; 2)&#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">    int[][] dp &#x3D; new int[2][prices.length];</span><br><span class="line">    &#x2F;&#x2F;0持有，1手上没股票</span><br><span class="line">    dp[0][0] &#x3D; -prices[0];</span><br><span class="line">    dp[0][1] &#x3D; Math.max(-prices[0],-prices[1]);</span><br><span class="line">    dp[1][1] &#x3D; Math.max(0,prices[1]-prices[0]);</span><br><span class="line">    for(int i &#x3D; 2; i &lt; prices.length ;++i)&#123;</span><br><span class="line">        dp[0][i] &#x3D; Math.max(dp[1][i-2] - prices[i] , dp[0][i-1]);</span><br><span class="line">        dp[1][i] &#x3D; Math.max(dp[1][i-1] , dp[0][i-1] + prices[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return dp[1][prices.length-1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-188/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-188/" class="post-title-link" itemprop="url">leetcode 188</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-20 16:00:41" itemprop="dateCreated datePublished" datetime="2020-07-20T16:00:41+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
+<p>由于买卖次数不确定，只能用dp做。</p>
+<p>状态位表示：</p>
+<p>（1）dp[i][yes][j]表示第i天持有股票且历史（包括本次买入）的持有股票数量j；</p>
+<p>（2）dp[i][no][j]表示第i天无持有股票且历史（包括本次卖出）的抛售股票数量为j；</p>
+<p>则有</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;当天持有股票且最大利润的结果为前一天历史持有j只股票与前一天历史抛售j-1只股票后在当天买入的最大值</span><br><span class="line">dp[i][yes][j] &#x3D; max( dp[i-1][yes][j] , dp[i-1][no][j-1] - prices[i] );</span><br><span class="line">&#x2F;&#x2F;当天无持有股票且最大利润的结果为前一天历史抛售j只股票与前一天历史持有j只股票后在当天卖出的最大值</span><br><span class="line">dp[i][no][j] &#x3D; max( dp[i-1][no][j] , dp[i-1][yes][j] + prices[i] );</span><br></pre></td></tr></table></figure>
+
+<p>注意到yes和no这一维其实可以用两个数组就可以降下来，考虑状态位优化：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;buy表示当前持有股票状态</span><br><span class="line">buy[i][j] &#x3D; max( buy[i-1][j] , sell[i-1][j-1] - prices[i] );</span><br><span class="line">&#x2F;&#x2F;sell表示当前无持有股票状态</span><br><span class="line">sell[i][j] &#x3D; max( sell[i-1][j] , buy[i-1][j] + prices[i] );</span><br></pre></td></tr></table></figure>
+<p>再次观察式子，后一天的状态跟前一天其实是无关的。</p>
+<p>（1）对于buy[i][j] = max( buy[i-1][j] , sell[i-1][j-1] - prices[i] )，当前历史持有j只股票只跟前一天的买入和前一天的j-1次买入有关，前一天的j-1很重要，如果是j则需要用数组来copy上一次的sell数组。</p>
+<p>（2）对于sell[i][j] = max( sell[i-1][j] , buy[i-1][j] + prices[i] )，当前历史持有j只股票只跟前一天为止卖出了j只股票和包括今天持有股票且历史持有j次有关。而且buy[i-1][j]不可能被上式buy[i][j]的更新影响，因为当天买入股票又卖出股票的情况不会比前一天买入低价当天卖出高价更大。</p>
+<p>最终优化为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;此时可以简化buy[j]的意义为交易小于等于j次且手头持有股票时的最大利润</span><br><span class="line">buy[j] &#x3D; Math.max(sell[j - 1] - prices[i], buy[j]);</span><br><span class="line">&#x2F;&#x2F;此时可以简化sell[j]的意义为交易小于等于j次且手头没有股票时的最大利润</span><br><span class="line">sell[j] &#x3D; Math.max(sell[j], buy[j] + prices[i]);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int k, int[] prices) &#123;</span><br><span class="line">        int len &#x3D; prices.length;</span><br><span class="line">        int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">        if (k &gt;&#x3D; (len &gt;&gt; 1)) &#123;</span><br><span class="line">            for (int i &#x3D; 1; i &lt; len; i++) &#123;</span><br><span class="line">                ans +&#x3D; prices[i] &gt; prices[i - 1] ? prices[i] - prices[i - 1] : 0;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            int[] buy &#x3D; new int[k + 1];</span><br><span class="line">            int[] sell &#x3D; new int[k + 1];</span><br><span class="line">            &#x2F;&#x2F;不填充就不买入了，而且必须填充所有的，因为第一天最后无论交易多少次手上只要持有，必定是亏损</span><br><span class="line">            &#x2F;&#x2F;可以用Integer.MIN_VALUE &gt;&gt; 1初始化，除以2是为了防止sell[j - 1] - prices[i]溢出，也可以用意义更为明确的-prices[0]</span><br><span class="line">            Arrays.fill(buy, Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            &#x2F;&#x2F;可以不填充卖出，有买入才有卖出</span><br><span class="line">            &#x2F;&#x2F;Arrays.fill(sell, Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            for (int i &#x3D; 1; i &lt; len; i++) &#123;</span><br><span class="line">                for (int j &#x3D; 1; j &lt;&#x3D; k &amp;&amp; j &lt;&#x3D; i; j++) &#123;</span><br><span class="line">                    buy[j] &#x3D; Math.max(sell[j - 1] - prices[i], buy[j]);</span><br><span class="line">                    sell[j] &#x3D; Math.max(sell[j], buy[j] + prices[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F;可以不用遍历，可能i在小于k的时候拿到最大值，但是更新i+1的时候会拿i的值比较刷新，因为要保证当前是利润最大的</span><br><span class="line">            &#x2F;&#x2F;或者理解成i+1次的时候可以通过当天买入卖出凑次数，虽然实际上并非如此</span><br><span class="line">            &#x2F;&#x2F;for (int i &#x3D; 0; i &lt;&#x3D; k; i++) &#123;</span><br><span class="line">            &#x2F;&#x2F;    ans &#x3D; Math.max(sell[i], ans);</span><br><span class="line">            &#x2F;&#x2F;&#125;</span><br><span class="line">            &#x2F;&#x2F;答案一定在最终卖出的时候取得，如果最后还持有股票，那么一定不会达到最大的利润</span><br><span class="line">            ans &#x3D; sell[k];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>二维dp数组写法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int k, int[] prices) &#123;</span><br><span class="line">        int len &#x3D; prices.length;</span><br><span class="line">        int ans &#x3D; 0;</span><br><span class="line">        if(k &gt;&#x3D; (len &gt;&gt; 1)) &#123;</span><br><span class="line">            for(int i &#x3D; 1; i &lt; len; ++i)&#123;</span><br><span class="line">                if(prices[i] &gt; prices[i - 1])&#123;</span><br><span class="line">                    ans +&#x3D; prices[i] - prices[i-1];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            int[][] dp &#x3D; new int[2][k + 1];</span><br><span class="line">            Arrays.fill(dp[0], Integer.MIN_VALUE &gt;&gt; 1);</span><br><span class="line">            &#x2F;&#x2F;可用Arrays.fill(dp[0], -prices[0]);</span><br><span class="line"></span><br><span class="line">            for(int i &#x3D; 1; i &lt; len; ++i)&#123;</span><br><span class="line">                for(int j &#x3D; 1; j &lt;&#x3D; k &amp;&amp; j &lt;&#x3D; i; ++j)&#123;</span><br><span class="line">                    dp[0][j] &#x3D; Math.max( dp[0][j] , dp[1][j - 1] - prices[i]);</span><br><span class="line">                    dp[1][j] &#x3D; Math.max( dp[1][j] , dp[0][j] + prices[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;	</span><br><span class="line"></span><br><span class="line">            ans &#x3D; dp[1][k];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-123/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-123/" class="post-title-link" itemprop="url">leetcode 123</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-20 15:59:50" itemprop="dateCreated datePublished" datetime="2020-07-20T15:59:50+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/</a></p>
+<p>股票限定只有两次购买出售，可以转化为找一个分割点i，使得i左右的股票抛售最大。首先，用两个数组左右各横扫一次，第一个数组记录从0到i为止的最大值，第二个数组记录从i到prices.length-1的最大值。左右答案相加即可，在遍历第二个数组的时候已经可以将答案得到，减少一个循环。注意：ans需要初始化为第一个数组的最后一个值，为了应付等差数列，例如1，2，3，4，5，因为我们是用第一个数组的i对应的值加上第二个数组的i+1对应的值，如果是等差数列，则会出现断裂的情况，比预期的值少了一个公差。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    if (prices.length &lt; 2) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int[] preArr &#x3D; new int[prices.length];</span><br><span class="line">    int[] suffArr &#x3D; new int[prices.length];</span><br><span class="line">    preArr[0] &#x3D; 0;</span><br><span class="line">    suffArr[0] &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    int preMin &#x3D; prices[0];</span><br><span class="line">    int suffMax &#x3D; prices[prices.length - 1];</span><br><span class="line">    for (int i &#x3D; 1; i &lt; prices.length; i++) &#123;</span><br><span class="line">        preArr[i] &#x3D; Math.max(preArr[i - 1], prices[i] - preMin);</span><br><span class="line">        preMin &#x3D; Math.min(preMin, prices[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int ans &#x3D; preArr[prices.length - 1];</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; prices.length - 2; i &gt;&#x3D; 0; i--) &#123;</span><br><span class="line">        suffArr[i] &#x3D; Math.max(suffArr[i + 1], suffMax - prices[i]);</span><br><span class="line">        suffMax &#x3D; Math.max(suffMax, prices[i]);</span><br><span class="line">        ans &#x3D; Math.max(ans, preArr[i] + suffArr[i + 1]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更为激进的做法，使用4个变量一次循环，buy代表买入，profit代表收益。buy1表示到当前位置的买入最小值，profit1表示到目前为止能达到的最大收益。buy2是寻找目前为止距离上次产生最大收益后能买入的最低价而且记录了上次产生的最大收益，profit2表示目前为止两次交易能达到的最大收益。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int buy1 &#x3D; Integer.MAX_VALUE;</span><br><span class="line">    int buy2 &#x3D; Integer.MAX_VALUE;</span><br><span class="line">    int profit1 &#x3D; 0;</span><br><span class="line">    int profit2 &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 0; i &lt; prices.length; i++) &#123;</span><br><span class="line">        buy1 &#x3D; Math.min(buy1, prices[i]);</span><br><span class="line">        profit1 &#x3D; Math.max(profit1, prices[i] - buy1);</span><br><span class="line">        buy2 &#x3D; Math.min(buy2, prices[i] - profit1);</span><br><span class="line">        profit2 &#x3D; Math.max(profit2, prices[i] - buy2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return profit2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-122/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-122/" class="post-title-link" itemprop="url">leetcode 122</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-20 15:58:36" itemprop="dateCreated datePublished" datetime="2020-07-20T15:58:36+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+<p>要求买必须在手上没有货的情况下，则求所有单调递增区间，取头尾差值即可。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int i &#x3D; 0;</span><br><span class="line">    int valley &#x3D; prices[0];</span><br><span class="line">    int peak &#x3D; prices[0];</span><br><span class="line">    int maxprofit &#x3D; 0;</span><br><span class="line">    while (i &lt; prices.length - 1) &#123;</span><br><span class="line">        while (i &lt; prices.length - 1 &amp;&amp; prices[i] &gt;&#x3D; prices[i + 1])</span><br><span class="line">            i++;</span><br><span class="line">        valley &#x3D; prices[i];</span><br><span class="line">        while (i &lt; prices.length - 1 &amp;&amp; prices[i] &lt;&#x3D; prices[i + 1])</span><br><span class="line">            i++;</span><br><span class="line">        peak &#x3D; prices[i];</span><br><span class="line">        maxprofit +&#x3D; peak - valley;</span><br><span class="line">    &#125;</span><br><span class="line">    return maxprofit;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>coding技巧，只要后面比之前大，加上差值即可，会凑成每个单调递增区间的差值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line">    for (int i &#x3D; 1; i &lt; prices.length; i++) &#123;</span><br><span class="line">        if (prices[i] &gt; prices[i - 1]) &#123;</span><br><span class="line">            ans +&#x3D; prices[i] - prices[i - 1];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/07/20/leetcode-121/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/20/leetcode-121/" class="post-title-link" itemprop="url">leetcode 121</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-20 15:57:50" itemprop="dateCreated datePublished" datetime="2020-07-20T15:57:50+08:00">2020-07-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-29 11:01:12" itemprop="dateModified" datetime="2021-07-29T11:01:12+08:00">2021-07-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/leetcode/" itemprop="url" rel="index"><span itemprop="name">leetcode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">https://leetcode.com/problems/best-time-to-buy-and-sell-stock/</a></p>
+<p>往后的比之前最小的差值即可。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public int maxProfit(int[] prices) &#123;</span><br><span class="line">    int min &#x3D; Integer.MAX_VALUE;</span><br><span class="line">    int ans &#x3D; 0;</span><br><span class="line"></span><br><span class="line">    for (int i &#x3D; 0; i &lt; prices.length; i++) &#123;</span><br><span class="line">        if (prices[i] &lt; min) &#123;</span><br><span class="line">            min &#x3D; prices[i];</span><br><span class="line">        &#125; else if (prices[i] - min &gt; ans) &#123;</span><br><span class="line">            ans &#x3D; prices[i] - min;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fuxyzz.github.io/2020/06/28/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%88%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="fuxyzz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fuxyzz's blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/28/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%88%86/" class="post-title-link" itemprop="url">浅谈二分</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-28 09:44:34 / 修改时间：09:47:41" itemprop="dateCreated datePublished" datetime="2020-06-28T09:44:34+08:00">2020-06-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>二分法是用在有序的数据中快速筛选数据的方法。</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>关于下界L和上界R，对于数组来说，假设我们新建一个长度为N的数组，用数学上的定义的来说，是[0,N)，左闭右开的区间。决定区间开闭的同时，也决定了搜索的区间和二分的终止条件（没有可以进行搜索的区间），最直接的就是反应在left和right在循环过程中的变化。详细看下面。</p>
+<h3 id="code-amp-analysis"><a href="#code-amp-analysis" class="headerlink" title="code &amp; analysis"></a>code &amp; analysis</h3><h5 id="一、标准二分"><a href="#一、标准二分" class="headerlink" title="一、标准二分"></a>一、标准二分</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int binarySearch(int[] nums, int target) &#123;</span><br><span class="line">    int left &#x3D; 0; </span><br><span class="line">    int right &#x3D; nums.length - 1;&#x2F;&#x2F;决定左闭右闭</span><br><span class="line"></span><br><span class="line">    while(left &lt;&#x3D; right) &#123;&#x2F;&#x2F;决定了搜索区间以及二分终止条件</span><br><span class="line">        int mid &#x3D; (right + left) &#x2F; 2;&#x2F;&#x2F;忽略溢出问题</span><br><span class="line">        if(nums[mid] &#x3D;&#x3D; target)</span><br><span class="line">            return mid; </span><br><span class="line">        else if (nums[mid] &lt; target)</span><br><span class="line">            left &#x3D; mid + 1;&#x2F;&#x2F;因为左闭</span><br><span class="line">        else if (nums[mid] &gt; target)</span><br><span class="line">            right &#x3D; mid - 1;&#x2F;&#x2F;因为右闭</span><br><span class="line">        &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>标准二分是左闭右闭的区间，搜索区间为[left,right]，注意二分终止的条件是 left &lt;= right，因为终止二分的条件是没有可以进行搜索的区间了，当搜索区间为[right+1,right]，搜索区间为空，终止条件正确。如果写成 left &lt; right ，就会出现当left=2，right=2，则搜索区间为[2,2]，此时搜索区间成立，还需要进行搜索，但二分搜索已经终止，终止条件错误。</p>
+<h5 id="二、左闭右开的二分"><a href="#二、左闭右开的二分" class="headerlink" title="二、左闭右开的二分"></a>二、左闭右开的二分</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int binarySearch(int[] nums, int target) &#123;</span><br><span class="line">    int left &#x3D; 0; </span><br><span class="line">    int right &#x3D; nums.length;&#x2F;&#x2F;决定左闭右开</span><br><span class="line"></span><br><span class="line">    while(left &lt; right) &#123;&#x2F;&#x2F;决定了搜索区间以及二分终止条件</span><br><span class="line">        int mid &#x3D; (right + left) &#x2F; 2;&#x2F;&#x2F;忽略溢出问题</span><br><span class="line">        if(nums[mid] &#x3D;&#x3D; target)</span><br><span class="line">            return mid; </span><br><span class="line">        else if (nums[mid] &lt; target)</span><br><span class="line">            left &#x3D; mid + 1;&#x2F;&#x2F;因为左闭</span><br><span class="line">        else if (nums[mid] &gt; target)</span><br><span class="line">            right &#x3D; mid;&#x2F;&#x2F;因为右开</span><br><span class="line">        &#125;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同标准二分一样分析，左闭右开的二分，则搜索区间是[left,right)，二分的终止条件是 left &lt; right ，当搜索区间为[right,right)，搜索区间为空，终止条件正确。注意right = mid的操作，而不是right = mid - 1，因为right初始值为nums.length，这个索引位置是不能访问的，另一个原因是右开，rright要始终遵守赋值为取不到的右边界。</p>
+<h5 id="三、重复元素的左界（下界）搜索二分"><a href="#三、重复元素的左界（下界）搜索二分" class="headerlink" title="三、重复元素的左界（下界）搜索二分"></a>三、重复元素的左界（下界）搜索二分</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int left_bound(int[] nums, int target) &#123;</span><br><span class="line">        if (nums.length &#x3D;&#x3D; 0) return -1;</span><br><span class="line">        int left &#x3D; 0;</span><br><span class="line">        int right &#x3D; nums.length;</span><br><span class="line"></span><br><span class="line">        while (left &lt; right) &#123; &#x2F;&#x2F; 注意</span><br><span class="line">            int mid &#x3D; (left + right) &#x2F; 2;</span><br><span class="line">            if (nums[mid] &#x3D;&#x3D; target) &#123;</span><br><span class="line">                right &#x3D; mid;&#x2F;&#x2F;不return，缩小中心点，使得中点向左靠，继续搜索左界</span><br><span class="line">            &#125; else if (nums[mid] &lt; target) &#123;</span><br><span class="line">                left &#x3D; mid + 1;</span><br><span class="line">            &#125; else if (nums[mid] &gt; target) &#123;</span><br><span class="line">                right &#x3D; mid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;&#x2F;循环结束时，left的值表示比target小的数有left个</span><br><span class="line"></span><br><span class="line">        &#x2F;&#x2F; target 比所有数都大</span><br><span class="line">        if (left &#x3D;&#x3D; nums.length) return -1;</span><br><span class="line">        &#x2F;&#x2F;处理可能target比所有数都小的情况下left也为0和target为搜不到但处于数组最小值与最大值之间的值的情况</span><br><span class="line">        return nums[left] &#x3D;&#x3D; target ? left : -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>左界二分是当出现重复元素的时候，找到最左值的索引。这里不分析边界的情况，这里主要说明找最左值的时应该知道的知识。在nums[mid] == target时，将right = mid，而不是return，是为了继续往左界搜索。最终得到left表示比target小的数有left个，注意left可能为nums.length，因为一直搜不到，最后mid + 1得到nums.length。因此，根据之前二分搜不到的情况下返回-1，最后程序单独处理一下即可。</p>
+<h5 id="四、重复元素的右界（上界）搜索二分"><a href="#四、重复元素的右界（上界）搜索二分" class="headerlink" title="四、重复元素的右界（上界）搜索二分"></a>四、重复元素的右界（上界）搜索二分</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int right_bound(int[] nums, int target) &#123;</span><br><span class="line">        if (nums.length &#x3D;&#x3D; 0) return -1;</span><br><span class="line">        int left &#x3D; 0, right &#x3D; nums.length;</span><br><span class="line"></span><br><span class="line">        while (left &lt; right) &#123;</span><br><span class="line">            int mid &#x3D; (left + right) &#x2F; 2;</span><br><span class="line">            if (nums[mid] &#x3D;&#x3D; target) &#123;</span><br><span class="line">                left &#x3D; mid + 1; &#x2F;&#x2F; 搜索上界</span><br><span class="line">            &#125; else if (nums[mid] &lt; target) &#123;</span><br><span class="line">                left &#x3D; mid + 1;</span><br><span class="line">            &#125; else if (nums[mid] &gt; target) &#123;</span><br><span class="line">                right &#x3D; mid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        &#x2F;*</span><br><span class="line">        循环结束时，left的值表示比target小的数有left-1个</span><br><span class="line">        减1是因为一直nums[mid]&#x3D;&#x3D;target的时候一直在加1，即使已经是最后一个了</span><br><span class="line">        *&#x2F;</span><br><span class="line"></span><br><span class="line">        if (left &#x3D;&#x3D; 0) return -1;</span><br><span class="line">        return nums[left - 1] &#x3D;&#x3D; target ? left - 1 : -1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="溢出处理"><a href="#溢出处理" class="headerlink" title="溢出处理"></a>溢出处理</h3><p>L + R溢出的情况，可以进行转换：（L + R）/ 2 = （2L + R-L）/ 2 = L + （R - L）/ 2，代码中写成 L + ((R - L) &gt;&gt; 1)。</p>
+<p>有些时候上面一步的转换并不能避免溢出的问题，这是因为数据范围的问题，无法用数学的方法避免，例如int情况下，使用L + ((R - L) &gt;&gt; 1)还是无法避免溢出是int数据范围导致的计算过程无法规避溢出问题，此时应该使用更大范围的数据类型进行处理，例如先用long进行计算，最后return的时候强转回int。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+  </nav>
+
+
+
+        </div>
+        
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fuxyzz</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
